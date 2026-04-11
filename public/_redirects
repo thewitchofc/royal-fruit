@@ -1,0 +1,6 @@
+# מחירון דרך פונקציית שרת (בלי חשיפת URL מלא ב-JS) — ראו netlify/functions/price-sheet.mjs
+/price-sheet.csv  /.netlify/functions/price-sheet  200
+# גיבוי: פרוקסי ישיר (ישן; חושף נתיב גיליון בבקשות הרשת של הדפדפן)
+/google-sheet-csv/*  https://docs.google.com/:splat  200
+# SPA (React Router) — רענון בעמוד פנימי
+/*  /index.html  200

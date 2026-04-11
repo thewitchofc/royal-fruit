@@ -1,0 +1,28 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+  functions = "netlify/functions"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# SPA: אל תשמרו את דף הכניסה זמן רב — אחרת דפדפן/CDN מחזיקים הפניה ל-CSS/JS ישנים.
+[[headers]]
+  for = "/"
+  [headers.values]
+    Cache-Control = "no-cache, private, must-revalidate"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, private, must-revalidate"
+
+# קבצים עם hash מ-Vite — בטוח לשמור שנים (שם הקובץ משתנה בכל build)
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
