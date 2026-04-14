@@ -223,6 +223,14 @@ export function Layout({ children }: { children: ReactNode }) {
             </picture>
           </NavLink>
         </div>
+        <nav className="mobile-quick-nav" aria-label="קישורים מהירים במובייל">
+          <NavLink to="/fruits" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            פירות פרימיום
+          </NavLink>
+          <NavLink to="/vegetables" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            ירקות פרימיום
+          </NavLink>
+        </nav>
         {children}
       </main>
       <SiteBottomWhatsappBar />
