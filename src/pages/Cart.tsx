@@ -1,4 +1,5 @@
 import { FormEvent, useMemo, useState } from "react";
+import { Apple, Cherry, Circle, MessageCircle, Star, Truck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { estimateCartTotal } from "../lib/cartEstimate";
@@ -9,6 +10,18 @@ import { usePageSeo } from "../lib/seo";
 
 function formatQty(qty: number) {
   return Number.isInteger(qty) ? String(qty) : qty.toFixed(1);
+}
+
+function CartItemIcon({ symbol }: { symbol: string }) {
+  if (symbol === "⭐") return <Star size={18} className="price-menu-icon price-menu-icon--primary" aria-hidden />;
+  if (symbol === "🚚") return <Truck size={18} className="price-menu-icon price-menu-icon--primary" aria-hidden />;
+  if (symbol === "⚡" || symbol === "🧃") return <Zap size={18} className="price-menu-icon price-menu-icon--primary" aria-hidden />;
+  if (symbol === "🍓" || symbol === "🍒") return <Cherry size={18} className="price-menu-icon price-menu-icon--primary" aria-hidden />;
+  if (symbol === "🍇" || symbol === "🍎" || symbol === "fruit") {
+    return <Apple size={18} className="price-menu-icon price-menu-icon--primary" aria-hidden />;
+  }
+  if (symbol === "veg") return <Circle size={14} className="price-menu-icon price-menu-icon--muted" aria-hidden />;
+  return <Circle size={14} className="price-menu-icon price-menu-icon--muted" aria-hidden />;
 }
 
 export function Cart() {
@@ -91,7 +104,7 @@ export function Cart() {
                   return (
                   <li key={line.id} className="cart-line">
                     <span className="cart-line-emoji" aria-hidden>
-                      {line.emoji}
+                      <CartItemIcon symbol={line.emoji} />
                     </span>
                     <div className="cart-line-body">
                       <div className="cart-line-title">{line.name}</div>
@@ -235,6 +248,7 @@ export function Cart() {
                   className="btn btn-primary btn-whatsapp btn-whatsapp-strong"
                   disabled={!deliveryOk.ok}
                 >
+                  <MessageCircle className="btn-whatsapp-icon" aria-hidden />
                   שלח הזמנה לוואטסאפ של אורי
                 </button>
 

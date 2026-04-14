@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Apple, Cherry, Circle, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { PriceCategory } from "../data/priceList";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
@@ -85,7 +86,7 @@ function PriceRowView({
     <li className={`price-menu-row${showEmojis ? "" : " no-emoji"}`}>
       {showEmojis ? (
         <span className="price-menu-emoji" aria-hidden>
-          {item.emoji}
+          <ProduceIcon symbol={item.emoji} />
         </span>
       ) : null}
       <span className="price-menu-name-wrap">
@@ -128,6 +129,17 @@ function PriceRowView({
       </span>
     </li>
   );
+}
+
+function ProduceIcon({ symbol }: { symbol: string }) {
+  if (symbol === "⭐") return <Star size={18} className="price-menu-icon price-menu-icon--primary" />;
+  if (symbol === "veg" || symbol === "🥬" || symbol === "🥑" || symbol === "🥒" || symbol === "🥕" || symbol === "🌽" || symbol === "🧅" || symbol === "🍅") {
+    return <Circle size={14} className="price-menu-icon price-menu-icon--primary" />;
+  }
+  if (symbol === "🧃") return <Circle size={14} className="price-menu-icon price-menu-icon--primary" />;
+  if (symbol === "🍓" || symbol === "🍒") return <Cherry size={18} className="price-menu-icon price-menu-icon--primary" />;
+  if (symbol === "🍇" || symbol === "🍎" || symbol === "fruit") return <Apple size={18} className="price-menu-icon price-menu-icon--primary" />;
+  return <Circle size={14} className="price-menu-icon price-menu-icon--muted" />;
 }
 
 type Props = {
@@ -211,7 +223,7 @@ export function PriceListSections({
             <header className="price-menu-category-head">
               {showEmojis ? (
                 <span className="price-menu-cat-emoji" aria-hidden>
-                  {cat.emoji}
+                  <ProduceIcon symbol={cat.emoji} />
                 </span>
               ) : null}
               <CategoryHeadingTag className="price-menu-cat-title">{cat.title}</CategoryHeadingTag>

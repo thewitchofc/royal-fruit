@@ -71,6 +71,38 @@ export const GALLERY_STOCK_IMAGES: PlatterShowcaseItem[] = [
     file: "premium-delivery-box.webp",
     alt: "ארגז משלוח פרימיום מלא תוצרת טרייה: מלון, אננס משק 32, תירס מתוק Super Sweet, אוכמניות מותג קרמל, תותים, צברים ומדבקת Royal Fruit",
   },
+  {
+    file: "starfruit-trays.webp",
+    alt: "קרמבולה טרייה וחתוכה למגשי אירוח, מסודרת באריזות שקופות",
+  },
+  {
+    file: "dates-walnut-pack.webp",
+    alt: "תמרים ממולאים באגוזי מלך באריזת אירוח אישית",
+  },
+  {
+    file: "colorful-cauliflower.webp",
+    alt: "כרובית צבעונית טרייה באריזה: סגול, צהוב וירוק",
+  },
+  {
+    file: "red-kissabel-apples.webp",
+    alt: "תפוחי Kissabel אדומים טריים, מסודרים במגש תצוגה",
+  },
+  {
+    file: "white-strawberries.webp",
+    alt: "תותים לבנים מובחרים באריזות פרימיום",
+  },
+  {
+    file: "mixed-fruit-box.webp",
+    alt: "ארגז פירות טריים מגוון: אננס, ענבים, תותים, פטל ואוכמניות",
+  },
+  {
+    file: "fresh-produce-box.webp",
+    alt: "ארגז תוצרת טרייה עם פירות וירקות נבחרים למשלוח",
+  },
+  {
+    file: "blueberries-pack.webp",
+    alt: "אוכמניות טריות באריזת פרימיום",
+  },
 ];
 
 const ALT_BY_FILE = Object.fromEntries([

@@ -1,9 +1,10 @@
 import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { MessageCircle, ShoppingCart, Star } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
-import { WhatsAppGlyph } from "./WhatsAppGlyph";
 import { InstagramGlyph } from "./InstagramGlyph";
+import { FacebookGlyph } from "./FacebookGlyph";
 import { BreadcrumbJsonLd } from "./BreadcrumbJsonLd";
 import { OrganizationJsonLd } from "./OrganizationJsonLd";
 import { CookieConsent } from "./CookieConsent";
@@ -12,6 +13,7 @@ import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibility
 import {
   BUSINESS_ADDRESS_LINE,
   BUSINESS_AREA_SERVED,
+  BUSINESS_FACEBOOK_URL,
   BUSINESS_INSTAGRAM_URL,
   BUSINESS_NAME,
   BUSINESS_PHONE,
@@ -67,7 +69,7 @@ function HeaderCartLink({ onClick }: { onClick?: () => void }) {
       onClick={onClick}
     >
       <span className="header-cart-icon" aria-hidden>
-        🛒
+        <ShoppingCart size={20} />
       </span>
       {totalItemCount > 0 ? (
         <span className="header-cart-badge">{totalItemCount > 99 ? "99+" : totalItemCount}</span>
@@ -248,7 +250,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <WhatsAppGlyph className="btn-whatsapp-icon" aria-hidden />
+                <MessageCircle className="btn-whatsapp-icon" aria-hidden />
                 שלחו הודעה בוואטסאפ עכשיו
               </a>
             </div>
@@ -286,6 +288,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
+                <Star className="btn-whatsapp-icon" aria-hidden />
                 {GOOGLE_REVIEW_CTA_LABEL}
               </a>
             </div>
@@ -308,6 +311,15 @@ export function Layout({ children }: { children: ReactNode }) {
         </div>
       </footer>
       <a
+        href={BUSINESS_FACEBOOK_URL}
+        className="facebook-fab"
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="פייסבוק של Royal Fruit, נפתח בלשונית חדשה"
+      >
+        <FacebookGlyph className="facebook-fab-icon" />
+      </a>
+      <a
         href={BUSINESS_INSTAGRAM_URL}
         className="instagram-fab"
         target="_blank"
@@ -323,7 +335,7 @@ export function Layout({ children }: { children: ReactNode }) {
         rel="noopener noreferrer"
         aria-label="פתיחת צ'אט וואטסאפ עם אורי"
       >
-        <WhatsAppGlyph className="whatsapp-fab-icon" />
+        <MessageCircle className="whatsapp-fab-icon" />
       </a>
       {totalItemCount > 0 ? (
         <Link to="/cart" className="cart-fab" aria-label={`למעבר לסל, ${totalItemCount} פריטים`}>

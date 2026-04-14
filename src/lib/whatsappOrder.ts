@@ -5,7 +5,7 @@ import { cartTotalDisplayUnits } from "./cartItemCount";
 export const ORI_WHATSAPP_E164 = "972505113009";
 
 /** הודעת פתיחה מברירת מחדל מקישורים באתר (המרות) */
-export const WHATSAPP_WEBSITE_PREFILL = `היי, ראיתי את האתר ואני רוצה להזמין 🙂
+export const WHATSAPP_WEBSITE_PREFILL = `היי, ראיתי את האתר ואני רוצה להזמין
 אפשר לקבל פרטים?`;
 const formatQty = (qty: number) => (Number.isInteger(qty) ? String(qty) : qty.toFixed(1));
 
@@ -18,13 +18,13 @@ export function buildOrderMessage(params: {
   const { lines, customerName, customerPhone, notes } = params;
   const parts: string[] = [];
 
-  parts.push("🛒 *הזמנה חדשה, Royal Fruit*", "");
+  parts.push("*הזמנה חדשה, Royal Fruit*", "");
   parts.push(`שם: ${customerName.trim() || "לא צוין"}`);
   parts.push(`טלפון: ${customerPhone.trim() || "לא צוין"}`);
   parts.push("", "*פריטים:*", "");
 
   lines.forEach((line, i) => {
-    parts.push(`${i + 1}. ${line.emoji} *${line.name}* × ${formatQty(line.qty)}`);
+    parts.push(`${i + 1}. *${line.name}* × ${formatQty(line.qty)}`);
     const priceBits = [line.priceLabel, line.unit?.trim()].filter(Boolean);
     parts.push(`   מחירון: ${priceBits.join(", ")}`);
     parts.push(`   קטגוריה: ${line.categoryPath}`);

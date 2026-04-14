@@ -1,3 +1,5 @@
+import { Zap } from "lucide-react";
+
 /** שורות דחיפות קצרות ליד כפתור וואטסאפ */
 export function OrderUrgencyLines({
   className,
@@ -12,7 +14,7 @@ export function OrderUrgencyLines({
       <span className="order-urgency-line">
         {showFinger ? (
           <span className="order-urgency-finger" aria-hidden>
-            👉{" "}
+            <Zap className="rf-inline-icon rf-inline-icon--secondary" size={16} />
           </span>
         ) : null}
         זמינות להזמנות להיום/מחר

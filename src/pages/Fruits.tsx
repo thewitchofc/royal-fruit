@@ -23,8 +23,8 @@ export function Fruits() {
         <div className="container">
           <SheetPriceListAsMenu
             idPrefix="sheet-fruits"
-            defaultEmoji="🍎"
-            emojiStrip="🍇🍒🍓🍎🍊🍋‍🟩🥥🥝"
+            defaultEmoji="fruit"
+            emojiStrip=""
             showEmojis={false}
             page="fruits"
             listMeta={{

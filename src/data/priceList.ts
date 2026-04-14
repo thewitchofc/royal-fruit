@@ -115,6 +115,11 @@ export function getProduceShortDescription(name: string): string {
 
   if (byExact[n]) return byExact[n];
   if (n.includes("חומץ") && n.includes("תפוח")) return appleCiderVinegarShort;
+  if (n.includes("אבוקדו")) return byExact["אבוקדו מוכן לאכילה"]!;
+  if (n.includes("פינגר ליים") || n.includes("finger lime")) return byExact["פינגר ליים"]!;
+  if (n.includes("שום")) return byExact["שום טרי"]!;
+  if (n.includes("תירס")) return byExact["תירס מתוק"]!;
+  if (n.includes("ג׳ינג׳ר") || n.includes("ג'ינג'ר") || n.includes("ginger")) return byExact["ג׳ינג׳ר טרי"]!;
   if (n.startsWith("סברס")) return byExact["סברס"]!;
   if (n.includes("ענב")) return "ענב מתוק לאכילה מיידית; כל זן עם פריכות וארומה משלו.";
   if (n.includes("תות")) return "תות ארומטי ומתוק; עדין, מומלץ קירור וצריכה קרובה.";
@@ -122,6 +127,102 @@ export function getProduceShortDescription(name: string): string {
   if (n.includes("מיץ")) return "מיץ טבעי לשתייה מיידית, עם טעם נקי וללא תוספות.";
 
   return "תוצרת טרייה לפרימיום יומי, מותאמת לאכילה, בישול או אירוח לפי הצורך.";
+}
+
+/** תמונת מוצר מייצגת לפי שם/תיאור, לתצוגה במחירון */
+export function getProduceImage(name: string, description?: string): string | undefined {
+  const n = name.trim();
+  const text = `${n} ${description ?? ""}`.toLowerCase();
+  const byExactName: Record<string, string> = {
+    קרמבולה: "/images/gallery/starfruit-trays.webp",
+    "קרמבולה פרימיום": "/images/gallery/starfruit-trays.webp",
+    "תמרים ממולאים אגוזי מלך": "/images/gallery/dates-walnut-pack.webp",
+    "תות לבבות מיוחד": "/images/gallery/white-strawberries.webp",
+    "תות חצאים": "/images/gallery/white-strawberries.webp",
+    "אוכמניות כרמל": "/images/gallery/blueberries-pack.webp",
+    "אוכמניות גליל ים": "/images/gallery/blueberries-pack.webp",
+    "אוכמניות פרו סקויה": "/images/gallery/blueberries-pack.webp",
+    "פטל אדום ישראלי": "/images/gallery/mixed-fruit-box.webp",
+    "פטל שחור": "/images/gallery/mixed-fruit-box.webp",
+    "ענב ירוק קריספי": "/images/gallery/diva-green-grapes.webp",
+    "ענב ירוק סוויט גלוב": "/images/gallery/diva-green-grapes.webp",
+    "ענב אדום כרימסון": "/images/gallery/diva-green-grapes.webp",
+    "ענב שחור סייבל": "/images/gallery/diva-green-grapes.webp",
+    "ענב אדום סוויט סלבריישן": "/images/gallery/diva-green-grapes.webp",
+    "ענב קריספי": "/images/gallery/diva-green-grapes.webp",
+    "אננס חתוך": "/images/gallery/pineapple-sliced-trays.webp",
+    "קיווי קלוף": "/images/gallery/kikoka-gold-kiwi.webp",
+    "קיווי ירוק": "/images/gallery/kikoka-gold-kiwi.webp",
+    "בקבוק חומץ תפוחים": "/images/gallery/red-kissabel-apples.webp",
+    "מיקס כרובית טריו": "/images/gallery/colorful-cauliflower.webp",
+    "כרובית לבנה": "/images/gallery/colorful-cauliflower.webp",
+    "ברוקולי ג׳מבו משק כהן": "/images/gallery/colorful-cauliflower.webp",
+    "זר גזר צבעוני": "/images/gallery/fresh-produce-box.webp",
+    "נשנושי גזר מתוק": "/images/gallery/fresh-produce-box.webp",
+    "אבוקדו מוכן לאכילה": "/images/gallery/fresh-produce-box.webp",
+    "מלפפון אורגני בלה מאיה": "/images/gallery/fresh-produce-box.webp",
+    "עגבניות אורגניות בלה מאיה": "/images/gallery/fresh-produce-box.webp",
+    "תפוז פירמיום": "/images/gallery/mixed-fruit-box.webp",
+    "תפוז דם": "/images/gallery/mixed-fruit-box.webp",
+    פומלה: "/images/gallery/mixed-fruit-box.webp",
+    אבטיח: "/images/gallery/mixed-fruit-box.webp",
+    "אבטיח חתוך": "/images/gallery/mixed-fruit-box.webp",
+    "מלון כתום": "/images/gallery/mixed-fruit-box.webp",
+    "מלון חתוך": "/images/gallery/mixed-fruit-box.webp",
+    "קוקוס חתוך": "/images/gallery/mixed-fruit-box.webp",
+    "כדורי קוקוס": "/images/gallery/mixed-fruit-box.webp",
+    "קוקוס לשתייה עם קש": "/images/gallery/mixed-fruit-box.webp",
+    "ג׳ינג׳ר טרי": "/images/gallery/fresh-produce-box.webp",
+    "שום טרי": "/images/gallery/fresh-produce-box.webp",
+    "תירס מתוק": "/images/gallery/fresh-produce-box.webp",
+    "פינגר ליים": "/images/gallery/starfruit-trays.webp",
+    "תרד גוליבר צ׳רי": "/images/gallery/fresh-produce-box.webp",
+    "אפונת שלג צ׳רי": "/images/gallery/fresh-produce-box.webp",
+    "אפונת גינה צ׳רי חדש": "/images/gallery/fresh-produce-box.webp",
+    "כורכום צ׳רי": "/images/gallery/fresh-produce-box.webp",
+    "בצל ספרדי משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "דלעת משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "כרוב ניצנים משק כהן": "/images/gallery/colorful-cauliflower.webp",
+    "חרשוף משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "קוסביה משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "שעועית ירוקה משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "שעועית צהובה משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "שעועית רחבה משק כהן": "/images/gallery/fresh-produce-box.webp",
+    פרוס: "/images/gallery/fresh-produce-box.webp",
+    חזרת: "/images/gallery/fresh-produce-box.webp",
+    "מארז פול": "/images/gallery/fresh-produce-box.webp",
+    "אספרגוס טרי": "/images/gallery/asparagus-bundles.webp",
+    "עלי גפן טריים (500 גרם)": "/images/gallery/fresh-produce-box.webp",
+    "מלפפון ארמטו ענק": "/images/gallery/fresh-produce-box.webp",
+    "עגבניות שרי בלה מאיה": "/images/gallery/fresh-produce-box.webp",
+    "מלפפון חמוץ בעבודת יד": "/images/gallery/cucumbers-trays.webp",
+    סברס: "/images/gallery/mixed-fruit-box.webp",
+    "סברס (לק״ג)": "/images/gallery/mixed-fruit-box.webp",
+    "גולדן ברי": "/images/gallery/mixed-fruit-box.webp",
+    "פקאן בוואקום": "/images/gallery/dates-walnut-pack.webp",
+    "פקאן עם קליפה": "/images/gallery/dates-walnut-pack.webp",
+    "בקבוק מיץ תפוחים 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
+    "בקבוק מיץ תפוחים וגזר 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
+    "בקבוק מיץ תפוחים וסלק 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
+    "בקבוק מיץ תפוחים וחבוש 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
+  };
+  const exact = byExactName[n];
+  if (exact) return exact;
+
+  // fallback for dynamic sheet rows so every product gets image
+  if (/(תות|strawber)/.test(text)) return "/images/gallery/white-strawberries.webp";
+  if (/(אוכמנ|blueber|פטל|berry)/.test(text)) return "/images/gallery/blueberries-pack.webp";
+  if (/(ענב|grape)/.test(text)) return "/images/gallery/diva-green-grapes.webp";
+  if (/(אננס|pineapple)/.test(text)) return "/images/gallery/pineapple-sliced-trays.webp";
+  if (/(קרמבולה|starfruit|כוכב)/.test(text)) return "/images/gallery/starfruit-trays.webp";
+  if (/(תמר|אגוז|פקאן|nuts|walnut)/.test(text)) return "/images/gallery/dates-walnut-pack.webp";
+  if (/(כרובית|ברוקולי|cauliflower|broccoli)/.test(text)) return "/images/gallery/colorful-cauliflower.webp";
+  if (/(תפוח|apple)/.test(text)) return "/images/gallery/red-kissabel-apples.webp";
+  if (/(קיווי|kiwi)/.test(text)) return "/images/gallery/kikoka-gold-kiwi.webp";
+  if (/(מלפפון|עגבני|גזר|אבוקדו|דלעת|תרד|אפונה|שום|בצל|אספרגוס|ירק|vegetable|veg)/.test(text)) {
+    return "/images/gallery/fresh-produce-box.webp";
+  }
+  return "/images/gallery/mixed-fruit-box.webp";
 }
 
 /** דף «פירות פרימיום» */

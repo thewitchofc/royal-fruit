@@ -41,6 +41,8 @@ export const BUSINESS_OPENING_HOURS_SPECIFICATION: Record<string, unknown>[] = [
 
 /** אינסטגרם רשמי של העסק */
 export const BUSINESS_INSTAGRAM_URL = "https://www.instagram.com/royal.fruit26/";
+/** פייסבוק רשמי של העסק */
+export const BUSINESS_FACEBOOK_URL = "https://www.facebook.com/profile.php?id=61583593416199&locale=he_IL";
 
 /** פתיחת חיפוש במפות Google לכתובת הנ״ל */
 export const GOOGLE_MAPS_URL =
@@ -67,5 +69,5 @@ export const GOOGLE_BUSINESS_GPAGE_URL = gPageEnv || "";
 export const GOOGLE_WRITE_REVIEW_URL = "https://g.page/r/CVeM2UapKGpbEBM/review";
 
 /** טקסטים לכפתורי ביקורת (אחידים באתר) */
-export const GOOGLE_REVIEW_CTA_HINT = "מרוצים מהשירות? נשמח לביקורת קצרה 🙏";
-export const GOOGLE_REVIEW_CTA_LABEL = "דרגו אותנו בגוגל ⭐";
+export const GOOGLE_REVIEW_CTA_HINT = "מרוצים מהשירות? נשמח לביקורת קצרה.";
+export const GOOGLE_REVIEW_CTA_LABEL = "דרגו אותנו בגוגל";

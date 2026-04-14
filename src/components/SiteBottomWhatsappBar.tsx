@@ -1,6 +1,6 @@
+import { MessageCircle } from "lucide-react";
 import { BUSINESS_TRUST_CUSTOMERS_LINE } from "../lib/business";
 import { OrderUrgencyLines } from "./OrderUrgencyLines";
-import { WhatsAppGlyph } from "./WhatsAppGlyph";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
 
 /** CTA וואטסאפ חוזר לפני הפוטר בכל דף */
@@ -25,7 +25,7 @@ export function SiteBottomWhatsappBar() {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <WhatsAppGlyph className="btn-whatsapp-icon" aria-hidden />
+          <MessageCircle className="btn-whatsapp-icon" aria-hidden />
           שלחו הודעה בוואטסאפ עכשיו
         </a>
       </div>

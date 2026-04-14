@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
+import { Apple, CheckCircle, MessageCircle, Star, Truck, Zap } from "lucide-react";
 import { OrderUrgencyLines } from "../components/OrderUrgencyLines";
-import { HomePageFaqSection } from "../components/HomePageFaqSection";
-import { WhatsAppGlyph } from "../components/WhatsAppGlyph";
 import {
   BUSINESS_ADDRESS_LINE,
   BUSINESS_NAME,
@@ -36,14 +35,23 @@ export function Home() {
           <div className="home-hero-why-wrap">
             <p className="home-hero-why-label">למה לבחור בוואטסאפ</p>
             <ul className="home-hero-benefits" aria-label="יתרונות הזמנה בוואטסאפ">
-              <li>פירות טריים יום־יום</li>
-              <li>משלוחים מהירים</li>
-              <li>התאמה אישית לכל אירוע</li>
+              <li>
+                <Apple className="rf-inline-icon rf-inline-icon--primary" size={18} aria-hidden />
+                <span>פירות טריים יום־יום</span>
+              </li>
+              <li>
+                <Truck className="rf-inline-icon rf-inline-icon--primary" size={18} aria-hidden />
+                <span>משלוחים מהירים</span>
+              </li>
+              <li>
+                <CheckCircle className="rf-inline-icon rf-inline-icon--primary" size={18} aria-hidden />
+                <span>התאמה אישית לכל אירוע</span>
+              </li>
             </ul>
             <div className="home-hero-trust-block">
               <p className="home-hero-trust">
-                <span className="home-hero-trust-finger" aria-hidden>
-                  👉{" "}
+                <span className="home-hero-trust-finger hero-trust-icon-wrap" aria-hidden>
+                  <Star className="rf-inline-icon rf-inline-icon--primary" size={18} />
                 </span>
                 {BUSINESS_TRUST_CUSTOMERS_LINE}
               </p>
@@ -59,7 +67,7 @@ export function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <WhatsAppGlyph className="btn-whatsapp-icon" aria-hidden />
+                <MessageCircle className="btn-whatsapp-icon" aria-hidden />
                 שלחו הודעה בוואטסאפ עכשיו
               </a>
               <p className="hero-cta-hint">מענה מהיר תוך דקות, בלי התחייבות</p>
@@ -72,7 +80,21 @@ export function Home() {
             </Link>
           </div>
           <p className="hero-urgency-strip" role="status">
-            אספקה יומית • מלאי מתעדכן • זמינות גבוהה
+            <span className="hero-urgency-item">
+              <Truck className="rf-inline-icon rf-inline-icon--secondary" size={16} aria-hidden /> אספקה יומית
+            </span>
+            <span className="hero-urgency-sep" aria-hidden>
+              •
+            </span>
+            <span className="hero-urgency-item">
+              <Zap className="rf-inline-icon rf-inline-icon--secondary" size={16} aria-hidden /> מלאי מתעדכן
+            </span>
+            <span className="hero-urgency-sep" aria-hidden>
+              •
+            </span>
+            <span className="hero-urgency-item">
+              <Star className="rf-inline-icon rf-inline-icon--secondary" size={16} aria-hidden /> זמינות גבוהה
+            </span>
           </p>
         </div>
       </section>
@@ -114,83 +136,12 @@ export function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
+                <Star className="btn-whatsapp-icon" aria-hidden />
               {GOOGLE_REVIEW_CTA_LABEL}
             </a>
           </div>
         </div>
       </section>
-
-      <section id="home-why-choose" className="section">
-        <div className="container">
-          <h2 className="section-title">למה לבחור בנו</h2>
-          <p className="home-why-lead muted wide">
-            שלושה דברים שמרגישים כבר בהזמנה הראשונה בוואטסאפ.
-          </p>
-          <div className="home-value-grid">
-            <article className="home-value-card feature-card">
-              <h3 className="home-value-card-title">פירות טריים יום־יום</h3>
-              <p>סחורה שמגיעה כל יום מהשדה, עם קירור וסידור נכון עד אליכם.</p>
-            </article>
-            <article className="home-value-card feature-card">
-              <h3 className="home-value-card-title">משלוחים מהירים</h3>
-              <p>תיאום קצר בוואטסאפ וחלון אספקה שנשמר, כדי שלא תישארו בלי מה שצריך למטבח.</p>
-            </article>
-            <article className="home-value-card feature-card">
-              <h3 className="home-value-card-title">התאמה אישית לכל אירוע</h3>
-              <p>סל לבית, למסעדה או לאירוע, לפי תקציב, עונה ומה שבאמת אוכלים אצלכם.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <section id="home-trust-us" className="section section-tint">
-        <div className="container narrow">
-          <h2 className="section-title">למה סומכים עלינו</h2>
-          <p className="home-trust-highlight">
-            <span className="home-trust-highlight-finger" aria-hidden>
-              👉{" "}
-            </span>
-            {BUSINESS_TRUST_CUSTOMERS_LINE}
-          </p>
-          <p className="home-trust-prose muted wide">
-            לקוחות פרטיים ועסקים בוחרים בנו בזכות טריות, איכות גבוהה ושירות אישי. אנחנו עובדים עם ספקים מובילים
-            ומספקים מוצרים טריים מדי יום.
-          </p>
-          <p className="home-trust-tagline muted wide">שירות אמין ומהיר עם ניסיון</p>
-          <p className="home-trust-prose muted wide home-trust-follow">
-            <Link to="/testimonials" className="price-menu-tel">
-              קראו המלצות מלקוחות
-            </Link>
-          </p>
-        </div>
-      </section>
-
-      <section id="home-about-snippet" className="section">
-        <div className="container narrow">
-          <h2 className="section-title">קצת עלינו</h2>
-          <p className="home-about-prose muted wide">
-            <strong>{BUSINESS_NAME}</strong> מתמחה באספקת פירות וירקות טריים באיכות גבוהה, עם דגש על שירות אישי,
-            טריות יומית ומבחר רחב של מוצרים. כל המוצרים נבחרים בקפידה ומגיעים מספקים מובילים.
-          </p>
-          <p className="home-about-prose muted wide home-about-seo">
-            ב־<strong>{BUSINESS_NAME}</strong> מספקים פירות וירקות טריים עד הבית, כולל מגוון רחב של פירות, ירקות,
-            מוצרים קלופים ומארזים איכותיים. השירות מתאים ללקוחות פרטיים ולעסקים.
-          </p>
-          <p className="home-about-prose muted wide home-about-follow">
-            רוצים לראות עוד?{" "}
-            <Link to="/about" className="price-menu-tel">
-              לעמוד אודות
-            </Link>{" "}
-            או{" "}
-            <Link to="/gallery" className="price-menu-tel">
-              לגלריה
-            </Link>
-            .
-          </p>
-        </div>
-      </section>
-
-      <HomePageFaqSection />
 
       <section id="home-order-cta" className="section">
         <div className="container narrow home-mid-cta">
@@ -204,7 +155,7 @@ export function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              <WhatsAppGlyph className="btn-whatsapp-icon" aria-hidden />
+              <MessageCircle className="btn-whatsapp-icon" aria-hidden />
               שלחו הודעה בוואטסאפ עכשיו
             </a>
             <p className="hero-cta-hint home-mid-cta-hint">מענה מהיר תוך דקות, בלי התחייבות</p>
