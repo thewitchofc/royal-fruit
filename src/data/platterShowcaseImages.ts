@@ -4,11 +4,11 @@ export type PlatterShowcaseItem = { file: string; alt: string };
 
 export const PLATTER_SHOWCASE_IMAGES: PlatterShowcaseItem[] = [
   {
-    file: "platter-fruit-open-tray.png",
+    file: "fruit-tray-open.webp",
     alt: "מגש פירות פרימיום עגול ועשיר: אבטיח, מלון, אננס, ענבים, קיווי, תותים, אוכמניות ועוד, מעוצב על ידי Royal Fruit",
   },
   {
-    file: "platter-fruit-wrapped-ribbon-a.png",
+    file: "fruit-tray-wrapped-ribbon.webp",
     alt: "מגש פירות לאירוע, עטוף בסלופן עם סרט ומדבקת Royal Fruit, מוכן למשלוח",
   },
 ];
@@ -16,59 +16,59 @@ export const PLATTER_SHOWCASE_IMAGES: PlatterShowcaseItem[] = [
 /** צילומי מלאי ופרימיום (גלריה) */
 export const GALLERY_STOCK_IMAGES: PlatterShowcaseItem[] = [
   {
-    file: "gallery-strawberries-bee-totes.png",
+    file: "strawberries-bee-totes.webp",
     alt: "מגשי תותים טריים באריזת ״בי־תות״, פורת יעקב והראל",
   },
   {
-    file: "gallery-pineapple-kapi-scale.png",
+    file: "pineapple-kapi-scale.webp",
     alt: "אננס Kapi על משקילה מקצועית, שקיפות משקל ללקוח",
   },
   {
-    file: "gallery-diva-green-grapes.png",
+    file: "diva-green-grapes.webp",
     alt: "ענבים ירוקים ללא גרעינים מותג Diva, יבוא פרו, ארוזים ברשת מגן",
   },
   {
-    file: "gallery-strawberries-yemini-heart.png",
+    file: "strawberries-yemini-heart.webp",
     alt: "תותי משק ימיני במגשי לב ארוזים, קופסת משלוח",
   },
   {
-    file: "gallery-kikoka-gold-kiwi.png",
+    file: "kikoka-gold-kiwi.webp",
     alt: "קיווי זהב Kikoka ארוז 500 גרם, מקור יוון",
   },
   {
-    file: "gallery-rainbow-carrots-yaakovov.png",
+    file: "rainbow-carrots-yaakovov.webp",
     alt: "גזר צבעוני טרי עם עלים, תוצרת משק יעקובוב",
   },
   {
-    file: "gallery-pineapple-sliced-trays.png",
+    file: "pineapple-sliced-trays.webp",
     alt: "מגשי אננס חתוך באריזות שקופות עם מדבקה בעברית",
   },
   {
-    file: "gallery-pineapple-kapi-crates.png",
+    file: "pineapple-kapi-crates.webp",
     alt: "ארגזי אננס Kapi Premium, תוצרת קוסטה ריקה",
   },
   {
-    file: "gallery-blackberries-patel-bahar.png",
+    file: "blackberries-patel-bahar.webp",
     alt: "פטל שחור ופטל אדום באריזות פטל בהר",
   },
   {
-    file: "gallery-young-coconut-drink.png",
+    file: "young-coconut-drink.webp",
     alt: "קוקוס צעיר לשתייה Young Fresh Coconut, ארוז ומוכן לשתייה",
   },
   {
-    file: "gallery-cucumbers-trays.png",
+    file: "cucumbers-trays.webp",
     alt: "מלפפונים טריים במגשי קצף עטופי צלופן",
   },
   {
-    file: "gallery-passion-fruit-oranges.png",
+    file: "passion-fruit-oranges.webp",
     alt: "מגשי פסיפלורה עטופי צלופן ותפוזים בארגזים",
   },
   {
-    file: "gallery-asparagus-bundles.png",
+    file: "asparagus-bundles.webp",
     alt: "אספרגוס ירוק טרי, צרורות בארגז דואר",
   },
   {
-    file: "gallery-premium-delivery-box.png",
+    file: "premium-delivery-box.webp",
     alt: "ארגז משלוח פרימיום מלא תוצרת טרייה: מלון, אננס משק 32, תירס מתוק Super Sweet, אוכמניות מותג קרמל, תותים, צברים ומדבקת Royal Fruit",
   },
 ];
@@ -94,40 +94,40 @@ export const GALLERY_PARTNER_NAMES: string[] = (() => {
   };
   for (const item of GALLERY_STOCK_IMAGES) {
     const { file } = item;
-    if (file === "gallery-strawberries-bee-totes.png") {
+    if (file === "strawberries-bee-totes.webp") {
       add("בי־תות");
       add("פורת יעקב והראל");
       continue;
     }
-    if (file === "gallery-pineapple-kapi-scale.png" || file === "gallery-pineapple-kapi-crates.png") {
+    if (file === "pineapple-kapi-scale.webp" || file === "pineapple-kapi-crates.webp") {
       add("Kapi");
       continue;
     }
-    if (file === "gallery-diva-green-grapes.png") {
+    if (file === "diva-green-grapes.webp") {
       add("Diva");
       continue;
     }
-    if (file === "gallery-strawberries-yemini-heart.png") {
+    if (file === "strawberries-yemini-heart.webp") {
       add("משק ימיני");
       continue;
     }
-    if (file === "gallery-kikoka-gold-kiwi.png") {
+    if (file === "kikoka-gold-kiwi.webp") {
       add("Kikoka");
       continue;
     }
-    if (file === "gallery-rainbow-carrots-yaakovov.png") {
+    if (file === "rainbow-carrots-yaakovov.webp") {
       add("משק יעקובוב");
       continue;
     }
-    if (file === "gallery-blackberries-patel-bahar.png") {
+    if (file === "blackberries-patel-bahar.webp") {
       add("פטל בהר");
       continue;
     }
-    if (file === "gallery-young-coconut-drink.png") {
+    if (file === "young-coconut-drink.webp") {
       add("Young Fresh Coconut");
       continue;
     }
-    if (file === "gallery-premium-delivery-box.png") {
+    if (file === "premium-delivery-box.webp") {
       add("משק 32");
       add("קרמל");
       continue;

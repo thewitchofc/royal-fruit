@@ -21,11 +21,11 @@ import {
   GOOGLE_REVIEW_CTA_LABEL,
   GOOGLE_WRITE_REVIEW_URL,
 } from "../lib/business";
-import logoPng from "../assets/brand-logo.png";
-import devSignature from "../assets/the-witch-signature.png";
 
-/** יחד עם `<link rel="preload" href="/logo.webp">` ב-index.html, אותו URL ל-LCP */
-const LOGO_WEBP_URL = "/logo.webp";
+/** יחד עם `<link rel="preload" href="/images/brand/logo.webp">` ב-index.html, אותו URL ל-LCP */
+const LOGO_WEBP_URL = "/images/brand/logo.webp";
+const LOGO_PNG_URL = "/images/brand/brand-logo.png";
+const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
 
 const links = [
   { to: "/", label: "דף בית" },
@@ -137,7 +137,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <picture>
                 <source srcSet={LOGO_WEBP_URL} type="image/webp" />
                 <img
-                  src={logoPng}
+                  src={LOGO_PNG_URL}
                   alt={isNarrowViewport ? "" : "Royal Fruit"}
                   className="brand-logo"
                   decoding="async"
@@ -170,7 +170,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <picture>
               <source srcSet={LOGO_WEBP_URL} type="image/webp" />
               <img
-                src={logoPng}
+                src={LOGO_PNG_URL}
                 alt=""
                 className="header-nav-compact-logo-img"
                 width={48}
@@ -211,7 +211,7 @@ export function Layout({ children }: { children: ReactNode }) {
             <picture>
               <source srcSet={LOGO_WEBP_URL} type="image/webp" />
               <img
-                src={logoPng}
+                src={LOGO_PNG_URL}
                 alt=""
                 className="mobile-main-logo-img"
                 width={360}
@@ -261,7 +261,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <h2 className="footer-block-title">קרדיט פיתוח</h2>
               <p className="footer-credit-sublabel">עיצוב ופיתוח אתר</p>
               <img
-                src={devSignature}
+                src={DEV_SIGNATURE_URL}
                 alt="The Witch, Web &amp; App Development"
                 className="footer-credit-logo"
                 loading="lazy"

@@ -3,7 +3,7 @@
  */
 
 /** נתיב תמונת OG ב-public, תמיד עם absoluteUrl() ב-meta ו-JSON-LD */
-export const SITE_OG_IMAGE_PATH = "/og-image.png" as const;
+export const SITE_OG_IMAGE_PATH = "/images/seo/og-image.png" as const;
 
 /**
  * Placeholder לבילד כש־VITE_SITE_URL חסר, לא דומיין אמיתי; חובה להגדיר URL בפרודקשן.

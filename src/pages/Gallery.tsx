@@ -5,19 +5,19 @@ import { usePageSeo } from "../lib/seo";
 const galleryImages = [
   ...PLATTER_SHOWCASE_IMAGES.map((x) => x.file),
   ...GALLERY_STOCK_IMAGES.map((x) => x.file),
-  "IMG_2608-53026900-aa5e-4602-a247-ad3f470d7e6d.png",
-  "IMG_2609-514de247-6daa-49ba-b011-65ba70684225.png",
-  "IMG_2607-b2af0579-cd03-4488-b547-2ccac78bf75d.png",
-  "IMG_2610-ad25b3dd-f247-4ee6-bc88-7162c5c83c49.png",
-  "IMG_2603-409fcb77-3e6a-4f4c-a3f7-c3d4869b2dfb.png",
-  "IMG_2606-1933002d-d2c0-40ff-9b3a-a534be38379a.png",
-  "IMG_2612-26a089a4-ab56-49ce-90c5-e82be84a890c.png",
-  "IMG_2611-c16d4eaf-1d72-48e9-b2bd-8e3dfc269ef3.png",
-  "IMG_2613-b22168fe-a74f-47c7-a141-258eb18e1737.png",
-  "IMG_2602-da8edb59-5f0b-4845-b367-0e75e11e39c8.png",
-  "IMG_2605-03a6346f-9767-4e4e-8ed9-8a8d323f7d9a.png",
-  "IMG_2604-0929cfb4-6197-4e05-aac2-290b2725fc5e.png",
-  "IMG_2601-de42e3c4-45fd-4e56-959c-bf26809ee075.png",
+  "fruit-gallery-01.webp",
+  "fruit-gallery-02.webp",
+  "fruit-gallery-03.webp",
+  "fruit-gallery-04.webp",
+  "fruit-gallery-05.webp",
+  "fruit-gallery-06.webp",
+  "fruit-gallery-07.webp",
+  "fruit-gallery-08.webp",
+  "fruit-gallery-09.webp",
+  "fruit-gallery-10.webp",
+  "fruit-gallery-11.webp",
+  "fruit-gallery-12.webp",
+  "fruit-gallery-13.webp",
 ];
 
 export function Gallery() {
@@ -77,7 +77,7 @@ export function Gallery() {
                   onClick={() => setActiveIndex(index)}
                   aria-label={`פתח תמונה ${index + 1} בגדול`}
                 >
-                  <img src={`/gallery/${filename}`} alt={galleryImageAlt(filename, index)} loading="lazy" decoding="async" />
+                  <img src={`/images/gallery/${filename}`} alt={galleryImageAlt(filename, index)} loading="lazy" decoding="async" />
                 </button>
               </figure>
             ))}
@@ -132,7 +132,7 @@ export function Gallery() {
           </p>
           <img
             className="gallery-lightbox-img"
-            src={`/gallery/${activeImage}`}
+            src={`/images/gallery/${activeImage}`}
             alt={galleryImageAlt(activeImage, activeIndex)}
             loading="lazy"
             decoding="async"

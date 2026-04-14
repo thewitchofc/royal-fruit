@@ -171,10 +171,10 @@ a {
   inset: 0;
   z-index: 0;
   background-color: var(--bg);
-  background-image: url("./assets/header-fruits-bg.png");
+  background-image: url("/images/backgrounds/header-fruits-bg.png");
   background-image: image-set(
-    url("./assets/header-fruits-bg.webp") type("image/webp"),
-    url("./assets/header-fruits-bg.png") type("image/png")
+    url("/images/backgrounds/header-fruits-bg.webp") type("image/webp"),
+    url("/images/backgrounds/header-fruits-bg.png") type("image/png")
   );
   background-size: cover;
   background-position: center 28%;
