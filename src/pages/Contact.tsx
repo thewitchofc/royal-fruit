@@ -1,10 +1,14 @@
 import { FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { PageCategoryNav } from "../components/PageCategoryNav";
+import { FacebookGlyph } from "../components/FacebookGlyph";
+import { InstagramGlyph } from "../components/InstagramGlyph";
 import {
   BUSINESS_ADDRESS_LINE,
   BUSINESS_AREA_SERVED,
+  BUSINESS_FACEBOOK_URL,
   BUSINESS_HOURS_SUMMARY,
+  BUSINESS_INSTAGRAM_URL,
   BUSINESS_NAME,
   BUSINESS_PHONE,
   BUSINESS_PHONE_E164,
@@ -246,6 +250,28 @@ export function Contact() {
             </h3>
             <p className="muted small">{BUSINESS_AREA_SERVED}</p>
             <p className="muted small">לפרטים והזמנות מהירות אפשר להתקשר ישירות לאורי.</p>
+            <div className="contact-social-links" aria-label="רשתות חברתיות">
+              <a
+                href={BUSINESS_INSTAGRAM_URL}
+                className="contact-social-link contact-social-link--instagram"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="אינסטגרם של Royal Fruit, נפתח בלשונית חדשה"
+              >
+                <InstagramGlyph className="contact-social-icon" />
+                אינסטגרם
+              </a>
+              <a
+                href={BUSINESS_FACEBOOK_URL}
+                className="contact-social-link contact-social-link--facebook"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="פייסבוק של Royal Fruit, נפתח בלשונית חדשה"
+              >
+                <FacebookGlyph className="contact-social-icon" />
+                פייסבוק
+              </a>
+            </div>
             <p className="small">
               <Link to="/faq">שאלות נפוצות ותשובות</Link>
             </p>

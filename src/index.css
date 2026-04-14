@@ -1740,6 +1740,42 @@ main,
   text-decoration: underline;
 }
 
+.contact-social-links {
+  margin: 0.85rem 0 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  justify-content: center;
+}
+
+.contact-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 700;
+  border: 1px solid rgba(24, 33, 23, 0.14);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+}
+
+.contact-social-link--instagram {
+  border-color: rgba(188, 24, 136, 0.35);
+}
+
+.contact-social-link--facebook {
+  border-color: rgba(24, 119, 242, 0.35);
+}
+
+.contact-social-icon {
+  width: 1rem;
+  height: 1rem;
+  display: block;
+}
+
 .small {
   font-size: 0.9rem;
 }
@@ -2035,83 +2071,6 @@ main,
   justify-content: flex-start;
 }
 
-/* צף: פייסבוק מעל אינסטגרם מעל וואטסאפ (אותו צד), סל מעליהם כשקיים */
-.facebook-fab {
-  position: fixed;
-  bottom: calc(1.1rem + 56px + 0.5rem + 56px + 0.5rem + env(safe-area-inset-bottom, 0px));
-  inset-inline-start: 1rem;
-  z-index: 70;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #1877f2;
-  color: #fff;
-  text-decoration: none;
-  box-shadow:
-    0 4px 22px rgba(24, 119, 242, 0.4),
-    0 2px 10px rgba(24, 33, 23, 0.16);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.facebook-fab:hover {
-  transform: scale(1.06);
-  box-shadow:
-    0 6px 28px rgba(24, 119, 242, 0.46),
-    0 4px 14px rgba(24, 33, 23, 0.18);
-}
-
-.facebook-fab:focus-visible {
-  outline: 3px solid var(--olive);
-  outline-offset: 3px;
-}
-
-.facebook-fab-icon {
-  width: 1.55rem;
-  height: 1.55rem;
-  display: block;
-}
-
-.instagram-fab {
-  position: fixed;
-  bottom: calc(1.1rem + 56px + 0.5rem + env(safe-area-inset-bottom, 0px));
-  inset-inline-start: 1rem;
-  z-index: 70;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(43deg, #f09433, #e6683c 33%, #dc2743 58%, #cc2366 78%, #bc1888);
-  color: #fff;
-  text-decoration: none;
-  box-shadow:
-    0 4px 22px rgba(188, 24, 136, 0.35),
-    0 2px 10px rgba(24, 33, 23, 0.16);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.instagram-fab:hover {
-  transform: scale(1.06);
-  box-shadow:
-    0 6px 26px rgba(188, 24, 136, 0.42),
-    0 4px 14px rgba(24, 33, 23, 0.18);
-}
-
-.instagram-fab:focus-visible {
-  outline: 3px solid var(--olive);
-  outline-offset: 3px;
-}
-
-.instagram-fab-icon {
-  width: 1.65rem;
-  height: 1.65rem;
-  display: block;
-}
-
 .whatsapp-fab {
   position: fixed;
   bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
@@ -2152,7 +2111,7 @@ main,
 
 .cart-fab {
   position: fixed;
-  bottom: calc(1.1rem + 56px + 0.5rem + 56px + 0.5rem + 56px + 0.5rem + env(safe-area-inset-bottom, 0px));
+  bottom: calc(1.1rem + 56px + 0.5rem + env(safe-area-inset-bottom, 0px));
   inset-inline-start: 1rem;
   z-index: 70;
   width: 56px;

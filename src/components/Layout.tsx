@@ -3,8 +3,6 @@ import { MessageCircle, ShoppingCart, Star } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
-import { InstagramGlyph } from "./InstagramGlyph";
-import { FacebookGlyph } from "./FacebookGlyph";
 import { BreadcrumbJsonLd } from "./BreadcrumbJsonLd";
 import { OrganizationJsonLd } from "./OrganizationJsonLd";
 import { CookieConsent } from "./CookieConsent";
@@ -13,8 +11,6 @@ import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibility
 import {
   BUSINESS_ADDRESS_LINE,
   BUSINESS_AREA_SERVED,
-  BUSINESS_FACEBOOK_URL,
-  BUSINESS_INSTAGRAM_URL,
   BUSINESS_NAME,
   BUSINESS_PHONE,
   BUSINESS_PHONE_E164,
@@ -318,24 +314,6 @@ export function Layout({ children }: { children: ReactNode }) {
           </nav>
         </div>
       </footer>
-      <a
-        href={BUSINESS_FACEBOOK_URL}
-        className="facebook-fab"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="פייסבוק של Royal Fruit, נפתח בלשונית חדשה"
-      >
-        <FacebookGlyph className="facebook-fab-icon" />
-      </a>
-      <a
-        href={BUSINESS_INSTAGRAM_URL}
-        className="instagram-fab"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="אינסטגרם של Royal Fruit (@royal.fruit26), נפתח בלשונית חדשה"
-      >
-        <InstagramGlyph className="instagram-fab-icon" />
-      </a>
       <a
         href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
         className="whatsapp-fab"
