@@ -77,7 +77,14 @@ export function Gallery() {
                   onClick={() => setActiveIndex(index)}
                   aria-label={`פתח תמונה ${index + 1} בגדול`}
                 >
-                  <img src={`/images/gallery/${filename}`} alt={galleryImageAlt(filename, index)} loading="lazy" decoding="async" />
+                  <img
+                    src={`/images/gallery/${filename}`}
+                    alt={galleryImageAlt(filename, index)}
+                    loading="lazy"
+                    decoding="async"
+                    width={800}
+                    height={1000}
+                  />
                 </button>
               </figure>
             ))}
@@ -136,6 +143,8 @@ export function Gallery() {
             alt={galleryImageAlt(activeImage, activeIndex)}
             loading="lazy"
             decoding="async"
+            width={800}
+            height={1000}
             onClick={(e) => e.stopPropagation()}
           />
         </div>

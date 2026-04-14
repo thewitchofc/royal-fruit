@@ -1,8 +1,9 @@
-import { useLayoutEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { MessageCircle, ShoppingCart, Star } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
+import { WhatsAppGlyph } from "./WhatsAppGlyph";
 import { BreadcrumbJsonLd } from "./BreadcrumbJsonLd";
 import { OrganizationJsonLd } from "./OrganizationJsonLd";
 import { CookieConsent } from "./CookieConsent";
@@ -19,6 +20,8 @@ import {
   GOOGLE_REVIEW_CTA_LABEL,
   GOOGLE_WRITE_REVIEW_URL,
 } from "../lib/business";
+import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
+import { warmSheetProductsCache } from "../hooks/useSheetProducts";
 
 /** יחד עם `<link rel="preload" href="/images/brand/logo.webp">` ב-index.html, אותו URL ל-LCP */
 const LOGO_WEBP_URL = "/images/brand/logo.webp";
@@ -27,12 +30,12 @@ const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
 
 const links = [
   { to: "/", label: "דף בית" },
+  { to: "/fruits", label: "פירות פרימיום" },
+  { to: "/vegetables", label: "ירקות פרימיום" },
   { to: "/about", label: "אודות העסק" },
   { to: "/articles", label: "מאמרים" },
   { to: "/gallery", label: "גלריה" },
   { to: "/testimonials", label: "המלצות" },
-  { to: "/fruits", label: "פירות פרימיום" },
-  { to: "/vegetables", label: "ירקות פרימיום" },
   { to: "/faq", label: "שאלות נפוצות" },
   { to: "/contact", label: "יצירת קשר" },
 ];
@@ -118,6 +121,26 @@ export function Layout({ children }: { children: ReactNode }) {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    const warmData = () => warmSheetProductsCache(getGoogleSheetsProductsCsvUrl());
+    const win = window as Window & {
+      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
+    };
+
+    if (typeof win.requestIdleCallback === "function") {
+      win.requestIdleCallback(warmData, { timeout: 1500 });
+      return;
+    }
+    const t = window.setTimeout(warmData, 500);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const prefetchPricePages = () => {
+    void import("../pages/Fruits");
+    void import("../pages/Vegetables");
+    warmSheetProductsCache(getGoogleSheetsProductsCsvUrl());
+  };
+
   const header = (
     <header ref={headerRef} className="site-header">
       <div className="container header-stack">
@@ -138,6 +161,8 @@ export function Layout({ children }: { children: ReactNode }) {
                   src={LOGO_PNG_URL}
                   alt={isNarrowViewport ? "" : "Royal Fruit"}
                   className="brand-logo"
+                  width={800}
+                  height={546}
                   decoding="async"
                 />
               </picture>
@@ -185,6 +210,8 @@ export function Layout({ children }: { children: ReactNode }) {
                 className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
                 end={to === "/"}
                 onClick={() => setOpen(false)}
+                onMouseEnter={to === "/fruits" || to === "/vegetables" ? prefetchPricePages : undefined}
+                onFocus={to === "/fruits" || to === "/vegetables" ? prefetchPricePages : undefined}
               >
                 {label}
               </NavLink>
@@ -270,7 +297,9 @@ export function Layout({ children }: { children: ReactNode }) {
                 src={DEV_SIGNATURE_URL}
                 alt="The Witch, Web &amp; App Development"
                 className="footer-credit-logo"
-                loading="lazy"
+                width={1024}
+                height={1024}
+                loading="eager"
                 decoding="async"
               />
             </div>
@@ -321,7 +350,7 @@ export function Layout({ children }: { children: ReactNode }) {
         rel="noopener noreferrer"
         aria-label="פתיחת צ'אט וואטסאפ עם אורי"
       >
-        <MessageCircle className="whatsapp-fab-icon" />
+        <WhatsAppGlyph className="whatsapp-fab-icon" />
       </a>
       {totalItemCount > 0 ? (
         <Link to="/cart" className="cart-fab" aria-label={`למעבר לסל, ${totalItemCount} פריטים`}>
