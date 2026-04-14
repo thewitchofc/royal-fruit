@@ -2762,18 +2762,46 @@ main,
 
 @media (max-width: 480px) {
   .price-menu-row {
-    gap: 0.35rem 0.4rem;
-    padding: 0.65rem;
+    gap: 0.25rem 0.35rem;
+    padding: 0.5rem 0.55rem;
+    border-radius: 10px;
   }
 
   .price-menu-qty-btn {
-    width: 1.55rem;
-    height: 1.55rem;
-    font-size: 0.95rem;
+    width: 1.35rem;
+    height: 1.35rem;
+    font-size: 0.82rem;
+  }
+
+  .price-menu-qty-badge {
+    min-width: 1.8rem;
+    font-size: 0.75rem;
+    padding: 0.15rem 0.28rem;
+  }
+
+  .price-menu-add-wrap {
+    gap: 0.25rem;
+    margin-top: 0.12rem;
   }
 
   .price-menu-price {
-    font-size: 0.88rem;
+    font-size: 0.8rem;
+    gap: 0.1rem;
+  }
+
+  .price-menu-name {
+    font-size: 0.94rem;
+    line-height: 1.25;
+  }
+
+  .price-menu-desc {
+    font-size: 0.76rem;
+    line-height: 1.3;
+  }
+
+  .price-menu-unit {
+    font-size: 0.7rem;
+    line-height: 1.2;
   }
 }
 
