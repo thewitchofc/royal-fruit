@@ -31,6 +31,7 @@ export default function App() {
           <Route path="/articles/:slug" element={<ArticlePage />} />
           <Route path="/testimonials" element={<Testimonials />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/projects/*" element={<Navigate to="/gallery" replace />} />
           <Route path="/catalog" element={<Navigate to="/" replace />} />
           <Route path="/fruits" element={<Fruits />} />
           <Route path="/vegetables" element={<Vegetables />} />

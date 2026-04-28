@@ -33,7 +33,7 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     id: "pickup",
     section: "general",
-    question: "איפה אוספים בעצמם?",
+    question: "איפה אפשר לאסוף?",
     answer:
       "הכתובת היא האורגים 7, חולון. איסוף עצמי לפי תיאום מול אורי, כדי לקצר המתנה ולוודא שכל הקרטונים מוכנים.",
   },

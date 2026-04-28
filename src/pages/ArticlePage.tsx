@@ -43,7 +43,7 @@ export function ArticlePage() {
           }),
         }}
       />
-      <section className="page-hero">
+      <section className="page-hero articles-hero article-detail-hero">
         <div className="container narrow">
           <p className="eyebrow">
             <Link to="/articles" className="article-back-link">
@@ -57,7 +57,7 @@ export function ArticlePage() {
         </div>
       </section>
 
-      <section className="section">
+      <section className="section article-detail-section">
         <div className="container narrow prose article-prose">
           {article.paragraphs.map((p, i) => (
             <p key={i}>{p}</p>

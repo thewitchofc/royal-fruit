@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { Fragment, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
   GOOGLE_REVIEW_CTA_HINT,
@@ -24,15 +24,16 @@ export function Testimonials() {
   });
 
   const testimonials = useMemo(() => shuffle(TESTIMONIALS), [TESTIMONIALS]);
+  const [featuredTestimonial, ...restTestimonials] = testimonials;
 
   return (
     <div className="page">
-      <section className="page-hero">
+      <section className="page-hero testimonials-hero">
         <div className="container narrow">
           <p className="eyebrow">המלצות</p>
-          <h1 className="page-title">מה אומרים מי שעובדים איתנו</h1>
+          <h1 className="page-title">לקוחות שמרגישים את ההבדל</h1>
           <p className="page-lead muted">
-            חוות דעת מלקוחות במטבחים, באירועים ובבתים שבחרו באספקה פרימיום. רוצים להצטרף?{" "}
+            חוות דעת מלקוחות פרטיים ועסקיים שבחרו בתוצרת טרייה, שירות אישי ואספקה מדויקת. רוצים להצטרף?{" "}
             <Link to="/contact" className="testimonials-inline-link">
               צרו קשר
             </Link>
@@ -42,36 +43,71 @@ export function Testimonials() {
       </section>
 
       <section className="section testimonials-section">
-        <div className="container">
+        <div className="container testimonials-premium-shell">
+          <div className="testimonials-proof-card" aria-label="סיכום המלצות לקוחות">
+            <div>
+              <p className="testimonials-proof-kicker">Customer Notes</p>
+              <h2>המלצות שמגיעות מהשטח</h2>
+            </div>
+            <div className="testimonials-proof-points">
+              <span>לקוחות פרטיים</span>
+              <span>אירועים ומטבחים</span>
+              <span>שירות אישי</span>
+            </div>
+          </div>
+
+          {featuredTestimonial ? (
+            <article className="testimonial-card testimonial-card-featured">
+              <div className="testimonial-stars" aria-label="דירוג מומלץ">
+                <span aria-hidden>★★★★★</span>
+              </div>
+              <p className="testimonial-quote">&ldquo;{featuredTestimonial.quote}&rdquo;</p>
+              <footer className="testimonial-meta">
+                <span className="testimonial-author">{featuredTestimonial.author}</span>
+                <span className="testimonial-role">{featuredTestimonial.role}</span>
+              </footer>
+            </article>
+          ) : null}
+
           <ul className="testimonials-grid">
-            {testimonials.map((t) => (
-              <li key={t.id}>
-                <article className="testimonial-card">
-                  <p className="testimonial-quote">&ldquo;{t.quote}&rdquo;</p>
-                  <footer className="testimonial-meta">
-                    <span className="testimonial-author">{t.author}</span>
-                    <span className="testimonial-role">{t.role}</span>
-                  </footer>
-                </article>
-              </li>
+            {restTestimonials.map((t, index) => (
+              <Fragment key={t.id}>
+                <li>
+                  <article className="testimonial-card">
+                    <div className="testimonial-stars" aria-label="דירוג מומלץ">
+                      <span aria-hidden>★★★★★</span>
+                    </div>
+                    <p className="testimonial-quote">&ldquo;{t.quote}&rdquo;</p>
+                    <footer className="testimonial-meta">
+                      <span className="testimonial-author">{t.author}</span>
+                      <span className="testimonial-role">{t.role}</span>
+                    </footer>
+                  </article>
+                </li>
+                {index === 3 ? (
+                  <li>
+                    <div className="testimonials-review-inline" aria-label="השארת ביקורת בגוגל">
+                      <p>{GOOGLE_REVIEW_CTA_HINT}</p>
+                      <a
+                        href={GOOGLE_WRITE_REVIEW_URL}
+                        className="testimonials-review-inline-link"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {GOOGLE_REVIEW_CTA_LABEL}
+                      </a>
+                      <span className="testimonials-review-stars" aria-hidden>
+                        ★★★★★
+                      </span>
+                    </div>
+                  </li>
+                ) : null}
+              </Fragment>
             ))}
           </ul>
         </div>
       </section>
 
-      <section className="section section-tint testimonials-google-section" aria-label="ביקורת בגוגל">
-        <div className="container narrow testimonials-google-inner">
-          <p className="google-review-cta-hint">{GOOGLE_REVIEW_CTA_HINT}</p>
-          <a
-            href={GOOGLE_WRITE_REVIEW_URL}
-            className="btn btn-ghost testimonials-google-review-btn"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {GOOGLE_REVIEW_CTA_LABEL}
-          </a>
-        </div>
-      </section>
     </div>
   );
 }

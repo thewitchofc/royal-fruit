@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { MessageCircle, ShoppingCart, Star } from "lucide-react";
+import { MessageCircle, ShoppingCart } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
@@ -9,17 +9,7 @@ import { OrganizationJsonLd } from "./OrganizationJsonLd";
 import { CookieConsent } from "./CookieConsent";
 import { SiteBottomWhatsappBar } from "./SiteBottomWhatsappBar";
 import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibilityLoader";
-import {
-  BUSINESS_ADDRESS_LINE,
-  BUSINESS_AREA_SERVED,
-  BUSINESS_NAME,
-  BUSINESS_PHONE,
-  BUSINESS_PHONE_E164,
-  GOOGLE_BUSINESS_PROFILE_URL,
-  GOOGLE_REVIEW_CTA_HINT,
-  GOOGLE_REVIEW_CTA_LABEL,
-  GOOGLE_WRITE_REVIEW_URL,
-} from "../lib/business";
+import { BUSINESS_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
 import { warmSheetProductsCache } from "../hooks/useSheetProducts";
 
@@ -27,6 +17,7 @@ import { warmSheetProductsCache } from "../hooks/useSheetProducts";
 const LOGO_WEBP_URL = "/images/brand/logo.webp";
 const LOGO_PNG_URL = "/images/brand/brand-logo.png";
 const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
+const DEV_CREDIT_URL = "https://thewitch.co.il";
 
 const links = [
   { to: "/", label: "דף בית" },
@@ -117,7 +108,7 @@ export function Layout({ children }: { children: ReactNode }) {
   }, []);
 
   useLayoutEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     setOpen(false);
   }, [pathname]);
 
@@ -217,6 +208,16 @@ export function Layout({ children }: { children: ReactNode }) {
               </NavLink>
             ))}
           </nav>
+          <a
+            className="header-wa-link"
+            href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="פתיחת צ'אט וואטסאפ להזמנה, נפתח בלשונית חדשה"
+          >
+            <MessageCircle className="header-wa-link-icon" aria-hidden />
+            להזמנה
+          </a>
         </div>
       </div>
     </header>
@@ -253,76 +254,55 @@ export function Layout({ children }: { children: ReactNode }) {
           <NavLink to="/vegetables" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
             ירקות פרימיום
           </NavLink>
+          <NavLink to="/cart" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            סל קניות
+          </NavLink>
+          <NavLink to="/contact" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            יצירת קשר
+          </NavLink>
         </nav>
         {children}
       </main>
       <SiteBottomWhatsappBar />
       <footer className="site-footer">
         <div className="container footer-inner">
-          <p className="footer-brand">{BUSINESS_NAME}</p>
-          <p className="footer-tagline muted small">
-            {BUSINESS_NAME}, פירות וירקות טריים, איכות גבוהה, אספקה עד הבית
-          </p>
-          <div className="footer-grid" aria-label="פרטי קשר ושירות">
-            <div className="footer-block">
-              <h2 className="footer-block-title">טלפון</h2>
-              <p className="footer-block-body">
-                <a href={`tel:${BUSINESS_PHONE_E164}`} className="footer-contact-link">
-                  {BUSINESS_PHONE}
-                </a>
-                <span className="footer-contact-suffix"> (אורי)</span>
-              </p>
+          <div className="footer-main">
+            <div className="footer-copy">
+              <p className="footer-kicker">Premium Fresh Market</p>
+              <p className="footer-brand">{BUSINESS_NAME}</p>
+              <p className="footer-tagline small">תוצרת פרימיום. שירות אישי. משלוח מתואם.</p>
             </div>
-            <div className="footer-block">
-              <h2 className="footer-block-title">וואטסאפ</h2>
+            <div className="footer-actions" aria-label="יצירת קשר מהירה">
+              <a href={`tel:${BUSINESS_PHONE_E164}`} className="footer-contact-link">
+                {BUSINESS_PHONE}
+              </a>
               <a
                 href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
-                className="btn btn-primary btn-whatsapp btn-whatsapp-strong footer-wa-cta"
+                className="btn btn-primary btn-whatsapp footer-wa-cta"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="שליחת הודעה בוואטסאפ לאורי, נפתח בלשונית חדשה"
               >
                 <MessageCircle className="btn-whatsapp-icon" aria-hidden />
-                שלחו הודעה בוואטסאפ עכשיו
+                וואטסאפ
               </a>
-            </div>
-            <div className="footer-block">
-              <h2 className="footer-block-title">אזור שירות</h2>
-              <p className="footer-block-body">{BUSINESS_ADDRESS_LINE}, איסוף עצמי לפי תיאום.</p>
-              <p className="footer-block-body footer-block-body--muted">{BUSINESS_AREA_SERVED}</p>
-            </div>
-            <div className="footer-block footer-block--credit">
-              <h2 className="footer-block-title">קרדיט פיתוח</h2>
-              <p className="footer-credit-sublabel">עיצוב ופיתוח אתר</p>
-              <img
-                src={DEV_SIGNATURE_URL}
-                alt="The Witch, Web &amp; App Development"
-                className="footer-credit-logo"
-                width={1024}
-                height={1024}
-                loading="eager"
-                decoding="async"
-              />
-            </div>
-          </div>
-          <div className="footer-google-wrap">
-            <a
-              href={GOOGLE_BUSINESS_PROFILE_URL}
-              className="footer-google-link"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              מצא אותנו בגוגל
-            </a>
-            <div className="footer-google-review-block">
-              <p className="google-review-cta-hint">{GOOGLE_REVIEW_CTA_HINT}</p>
               <a
-                href={GOOGLE_WRITE_REVIEW_URL}
-                className="btn btn-ghost footer-google-review-btn"
+                href={DEV_CREDIT_URL}
+                className="footer-credit-link"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="The Witch, Web and App Development, נפתח בלשונית חדשה"
               >
-                <Star className="btn-whatsapp-icon" aria-hidden />
-                {GOOGLE_REVIEW_CTA_LABEL}
+                <img
+                  src={DEV_SIGNATURE_URL}
+                  alt="The Witch, Web &amp; App Development"
+                  className="footer-credit-logo"
+                  width={1024}
+                  height={1024}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span className="footer-credit-text">קרדיט פיתוח</span>
               </a>
             </div>
           </div>
@@ -348,7 +328,7 @@ export function Layout({ children }: { children: ReactNode }) {
         className="whatsapp-fab"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="פתיחת צ'אט וואטסאפ עם אורי"
+        aria-label="פתיחת צ'אט וואטסאפ עם אורי, נפתח בלשונית חדשה"
       >
         <WhatsAppGlyph className="whatsapp-fab-icon" />
       </a>

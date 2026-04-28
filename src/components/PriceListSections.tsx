@@ -202,7 +202,7 @@ export function PriceListSections({
 
       <div className="price-menu-search price-menu-search--global">
         <label htmlFor={`${searchFieldIdPrefix}-search`}>
-          <span className="sr-only">חיפוש מהיר בכל המחירון</span>
+          <span className="price-menu-search-label">חיפוש מהיר בדוכן</span>
           <input
             id={`${searchFieldIdPrefix}-search`}
             type="search"

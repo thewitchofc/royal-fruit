@@ -120,7 +120,7 @@ export function Cart() {
                       <button
                         type="button"
                         className="cart-qty-btn"
-                        aria-label="הפחת כמות"
+                        aria-label={`הפחת כמות עבור ${line.name}`}
                         onClick={() => setQty(line.id, line.qty - step)}
                       >
                         −
@@ -129,13 +129,18 @@ export function Cart() {
                       <button
                         type="button"
                         className="cart-qty-btn"
-                        aria-label="הוסף כמות"
+                        aria-label={`הוסף כמות עבור ${line.name}`}
                         onClick={() => setQty(line.id, line.qty + step)}
                       >
                         +
                       </button>
                     </div>
-                    <button type="button" className="cart-remove" onClick={() => removeLine(line.id)}>
+                    <button
+                      type="button"
+                      className="cart-remove"
+                      aria-label={`הסר את ${line.name} מהסל`}
+                      onClick={() => removeLine(line.id)}
+                    >
                       הסר
                     </button>
                   </li>
@@ -186,7 +191,7 @@ export function Cart() {
               <form className="cart-checkout" onSubmit={onSubmit} noValidate>
                 <h2 className="cart-checkout-title">לפני השליחה</h2>
                 {formError ? (
-                  <p className="cart-form-error" role="alert">
+                  <p id="cart-form-error" className="cart-form-error" role="alert">
                     {formError}
                   </p>
                 ) : null}
@@ -207,6 +212,7 @@ export function Cart() {
                     aria-invalid={
                       formError?.includes("שם מלא") ? true : undefined
                     }
+                    aria-describedby={formError?.includes("שם מלא") ? "cart-form-error" : undefined}
                   />
                 </label>
                 <label className="field">
@@ -230,6 +236,7 @@ export function Cart() {
                       aria-invalid={
                         formError?.includes("טלפון") ? true : undefined
                       }
+                      aria-describedby={formError?.includes("טלפון") ? "cart-form-error" : undefined}
                     />
                   </span>
                 </label>

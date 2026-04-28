@@ -188,8 +188,7 @@ export function resolveSheetCsvFetchUrl(configured: string): string {
   return configured;
 }
 
-export async function loadSheetProducts(csvUrl: string): Promise<SheetProduct[]> {
-  const url = resolveSheetCsvFetchUrl(csvUrl);
+async function fetchCsvText(url: string): Promise<string> {
   const res = await fetch(url, { cache: "default", credentials: "omit", mode: "cors" });
   if (!res.ok) {
     throw new Error(
@@ -202,11 +201,28 @@ export async function loadSheetProducts(csvUrl: string): Promise<SheetProduct[]>
       "התקבלה תשובת HTML במקום CSV, כנראה כתובת לא מפורסמת, פרוקסי לא מוגדר, או SPA החזירה דף בית. בדקו קישור פרסום CSV ופריסת שרת.",
     );
   }
+  return text;
+}
+
+export async function loadSheetProducts(csvUrl: string): Promise<SheetProduct[]> {
+  const url = resolveSheetCsvFetchUrl(csvUrl);
+  const useProxyFallback = url !== PRICE_SHEET_PUBLIC_PATH;
+
   try {
+    const text = await fetchCsvText(url);
     return parseProductsCsv(text);
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : String(e);
-    throw new Error(msg);
+  } catch (firstErr) {
+    if (!useProxyFallback) {
+      const msg = firstErr instanceof Error ? firstErr.message : String(firstErr);
+      throw new Error(msg);
+    }
+    try {
+      const text = await fetchCsvText(PRICE_SHEET_PUBLIC_PATH);
+      return parseProductsCsv(text);
+    } catch {
+      const msg = firstErr instanceof Error ? firstErr.message : String(firstErr);
+      throw new Error(msg);
+    }
   }
 }
 

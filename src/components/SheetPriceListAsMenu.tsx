@@ -47,16 +47,25 @@ export function SheetPriceListAsMenu({
   }
 
   if (state.status === "loading") {
-    return <p className="muted">טוען מחירון…</p>;
+    return (
+      <div className="sheet-products-loading" role="status" aria-live="polite">
+        <span className="sheet-products-loading-orb" aria-hidden />
+        <p className="sheet-products-loading-title">מסדרים את הדוכן הטרי...</p>
+        <p className="muted small">טוענים מחירים ומלאי עדכניים מהגיליון.</p>
+      </div>
+    );
   }
 
   if (state.status === "error") {
     const publicMessage =
       "לא הצלחנו לטעון את המחירון כרגע. נסו לרענן את העמוד בעוד רגע, או התקשרו לעדכון מחירים ומלאי.";
     return (
-      <p className="sheet-products-error" role="alert">
-        {import.meta.env.DEV ? state.message : publicMessage}
-      </p>
+      <div className="sheet-products-error" role="alert">
+        <p>{import.meta.env.DEV ? state.message : publicMessage}</p>
+        <button type="button" className="btn btn-ghost btn-sm sheet-products-retry" onClick={() => window.location.reload()}>
+          נסו לטעון שוב
+        </button>
+      </div>
     );
   }
 

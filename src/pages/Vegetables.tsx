@@ -12,7 +12,7 @@ export function Vegetables() {
       <section className="page-hero">
         <div className="container narrow">
           <p className="eyebrow">ירקות פרימיום</p>
-          <h1 className="page-title">ירקות שמחזיקים קו אחיד מהשדה ועד הסלטייה</h1>
+          <h1 className="page-title vegetables-page-title">ירקות שמחזיקים קו אחיד מהשדה ועד הסלטייה</h1>
           <p className="page-lead muted">
             המחירון והמלאי מתעדכנים באופן שוטף, מה שמופיע כאן משקף את מה שזמין אצלנו כרגע.
           </p>

@@ -36,14 +36,19 @@ export function CookieConsent() {
   }
 
   return (
-    <div className="cookie-consent" role="dialog" aria-labelledby="cookie-consent-title" aria-live="polite">
+    <div
+      className="cookie-consent"
+      role="region"
+      aria-labelledby="cookie-consent-title"
+      aria-describedby="cookie-consent-description"
+    >
       <div className="cookie-consent-inner">
         <p id="cookie-consent-title" className="cookie-consent-title">
-          עוגיות וסטליסטיקה
+          עוגיות וסטטיסטיקה
         </p>
-        <p className="cookie-consent-text muted small">
-          אנו משתמשים בעוגיות להפעלת Google Analytics (סטטיסטיקת ביקורים אנונימית בכפוף להגדרות) כדי לשפר את
-          האתר. אפשר לבחור «אישור אנליטיקה» או «רק חיוני». פרטים ב
+        <p id="cookie-consent-description" className="cookie-consent-text muted small">
+          אנו משתמשים בעוגיות ובאחסון מקומי להפעלת Google Analytics (סטטיסטיקת ביקורים אנונימית בכפוף להגדרות)
+          ולשמירת בחירת ההסכמה. אפשר לבחור «אישור אנליטיקה» או «רק חיוני». פרטים ב
           <Link to="/privacy" className="cookie-consent-link">
             מדיניות הפרטיות
           </Link>

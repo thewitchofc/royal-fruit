@@ -1,8 +1,8 @@
 import { FormEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { PageCategoryNav } from "../components/PageCategoryNav";
 import { FacebookGlyph } from "../components/FacebookGlyph";
 import { InstagramGlyph } from "../components/InstagramGlyph";
+import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import {
   BUSINESS_ADDRESS_LINE,
   BUSINESS_AREA_SERVED,
@@ -102,29 +102,20 @@ export function Contact() {
       <section className="page-hero">
         <div className="container narrow">
           <p className="eyebrow">יצירת קשר</p>
-          <h1 className="page-title">בואו נבנה יחד סל פרימיום שמתאים בול לצרכים שלכם</h1>
+          <h1 className="page-title contact-page-title">שירות פרימיום מתחיל בשיחה מדויקת</h1>
           <p className="page-lead muted">
-            השאירו פרטים והטופס יפתח וואטסאפ עם פרטי הפנייה לאורי לאישור ותיאום מהירים.
+            ספרו לנו מה צריך להגיע, לאן ומתי. אורי יחזור אליכם עם התאמה אישית, זמינות ותיאום מהיר.
           </p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <PageCategoryNav
-            items={[
-              { href: "#contact-form", label: "טופס" },
-              { href: "#contact-details", label: "פרטי קשר" },
-              { href: "#contact-hours", label: "שעות ואיסוף" },
-              { href: "#contact-delivery", label: "אזורי משלוח" },
-            ]}
-          />
-        </div>
-      </section>
-
-      <section className="section">
+      <section className="section contact-premium-section">
         <div className="container contact-grid">
           <form id="contact-form" className="contact-form" onSubmit={onSubmit} noValidate>
+            <div className="contact-form-head">
+              <RoyalFruitWordmark className="contact-form-wordmark" />
+              <h2>פנייה מהירה לאורי</h2>
+            </div>
             {summary ? (
               <p className="contact-form-summary-error" role="alert">
                 {summary}
@@ -212,7 +203,7 @@ export function Contact() {
               <span>הודעה</span>
               <textarea name="message" rows={5} placeholder="תארו תאריך, היקף וכל דגש מיוחד..." />
             </label>
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary contact-submit">
               שליחה לוואטסאפ לאורי
             </button>
             {sent ? (
@@ -223,33 +214,49 @@ export function Contact() {
           </form>
 
           <aside id="contact-details" className="contact-aside">
-            <h2>פרטי קשר</h2>
-            <p>
-              <strong>עסק:</strong> {BUSINESS_NAME}
-            </p>
-            <p>
-              <strong>טלפון:</strong>{" "}
-              <a href={`tel:${BUSINESS_PHONE_E164}`}>{BUSINESS_PHONE}</a> (אורי)
-            </p>
-            <p>
-              <strong>כתובת:</strong>{" "}
-              <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
+            <div className="contact-aside-head">
+              <p className="contact-form-kicker">Direct Line</p>
+              <h2>פרטי קשר</h2>
+              <p>{BUSINESS_NAME} זמינים להזמנות, אירועים ואספקה שוטפת.</p>
+            </div>
+
+            <div className="contact-info-card">
+              <span className="contact-info-label">טלפון ישיר</span>
+              <a href={`tel:${BUSINESS_PHONE_E164}`} className="contact-info-value">
+                {BUSINESS_PHONE}
+              </a>
+              <p>אורי</p>
+            </div>
+
+            <div className="contact-info-card">
+              <span className="contact-info-label">כתובת ואיסוף</span>
+              <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer" className="contact-info-value">
                 {BUSINESS_ADDRESS_LINE}
-              </a>{" "}
-              (פתיחה ב־Google Maps)
-            </p>
-            <p>
-              <strong>אספקה:</strong> משלוחים עד הבית + אפשרות לאיסוף עצמי לפי תיאום
-            </p>
-            <h3 id="contact-hours" className="contact-aside-sub">
-              שעות פעילות ואיסוף
-            </h3>
-            <p className="muted small">{BUSINESS_HOURS_SUMMARY}</p>
-            <h3 id="contact-delivery" className="contact-aside-sub">
-              אזורי משלוח
-            </h3>
-            <p className="muted small">{BUSINESS_AREA_SERVED}</p>
-            <p className="muted small">לפרטים והזמנות מהירות אפשר להתקשר ישירות לאורי.</p>
+              </a>
+              <p>פתיחה ב־Google Maps</p>
+            </div>
+
+            <div className="contact-info-card">
+              <span className="contact-info-label">אספקה</span>
+              <strong className="contact-info-value">משלוח עד הבית + איסוף עצמי</strong>
+              <p>לפי תיאום מראש</p>
+            </div>
+
+            <div className="contact-mini-grid">
+              <section className="contact-mini-card" aria-labelledby="contact-hours">
+                <h3 id="contact-hours" className="contact-aside-sub">
+                  שעות פעילות
+                </h3>
+                <p>{BUSINESS_HOURS_SUMMARY}</p>
+              </section>
+              <section className="contact-mini-card" aria-labelledby="contact-delivery">
+                <h3 id="contact-delivery" className="contact-aside-sub">
+                  אזורי משלוח
+                </h3>
+                <p>{BUSINESS_AREA_SERVED}</p>
+              </section>
+            </div>
+
             <div className="contact-social-links" aria-label="רשתות חברתיות">
               <a
                 href={BUSINESS_INSTAGRAM_URL}

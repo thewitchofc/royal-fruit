@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { ARTICLES, formatArticleDate } from "../data/articles";
 import { usePageSeo } from "../lib/seo";
 
@@ -10,10 +11,10 @@ export function ArticlesList() {
 
   return (
     <div className="page">
-      <section className="page-hero">
+      <section className="page-hero articles-hero">
         <div className="container narrow">
           <p className="eyebrow">מאמרים וטיפים</p>
-          <h1 className="page-title">מהחנות אל השולחן, ידע קטן שעושה הבדל גדול</h1>
+          <h1 className="page-title">ידע קטן שעושה הבדל גדול</h1>
           <p className="page-lead muted">
             מדריכים קצרים על בחירת פרי, שמירה על ירקות ומה שקורה מאחורי הקלעים באיכות
             פרימיום.
@@ -22,7 +23,19 @@ export function ArticlesList() {
       </section>
 
       <section className="section articles-section">
-        <div className="container">
+        <div className="container articles-premium-shell">
+          <div className="articles-intro-card" aria-label="אופי המאמרים">
+            <div>
+              <RoyalFruitWordmark className="articles-intro-wordmark" />
+              <h2>טיפים קצרים לבחירה, אחסון ואירוח נכון.</h2>
+            </div>
+            <div className="articles-intro-points">
+              <span>בחירת תוצרת</span>
+              <span>שמירה בבית</span>
+              <span>אירוח פרימיום</span>
+            </div>
+          </div>
+
           <ul className="articles-grid">
             {ARTICLES.map((article) => (
               <li key={article.slug}>

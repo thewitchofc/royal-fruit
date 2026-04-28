@@ -12,7 +12,7 @@ export function Fruits() {
       <section className="page-hero">
         <div className="container narrow">
           <p className="eyebrow">פירות פרימיום</p>
-          <h1 className="page-title">ממתקי טבע שנבחרו כמו אבנים נדירות</h1>
+          <h1 className="page-title fruits-page-title">ממתקי טבע שנבחרו כמו אבנים נדירות</h1>
           <p className="page-lead muted">
             המחירון והמלאי מתעדכנים באופן שוטף, מה שמופיע כאן משקף את מה שזמין אצלנו כרגע.
           </p>

@@ -24,6 +24,7 @@ export function SiteBottomWhatsappBar() {
           href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
           target="_blank"
           rel="noopener noreferrer"
+          aria-label="שליחת הודעה בוואטסאפ לאורי, נפתח בלשונית חדשה"
         >
           <MessageCircle className="btn-whatsapp-icon" aria-hidden />
           שלחו הודעה בוואטסאפ עכשיו

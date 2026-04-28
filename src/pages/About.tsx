@@ -1,3 +1,4 @@
+import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { usePageSeo } from "../lib/seo";
 
 export function About() {
@@ -8,19 +9,31 @@ export function About() {
 
   return (
     <div className="page">
-      <section className="page-hero">
+      <section className="page-hero about-hero">
         <div className="container about-page-inner">
           <p className="eyebrow">אודות העסק</p>
           <h1 className="page-title">אנחנו כאן בשביל הטעם שמגיע ראשון לצלחת</h1>
           <p className="page-lead muted">
-            Royal Fruit נולדה מצורך של שפים ובתים שמחפשים את הרמה הבאה: לא רק &quot;טרי&quot;, אלא
+            <RoyalFruitWordmark className="royal-fruit-wordmark-inline" /> נולדה מצורך של שפים ובתים שמחפשים את הרמה הבאה: לא רק &quot;טרי&quot;, אלא
             מדויק, עקבי ויפה עד הקצה האחרון של העלה.
           </p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container about-page-inner">
+      <section className="section about-section">
+        <div className="container about-page-inner about-premium-shell">
+          <div className="about-intro-card" aria-label="העקרונות של Royal Fruit">
+            <div>
+              <RoyalFruitWordmark className="about-intro-wordmark" />
+              <h2>בחירה מדויקת, מיון אנושי ושירות שמכיר את הלקוח.</h2>
+            </div>
+            <div className="about-intro-points">
+              <span>תוצרת פרימיום</span>
+              <span>שרשרת קור</span>
+              <span>תיאום אישי</span>
+            </div>
+          </div>
+
           <div className="prose about-story-bubble">
             <h2>הסיפור שלנו</h2>
             <p>

@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { GALLERY_PARTNER_NAMES, GALLERY_STOCK_IMAGES, PLATTER_SHOWCASE_IMAGES, galleryImageAlt } from "../data/platterShowcaseImages";
 import { usePageSeo } from "../lib/seo";
 
@@ -22,6 +23,7 @@ const galleryImages = [
 
 export function Gallery() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const activeImage = activeIndex === null ? null : galleryImages[activeIndex];
   const lastIndex = galleryImages.length - 1;
 
@@ -51,6 +53,11 @@ export function Gallery() {
     };
   }, [activeIndex, lastIndex]);
 
+  useEffect(() => {
+    if (activeIndex === null) return;
+    closeButtonRef.current?.focus();
+  }, [activeIndex]);
+
   usePageSeo({
     title: "Royal Fruit | גלריה",
     description: "גלריית תמונות של תוצרת טרייה, מארזים ומגשי פירות של Royal Fruit.",
@@ -58,16 +65,28 @@ export function Gallery() {
 
   return (
     <div className="page">
-      <section className="page-hero">
+      <section className="page-hero gallery-hero">
         <div className="container narrow">
           <p className="eyebrow">גלריה</p>
-          <h1 className="page-title">תמונות מהשטח ומהמקררים</h1>
-          <p className="page-lead muted">מבחר רגעים של טריות, אריזות פרימיום ומוצרים שמגיעים אליכם הכי יפה שיש.</p>
+          <h1 className="page-title">תוצרת שנראית כמו שהיא מרגישה</h1>
+          <p className="page-lead muted">מבט קרוב על פירות, ירקות, מארזים ומגשים שנבחרים בקפדנות ונארזים נקי.</p>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
+      <section className="section gallery-section">
+        <div className="container gallery-premium-shell">
+          <div className="gallery-intro-card" aria-label="אופי הגלריה">
+            <div>
+              <RoyalFruitWordmark className="gallery-intro-wordmark" />
+              <h2>צבע, טריות ודיוק בהגשה.</h2>
+            </div>
+            <div className="gallery-intro-points">
+              <span>תוצרת עונתית</span>
+              <span>מגשי פרימיום</span>
+              <span>אריזה נקייה</span>
+            </div>
+          </div>
+
           <div className="gallery-grid">
             {galleryImages.map((filename, index) => (
               <figure key={filename} className="gallery-card">
@@ -108,8 +127,20 @@ export function Gallery() {
         </div>
       </section>
       {activeImage !== null && activeIndex !== null ? (
-        <div className="gallery-lightbox" role="dialog" aria-modal="true" aria-label="תמונה מוגדלת" onClick={() => setActiveIndex(null)}>
-          <button type="button" className="gallery-lightbox-close" onClick={() => setActiveIndex(null)} aria-label="סגור תמונה">
+        <div
+          className="gallery-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={`תמונה מוגדלת ${activeIndex + 1} מתוך ${galleryImages.length}`}
+          onClick={() => setActiveIndex(null)}
+        >
+          <button
+            ref={closeButtonRef}
+            type="button"
+            className="gallery-lightbox-close"
+            onClick={() => setActiveIndex(null)}
+            aria-label="סגור תמונה מוגדלת"
+          >
             ×
           </button>
           <button
