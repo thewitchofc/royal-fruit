@@ -11,6 +11,11 @@ import { buildOrderMessage, whatsappOrderUrl } from "../lib/whatsappOrder";
 import { usePageSeo } from "../lib/seo";
 
 type GoogleAutocompletePlace = {
+  address_components?: Array<{
+    long_name: string;
+    short_name: string;
+    types: string[];
+  }>;
   formatted_address?: string;
   name?: string;
 };
@@ -95,6 +100,10 @@ function getNextDeliveryDateInputValue() {
     date.setDate(date.getDate() + 1);
   }
   return formatDateInputValue(date);
+}
+
+function getGoogleAddressComponent(place: GoogleAutocompletePlace, type: string) {
+  return place.address_components?.find((component) => component.types.includes(type))?.long_name ?? "";
 }
 
 function CartItemIcon({ symbol }: { symbol: string }) {
@@ -211,7 +220,7 @@ function getCartUpsellSuggestions(lines: { name: string; categoryPath: string; u
 export function Cart() {
   usePageSeo({
     title: "Royal Fruit | סל קניות",
-    description: "בנו הזמנה ושלחו לוואטסאפ של אורי, כולל סכום משוער ומינימום הזמנה למשלוח.",
+    description: "בנו הזמנה ושלחו לוואטסאפ של אורי, כולל סכום משוערך ומינימום הזמנה למשלוח.",
     noIndex: true,
   });
 
@@ -225,7 +234,11 @@ export function Cart() {
   }, [lines]);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
-  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [deliveryCity, setDeliveryCity] = useState("");
+  const [deliveryStreet, setDeliveryStreet] = useState("");
+  const [deliveryHouseNumber, setDeliveryHouseNumber] = useState("");
+  const [deliveryFloor, setDeliveryFloor] = useState("");
+  const [deliveryApartment, setDeliveryApartment] = useState("");
   const [deliveryDate, setDeliveryDate] = useState(() => getNextDeliveryDateInputValue());
   const [deliveryWindow, setDeliveryWindow] = useState("09:00-13:00");
   const [notes, setNotes] = useState("");
@@ -247,14 +260,22 @@ export function Cart() {
         if (cancelled || !window.google?.maps?.places || !deliveryAddressRef.current) return;
         const autocomplete = new window.google.maps.places.Autocomplete(deliveryAddressRef.current, {
           componentRestrictions: { country: "il" },
-          fields: ["formatted_address", "name"],
+          fields: ["address_components", "formatted_address", "name"],
           types: ["address"],
         });
 
         listener = autocomplete.addListener("place_changed", () => {
           const place = autocomplete.getPlace();
-          const nextAddress = place.formatted_address || place.name || deliveryAddressRef.current?.value || "";
-          setDeliveryAddress(nextAddress);
+          const street = getGoogleAddressComponent(place, "route") || place.name || deliveryAddressRef.current?.value || "";
+          const houseNumber = getGoogleAddressComponent(place, "street_number");
+          const city =
+            getGoogleAddressComponent(place, "locality") ||
+            getGoogleAddressComponent(place, "postal_town") ||
+            getGoogleAddressComponent(place, "administrative_area_level_2");
+
+          setDeliveryStreet(street);
+          if (houseNumber) setDeliveryHouseNumber(houseNumber);
+          if (city) setDeliveryCity(city);
           setFormError(null);
         });
       })
@@ -295,9 +316,21 @@ export function Cart() {
       setFormError("נא להזין מספר טלפון ישראלי תקין (למשל 050-1234567).");
       return;
     }
-    const trimmedAddress = deliveryAddress.trim();
-    if (fulfillmentMethod === "delivery" && trimmedAddress.length < 6) {
-      setFormError("נא להזין כתובת מלאה למשלוח, כולל רחוב, מספר ועיר.");
+    const trimmedCity = deliveryCity.trim();
+    const trimmedStreet = deliveryStreet.trim();
+    const trimmedHouseNumber = deliveryHouseNumber.trim();
+    const trimmedFloor = deliveryFloor.trim();
+    const trimmedApartment = deliveryApartment.trim();
+    if (fulfillmentMethod === "delivery" && trimmedCity.length < 2) {
+      setFormError("נא להזין עיר למשלוח.");
+      return;
+    }
+    if (fulfillmentMethod === "delivery" && trimmedStreet.length < 2) {
+      setFormError("נא להזין רחוב למשלוח.");
+      return;
+    }
+    if (fulfillmentMethod === "delivery" && trimmedHouseNumber.length < 1) {
+      setFormError("נא להזין מספר בית למשלוח.");
       return;
     }
     if (fulfillmentMethod === "delivery" && !deliveryDate) {
@@ -314,7 +347,11 @@ export function Cart() {
       customerName: trimmedName,
       customerPhone: trimmedPhone,
       fulfillmentMethod,
-      deliveryAddress: trimmedAddress,
+      deliveryCity: trimmedCity,
+      deliveryStreet: trimmedStreet,
+      deliveryHouseNumber: trimmedHouseNumber,
+      deliveryFloor: trimmedFloor,
+      deliveryApartment: trimmedApartment,
       deliveryDate,
       deliveryWindow,
       notes,
@@ -332,7 +369,7 @@ export function Cart() {
           <h1 className="page-title">בונים הזמנה, ושולחים לוואטסאפ</h1>
           <p className="page-lead muted">
             התשלום והמשלוח מתואמים ישירות עם אורי בוואטסאפ אחרי השליחה. זה לא חיוב באתר. מינימום
-            הזמנה למשלוח: <strong>{MIN_DELIVERY_ORDER_NIS} ₪</strong> (לפי סכום משוער מהמחירון).
+            הזמנה למשלוח: <strong>{MIN_DELIVERY_ORDER_NIS} ₪</strong> (לפי סכום משוערך מהמחירון).
           </p>
         </div>
       </section>
@@ -367,7 +404,7 @@ export function Cart() {
                   </span>
                   <span>
                     <strong>{cartEstimate.hasAnyKnown ? `~${cartEstimate.knownTotal.toLocaleString("he-IL")} ₪` : "לתיאום"}</strong>
-                    סכום משוער
+                    סכום משוערך
                   </span>
                 </div>
               </div>
@@ -424,7 +461,7 @@ export function Cart() {
                 {cartEstimate.hasAnyKnown ? (
                   <>
                     <p className="cart-estimate-main">
-                      סה״כ משוער:{" "}
+                      סכום משוערך:{" "}
                       <strong className="cart-estimate-sum">~{cartEstimate.knownTotal.toLocaleString("he-IL")} ₪</strong>
                     </p>
                     {cartEstimate.unknownLineCount > 0 ? (
@@ -436,7 +473,7 @@ export function Cart() {
                   </>
                 ) : (
                   <p className="cart-estimate-note muted small">
-                    לא ניתן לחשב סכום משוער מהטקסט במחירון, אורי יעדכן מחיר בוואטסאפ.
+                    לא ניתן לחשב סכום משוערך מהטקסט במחירון, אורי יעדכן מחיר בוואטסאפ.
                   </p>
                 )}
               </div>
@@ -563,21 +600,73 @@ export function Cart() {
                   <>
                     <label className="field">
                       <span>
-                        כתובת מלאה למשלוח <span className="field-required">(חובה)</span>
+                        עיר <span className="field-required">(חובה)</span>
+                      </span>
+                      <input
+                        value={deliveryCity}
+                        onChange={(e) => {
+                          setDeliveryCity(e.target.value);
+                          setFormError(null);
+                        }}
+                        autoComplete="address-level2"
+                        required
+                        placeholder="למשל: תל אביב"
+                        aria-invalid={formError?.includes("עיר") ? true : undefined}
+                        aria-describedby={formError?.includes("עיר") ? "cart-form-error" : undefined}
+                      />
+                    </label>
+                    <label className="field">
+                      <span>
+                        רחוב <span className="field-required">(חובה)</span>
                       </span>
                       <input
                         ref={deliveryAddressRef}
-                        value={deliveryAddress}
+                        value={deliveryStreet}
                         onChange={(e) => {
-                          setDeliveryAddress(e.target.value);
+                          setDeliveryStreet(e.target.value);
                           setFormError(null);
                         }}
-                        autoComplete="street-address"
+                        autoComplete="address-line1"
                         required
-                        minLength={6}
-                        placeholder="רחוב, מספר, דירה ועיר"
-                        aria-invalid={formError?.includes("כתובת") ? true : undefined}
-                        aria-describedby={formError?.includes("כתובת") ? "cart-form-error" : undefined}
+                        placeholder="למשל: דיזינגוף"
+                        aria-invalid={formError?.includes("רחוב") ? true : undefined}
+                        aria-describedby={formError?.includes("רחוב") ? "cart-form-error" : undefined}
+                      />
+                    </label>
+                    <label className="field">
+                      <span>
+                        מספר בית <span className="field-required">(חובה)</span>
+                      </span>
+                      <input
+                        value={deliveryHouseNumber}
+                        onChange={(e) => {
+                          setDeliveryHouseNumber(e.target.value);
+                          setFormError(null);
+                        }}
+                        autoComplete="address-line2"
+                        required
+                        inputMode="numeric"
+                        placeholder="12"
+                        aria-invalid={formError?.includes("מספר בית") ? true : undefined}
+                        aria-describedby={formError?.includes("מספר בית") ? "cart-form-error" : undefined}
+                      />
+                    </label>
+                    <label className="field">
+                      <span>קומה</span>
+                      <input
+                        value={deliveryFloor}
+                        onChange={(e) => setDeliveryFloor(e.target.value)}
+                        inputMode="numeric"
+                        placeholder="3"
+                      />
+                    </label>
+                    <label className="field">
+                      <span>דירה</span>
+                      <input
+                        value={deliveryApartment}
+                        onChange={(e) => setDeliveryApartment(e.target.value)}
+                        inputMode="numeric"
+                        placeholder="8"
                       />
                     </label>
                     <label className="field cart-date-field" onClick={openDeliveryDatePicker}>
