@@ -13,6 +13,8 @@ interface ImportMetaEnv {
   readonly VITE_PRICE_SHEET_VIA_PROXY?: string;
   /** קישור g.page או פרופיל Google Business ל־sameAs ב־JSON-LD */
   readonly VITE_GOOGLE_BUSINESS_GPAGE?: string;
+  /** מפתח Google Maps לדפדפן, להפעלת השלמת כתובות בסל (להגביל לדומיין ב-Google Cloud) */
+  readonly VITE_GOOGLE_MAPS_API_KEY?: string;
   /** URL סקריפט נגישות חיצוני (למשל לאחר רישום ל«נגיש בקליק»), רק כשיש ערך */
   readonly VITE_ACCESSIBILITY_VENDOR_SCRIPT_URL?: string;
   /** אופציונלי, JSON של data-* על תג ה־script, למשל {"sitekey":"abc"} */

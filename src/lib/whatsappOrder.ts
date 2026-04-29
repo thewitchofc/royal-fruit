@@ -13,14 +13,34 @@ export function buildOrderMessage(params: {
   lines: CartLine[];
   customerName: string;
   customerPhone: string;
+  fulfillmentMethod?: "delivery" | "pickup";
+  deliveryAddress?: string;
+  deliveryDate?: string;
+  deliveryWindow?: string;
   notes: string;
 }): string {
-  const { lines, customerName, customerPhone, notes } = params;
+  const {
+    lines,
+    customerName,
+    customerPhone,
+    fulfillmentMethod = "delivery",
+    deliveryAddress = "",
+    deliveryDate = "",
+    deliveryWindow = "",
+    notes,
+  } = params;
   const parts: string[] = [];
+  const fulfillmentLabel = fulfillmentMethod === "pickup" ? "איסוף עצמי" : "משלוח";
 
   parts.push("*הזמנה חדשה, Royal Fruit*", "");
   parts.push(`שם: ${customerName.trim() || "לא צוין"}`);
   parts.push(`טלפון: ${customerPhone.trim() || "לא צוין"}`);
+  parts.push(`אופן קבלה: ${fulfillmentLabel}`);
+  if (fulfillmentMethod === "delivery") {
+    parts.push(`כתובת למשלוח: ${deliveryAddress.trim() || "לא צוינה"}`);
+    parts.push(`תאריך משלוח: ${deliveryDate.trim() || "לתיאום"}`);
+    parts.push(`שעת קבלת משלוח: ${deliveryWindow.trim() || "לתיאום"}`);
+  }
   parts.push("", "*פריטים:*", "");
 
   lines.forEach((line, i) => {
@@ -33,7 +53,7 @@ export function buildOrderMessage(params: {
 
   const totalUnits = cartTotalDisplayUnits(lines);
   parts.push(`סה״כ פריטים (יחידות): ${totalUnits}`);
-  parts.push("", "התשלום והמשלוח, לתיאום מול אורי בוואטסאפ.");
+  parts.push("", "המחיר הסופי, המלאי והתיאום, מול אורי בוואטסאפ.");
 
   if (notes.trim()) {
     parts.push("", "*הערות מהלקוח:*", notes.trim());

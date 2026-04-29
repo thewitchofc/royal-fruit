@@ -269,7 +269,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </nav>
         {children}
       </main>
-      {pathname === "/" ? null : <SiteBottomWhatsappBar />}
+      {pathname === "/" || pathname === "/cart" ? null : <SiteBottomWhatsappBar />}
       <footer className="site-footer">
         <div className="container footer-inner">
           <div className="footer-main">
