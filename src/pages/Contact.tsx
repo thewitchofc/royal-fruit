@@ -26,8 +26,8 @@ type ContactFieldKey = "name" | "phone" | "email";
 
 export function Contact() {
   usePageSeo({
-    title: "Royal Fruit | יצירת קשר",
-    description: "השאירו פרטים או שלחו פנייה מהירה לתיאום אספקה והזמנות.",
+    title: "Royal Fruit | יצירת קשר להזמנת פירות וירקות",
+    description: "צרו קשר עם Royal Fruit לתיאום משלוח פירות וירקות פרימיום, איסוף עצמי או הזמנה לעסק באזור חולון, גוש דן והמרכז.",
   });
 
   const [sent, setSent] = useState(false);

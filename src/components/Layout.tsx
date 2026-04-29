@@ -9,9 +9,11 @@ import { OrganizationJsonLd } from "./OrganizationJsonLd";
 import { CookieConsent } from "./CookieConsent";
 import { SiteBottomWhatsappBar } from "./SiteBottomWhatsappBar";
 import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibilityLoader";
-import { BUSINESS_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
+import { RoyalFruitWordmark } from "./RoyalFruitWordmark";
+import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
 import { warmSheetProductsCache } from "../hooks/useSheetProducts";
+import { useScrollReveal } from "../hooks/useScrollReveal";
 
 /** יחד עם `<link rel="preload" href="/images/brand/logo.webp">` ב-index.html, אותו URL ל-LCP */
 const LOGO_WEBP_URL = "/images/brand/logo.webp";
@@ -23,10 +25,10 @@ const links = [
   { to: "/", label: "דף בית" },
   { to: "/fruits", label: "פירות פרימיום" },
   { to: "/vegetables", label: "ירקות פרימיום" },
-  { to: "/about", label: "אודות העסק" },
-  { to: "/articles", label: "מאמרים" },
   { to: "/gallery", label: "גלריה" },
   { to: "/testimonials", label: "המלצות" },
+  { to: "/articles", label: "מאמרים" },
+  { to: "/about", label: "אודות העסק" },
   { to: "/faq", label: "שאלות נפוצות" },
   { to: "/contact", label: "יצירת קשר" },
 ];
@@ -74,6 +76,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const headerRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
   const { totalItemCount } = useCart();
+  useScrollReveal(pathname);
 
   useLayoutEffect(() => {
     const mq = window.matchMedia("(max-width: 960px)");
@@ -254,6 +257,9 @@ export function Layout({ children }: { children: ReactNode }) {
           <NavLink to="/vegetables" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
             ירקות פרימיום
           </NavLink>
+          <NavLink to="/gallery" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            גלריה
+          </NavLink>
           <NavLink to="/cart" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
             סל קניות
           </NavLink>
@@ -263,13 +269,13 @@ export function Layout({ children }: { children: ReactNode }) {
         </nav>
         {children}
       </main>
-      <SiteBottomWhatsappBar />
+      {pathname === "/" ? null : <SiteBottomWhatsappBar />}
       <footer className="site-footer">
         <div className="container footer-inner">
           <div className="footer-main">
             <div className="footer-copy">
               <p className="footer-kicker">Premium Fresh Market</p>
-              <p className="footer-brand">{BUSINESS_NAME}</p>
+              <RoyalFruitWordmark className="footer-brand-wordmark" />
               <p className="footer-tagline small">תוצרת פרימיום. שירות אישי. משלוח מתואם.</p>
             </div>
             <div className="footer-actions" aria-label="יצירת קשר מהירה">

@@ -10,7 +10,6 @@ export const SEO_STATIC_PATHS: string[] = [
   "/fruits",
   "/vegetables",
   "/faq",
-  "/cart",
   "/contact",
   "/privacy",
   "/terms",

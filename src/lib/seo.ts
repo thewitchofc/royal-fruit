@@ -5,7 +5,7 @@ import { absoluteUrl, getSiteUrl } from "./siteUrl";
 
 /** מילות מפתח כלליות לדפים בעברית (Google מתעלם חלקית; עדיין עוזר לכלי מטא ולעקביות) */
 export const SITE_META_KEYWORDS =
-  "Royal Fruit, פירות פרימיום, ירקות פרימיום, חולון, משלוחי פירות, הזמנת פירות וירקות, פירות טריים, אורי צפניה";
+  "Royal Fruit, רויאל פרוט, פירות פרימיום, ירקות פרימיום, משלוח פירות וירקות, פירות וירקות עד הבית, פירות טריים חולון, ירקות טריים חולון, משלוחי פירות חולון, משלוחי ירקות גוש דן, פירות וירקות ראשון לציון, פירות וירקות בת ים, פירות וירקות תל אביב, אורי צפניה";
 
 type SeoParams = {
   title: string;
@@ -108,6 +108,14 @@ export function usePageSeo(params: SeoParams) {
     upsertMeta('meta[property="og:type"]', {
       property: "og:type",
       content: ogType,
+    });
+    upsertMeta('meta[property="og:site_name"]', {
+      property: "og:site_name",
+      content: "Royal Fruit",
+    });
+    upsertMeta('meta[property="og:locale"]', {
+      property: "og:locale",
+      content: "he_IL",
     });
 
     if (canonical) {

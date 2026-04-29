@@ -1,24 +1,19 @@
 import { Link } from "react-router-dom";
-import { Apple, CheckCircle, MessageCircle, Star, Truck, Zap } from "lucide-react";
-import { HomePageFaqSection } from "../components/HomePageFaqSection";
+import { Apple, CheckCircle, Leaf, MessageCircle, ShoppingBasket, Star, Truck, Zap } from "lucide-react";
 import { OrderUrgencyLines } from "../components/OrderUrgencyLines";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import {
-  BUSINESS_ADDRESS_LINE,
+  BUSINESS_AREA_SERVED,
   BUSINESS_TRUST_CUSTOMERS_LINE,
-  GOOGLE_MAPS_URL,
-  GOOGLE_REVIEW_CTA_HINT,
-  GOOGLE_REVIEW_CTA_LABEL,
-  GOOGLE_WRITE_REVIEW_URL,
 } from "../lib/business";
 import { usePageSeo } from "../lib/seo";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
 
 export function Home() {
   usePageSeo({
-    title: "Royal Fruit | פירות וירקות טריים עד הבית, משלוחים יומיים",
+    title: "Royal Fruit | משלוח פירות וירקות פרימיום בחולון וגוש דן",
     description:
-      "Royal Fruit, משלוח פירות וירקות טריים עד הבית. מוצרים קלופים, מארזים והמלצות לקוחות. איכות גבוהה, אספקה יומית ומענה מהיר בוואטסאפ. לבית ולעסקים.",
+      "Royal Fruit מספקת פירות וירקות פרימיום עד הבית בחולון, בת ים, ראשון לציון, תל אביב וגוש דן. בחירה יומית, אריזה נקייה ותיאום מהיר בוואטסאפ.",
   });
 
   return (
@@ -30,11 +25,11 @@ export function Home() {
             <RoyalFruitWordmark className="hero-brand-wordmark" />
           </div>
           <h1 id="home-hero-heading" className="hero-title">
-            שוק טרי, צבעוני ושמח שמגיע עד הדלת
+            תוצרת פרימיום שנבחרת בבוקר ומגיעה עד הדלת
           </h1>
           <p className="hero-lead home-hero-supporting">
-            אנחנו בוחרים בכל בוקר פירות וירקות עם צבע, ריח וטעם של טריות אמיתית, אורזים יפה ומתאמים משלוח
-            מהיר בוואטסאפ.
+            אנחנו בוחרים בכל בוקר פירות וירקות עם צבע, ריח וטעם של טריות אמיתית, אורזים נקי ומתאמים
+            משלוח מדויק בוואטסאפ.
           </p>
           <div className="home-market-badges" aria-label="מה מקבלים אצל Royal Fruit">
             <span>סחורה יומית</span>
@@ -68,43 +63,26 @@ export function Home() {
             </div>
           </div>
           <div className="hero-actions">
-            <div className="hero-cta-cluster">
-              <OrderUrgencyLines className="order-urgency-lines order-urgency-lines--hero" />
-              <a
-                className="btn btn-primary btn-whatsapp btn-whatsapp-strong home-hero-cta"
-                href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <MessageCircle className="btn-whatsapp-icon" aria-hidden />
-                בונים סל טרי בוואטסאפ
-              </a>
-              <p className="hero-cta-hint">שלחו מה אתם צריכים, אנחנו נעזור לדייק את הסל</p>
+            <a
+              className="btn btn-primary btn-whatsapp btn-whatsapp-strong home-hero-cta"
+              href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="btn-whatsapp-icon" aria-hidden />
+              בונים סל טרי בוואטסאפ
+            </a>
+            <p className="hero-cta-hint">שלחו מה אתם צריכים, אנחנו נעזור לדייק את הסל</p>
+            <div className="hero-secondary-actions" aria-label="מעבר למחירונים">
+              <Link className="btn btn-ghost" to="/fruits">
+                לראות פירות
+              </Link>
+              <Link className="btn btn-ghost" to="/vegetables">
+                לראות ירקות
+              </Link>
             </div>
-            <Link className="btn btn-ghost" to="/fruits">
-              לראות פירות
-            </Link>
-            <Link className="btn btn-ghost" to="/vegetables">
-              לראות ירקות
-            </Link>
           </div>
-          <p className="hero-urgency-strip" role="status">
-            <span className="hero-urgency-item">
-              <Truck className="rf-inline-icon rf-inline-icon--secondary" size={16} aria-hidden /> אספקה יומית
-            </span>
-            <span className="hero-urgency-sep" aria-hidden>
-              •
-            </span>
-            <span className="hero-urgency-item">
-              <Zap className="rf-inline-icon rf-inline-icon--secondary" size={16} aria-hidden /> מלאי מתעדכן
-            </span>
-            <span className="hero-urgency-sep" aria-hidden>
-              •
-            </span>
-            <span className="hero-urgency-item">
-              <Star className="rf-inline-icon rf-inline-icon--secondary" size={16} aria-hidden /> זמינות גבוהה
-            </span>
-          </p>
+          <OrderUrgencyLines className="order-urgency-lines order-urgency-lines--hero" />
         </div>
       </section>
 
@@ -113,17 +91,18 @@ export function Home() {
           <div className="home-market-head">
             <p className="eyebrow">מה טרי היום</p>
             <h2 id="home-market-heading" className="section-title">
-              תחושה של דוכן צבעוני, שירות של ספק אישי
+              בחירה יומית, שירות אישי, סל שמרגיש מדויק
             </h2>
             <p className="muted wide">
-              במקום לנחש לבד מול מדף, מקבלים הכוונה קצרה: מה מתוק עכשיו, מה מתאים לאירוח ומה עדיף להזמין בכמות.
+              במקום לנחש לבד מול מדף, מקבלים הכוונה קצרה: מה בשל עכשיו, מה מתאים לאירוח ומה כדאי להזמין
+              בכמות.
             </p>
           </div>
           <div className="home-market-grid">
             <article className="home-market-card home-market-card--fruit">
               <span className="home-market-sticker">נבחר היום</span>
               <span className="home-market-card-icon" aria-hidden>
-                🍓
+                <Apple size={28} />
               </span>
               <h3>פירות בשלים בדיוק לזמן שלכם</h3>
               <p>ענבים, פירות עונה, הדרים ומיוחדים שנבחרים לפי טעם, מרקם ונראות.</p>
@@ -134,7 +113,7 @@ export function Home() {
             <article className="home-market-card home-market-card--veg">
               <span className="home-market-sticker">טרי במיוחד</span>
               <span className="home-market-card-icon" aria-hidden>
-                🥬
+                <Leaf size={28} />
               </span>
               <h3>ירקות נקיים, חזקים ומוכנים לעבודה</h3>
               <p>עלים, שורשים, ירקות לסלט ולבישול, עם דגש על טריות שמחזיקה.</p>
@@ -145,7 +124,7 @@ export function Home() {
             <article className="home-market-card home-market-card--basket">
               <span className="home-market-sticker">מומלץ לאירוח</span>
               <span className="home-market-card-icon" aria-hidden>
-                🧺
+                <ShoppingBasket size={28} />
               </span>
               <h3>סלים בהתאמה אישית</h3>
               <p>לבית, לעסק או לאירוח, עם איזון בין פריטים יפים, שימושיים וטעימים.</p>
@@ -158,6 +137,46 @@ export function Home() {
                 לבניית סל עם אורי
               </a>
             </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="home-standard" className="section home-standard-section" aria-labelledby="home-standard-heading">
+        <div className="container home-standard-shell">
+          <div className="home-standard-card">
+            <div className="home-standard-copy">
+              <p className="eyebrow">Royal Fruit Standard</p>
+              <h2 id="home-standard-heading" className="section-title">
+                לא עוד משלוח ירקות. בחירה אנושית לפני שהסל יוצא.
+              </h2>
+              <p className="muted wide">
+                ההבדל נמצא בפרטים הקטנים: פרי שלא רך מדי, ירק שלא עייף בקצה, וסל שמותאם לשימוש שלכם ולא
+                רק למה שהיה זמין על המדף.
+              </p>
+            </div>
+            <div className="home-standard-points" aria-label="יתרונות השירות">
+              <article>
+                <span aria-hidden>
+                  <CheckCircle size={18} />
+                </span>
+                <h3>בחירה לפי שימוש</h3>
+                <p>לאירוח היום, סלטייה למחר או סל שבועי, הבשלות נבחרת לפי המועד.</p>
+              </article>
+              <article>
+                <span aria-hidden>
+                  <Star size={18} />
+                </span>
+                <h3>מראה וטעם יחד</h3>
+                <p>שמים לב לצבע, ריח, מרקם ונראות, כדי שהסל ירגיש פרימיום גם בפתיחה.</p>
+              </article>
+              <article>
+                <span aria-hidden>
+                  <Truck size={18} />
+                </span>
+                <h3>תיאום קצר וברור</h3>
+                <p>סוגרים מלאי, תקציב ומשלוח בשיחה פשוטה, בלי טופס ארוך ובלי ניחושים.</p>
+              </article>
+            </div>
           </div>
         </div>
       </section>
@@ -191,45 +210,12 @@ export function Home() {
               <footer>נועה, חולון</footer>
             </blockquote>
           </div>
-          <div className="home-google-review-wrap">
-            <p className="google-review-cta-hint">{GOOGLE_REVIEW_CTA_HINT}</p>
-            <a
-              href={GOOGLE_WRITE_REVIEW_URL}
-              className="btn btn-ghost home-google-review-btn"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-                <Star className="btn-whatsapp-icon" aria-hidden />
-              {GOOGLE_REVIEW_CTA_LABEL}
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section id="home-order-cta" className="section">
-        <div className="container narrow home-mid-cta">
-          <p className="eyebrow">הזמנה מהירה</p>
-          <h2 className="home-mid-cta-title">ספרו לנו מה בא לכם בסל</h2>
-          <p className="muted home-mid-cta-lead">נשמח לעזור לבחור מוצרים, לתאם משלוח או איסוף, ולסגור הזמנה בלי טופס ארוך.</p>
-          <div className="home-mid-cta-cluster">
-            <OrderUrgencyLines className="order-urgency-lines order-urgency-lines--mid" />
-            <a
-              className="btn btn-primary btn-whatsapp btn-whatsapp-strong home-mid-cta-btn"
-              href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <MessageCircle className="btn-whatsapp-icon" aria-hidden />
-              שלחו הודעה ונבנה סל
-            </a>
-            <p className="hero-cta-hint home-mid-cta-hint">אפשר להתחיל גם מרשימה חלקית, אנחנו נשלים יחד</p>
-          </div>
         </div>
       </section>
 
       <section id="home-process" className="section">
         <div className="container">
-          <h2 className="section-title">איך הופכים חשק לסל מוכן</h2>
+          <h2 className="section-title">איך הופכים צורך לסל מוכן</h2>
           <div className="feature-grid">
             <article className="feature-card">
               <h3>כותבים מה צריך</h3>
@@ -253,8 +239,8 @@ export function Home() {
         </div>
       </section>
 
-      <section id="home-audience" className="section section-tint">
-        <div className="container split-cta">
+      <section id="home-audience" className="section home-audience-section">
+        <div className="container narrow home-audience-card split-cta">
           <div>
             <h2 className="section-title">למי השירות מתאים</h2>
             <p className="muted wide">
@@ -265,29 +251,38 @@ export function Home() {
               עובדים איתנו כשצריך שקט תפעולי: פחות חוסרים, פחות פחת, ויותר ביטחון שכל מה שיוצא מהמטבח נראה ומרגיש
               ברמה הנכונה.
             </p>
+            <p className="muted wide home-local-seo-copy">{BUSINESS_AREA_SERVED}</p>
           </div>
-          <Link className="btn btn-primary align-self" to="/contact">
+          <Link className="home-audience-link align-self" to="/contact">
             יצירת קשר
           </Link>
         </div>
       </section>
 
-      <HomePageFaqSection />
-
-      <section id="home-location" className="section">
-        <div className="container narrow home-location-block">
-          <h2 className="section-title">איפה אנחנו נפגשים</h2>
-          <p className="muted wide home-location-lead">
-            החנות והנקודה לאיסוף עצמי נמצאים ב־{BUSINESS_ADDRESS_LINE}. איסוף לפי תיאום מראש, כדי שהסל יחכה ארוז
-            ומוכן.
+      <section id="home-final-cta" className="section home-final-cta-section">
+        <div className="container narrow home-final-cta-card">
+          <RoyalFruitWordmark className="home-final-cta-wordmark" />
+          <h2>רוצים סל מדויק להיום או למחר?</h2>
+          <p className="muted">
+            שלחו הודעה קצרה לאורי, ונכוון אתכם לפי המלאי הטרי, הבשלות והתקציב.
           </p>
-          <p className="home-location-cta">
-            <a className="btn btn-ghost" href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
-              פתיחת מיקום ב־Google Maps
+          <div className="home-final-cta-actions">
+            <a
+              className="btn btn-primary btn-whatsapp btn-whatsapp-strong"
+              href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <MessageCircle className="btn-whatsapp-icon" aria-hidden />
+              שליחת הודעה בוואטסאפ
             </a>
-          </p>
+            <Link className="btn btn-ghost" to="/fruits">
+              צפייה במחירון
+            </Link>
+          </div>
         </div>
       </section>
+
     </>
   );
 }

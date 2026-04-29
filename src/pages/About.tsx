@@ -3,8 +3,8 @@ import { usePageSeo } from "../lib/seo";
 
 export function About() {
   usePageSeo({
-    title: "Royal Fruit | אודות העסק",
-    description: "הסיפור, הערכים ושיטת העבודה של Royal Fruit בבחירת תוצרת פרימיום ושירות מותאם.",
+    title: "Royal Fruit | אודות משלוחי פירות וירקות פרימיום",
+    description: "הסיפור, הערכים ושיטת העבודה של Royal Fruit בבחירת פירות וירקות פרימיום, מיון אנושי ושירות מותאם ללקוחות פרטיים ועסקיים.",
   });
 
   return (

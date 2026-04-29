@@ -1,6 +1,6 @@
 import { PriceListSections } from "./PriceListSections";
 import { useSheetProducts } from "../hooks/useSheetProducts";
-import { findDuplicateDisplayNamesInCategories, type PriceListBannerMeta } from "../data/priceList";
+import { findDuplicateDisplayNamesInCategories, type PriceCategory, type PriceListBannerMeta } from "../data/priceList";
 import {
   getGoogleSheetsProductsCsvUrl,
   groupSheetProductsToPriceCategories,
@@ -17,6 +17,7 @@ type SheetPriceListAsMenuProps = {
   /** מעל הרשימה, כמו באנר המחירון. null = בלי באנר */
   listMeta: PriceListBannerMeta | null;
   categoryHeadingRank?: 2 | 3;
+  singleCategoryTitle?: string;
 };
 
 export function SheetPriceListAsMenu({
@@ -27,6 +28,7 @@ export function SheetPriceListAsMenu({
   page,
   listMeta,
   categoryHeadingRank = 2,
+  singleCategoryTitle,
 }: SheetPriceListAsMenuProps) {
   const csvUrl = getGoogleSheetsProductsCsvUrl();
   const state = useSheetProducts(csvUrl);
@@ -73,11 +75,18 @@ export function SheetPriceListAsMenu({
     return null;
   }
 
-  const categories = groupSheetProductsToPriceCategories(state.products, {
+  const groupedCategories = groupSheetProductsToPriceCategories(state.products, {
     idPrefix,
     defaultEmoji,
     page,
   });
+  const categories = singleCategoryTitle
+    ? mergeCategoriesToSingleList(groupedCategories, {
+        id: `${idPrefix}-all`,
+        title: singleCategoryTitle,
+        emoji: defaultEmoji,
+      })
+    : groupedCategories;
 
   if (import.meta.env.DEV) {
     const dups = findDuplicateDisplayNamesInCategories(categories);
@@ -104,4 +113,23 @@ export function SheetPriceListAsMenu({
       searchFieldIdPrefix={idPrefix}
     />
   );
+}
+
+function mergeCategoriesToSingleList(
+  categories: PriceCategory[],
+  merged: Pick<PriceCategory, "id" | "title" | "emoji">,
+): PriceCategory[] {
+  const rows = categories.flatMap((category) => [
+    ...(category.rows ?? []),
+    ...(category.subsections?.flatMap((subsection) => subsection.rows) ?? []),
+  ]).sort((a, b) => a.name.localeCompare(b.name, "he"));
+
+  if (!rows.length) return [];
+
+  return [
+    {
+      ...merged,
+      rows,
+    },
+  ];
 }

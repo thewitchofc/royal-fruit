@@ -1,6 +1,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { Apple, Cherry, Circle, MessageCircle, Star, Truck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
+import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { useCart } from "../context/CartContext";
 import { estimateCartTotal } from "../lib/cartEstimate";
 import { deliveryMinimumStatus, MIN_DELIVERY_ORDER_NIS } from "../lib/cartPolicies";
@@ -28,6 +29,7 @@ export function Cart() {
   usePageSeo({
     title: "Royal Fruit | סל קניות",
     description: "בנו הזמנה ושלחו לוואטסאפ של אורי, כולל סכום משוער ומינימום הזמנה למשלוח.",
+    noIndex: true,
   });
 
   const { lines, totalItemCount, setQty, removeLine, clearCart } = useCart();
@@ -70,7 +72,7 @@ export function Cart() {
 
   return (
     <div className="page">
-      <section className="page-hero">
+      <section className="page-hero cart-hero">
         <div className="container narrow">
           <p className="eyebrow">סל קניות</p>
           <h1 className="page-title">בונים הזמנה, ושולחים לוואטסאפ</h1>
@@ -85,6 +87,7 @@ export function Cart() {
         <div className="container narrow-block">
           {lines.length === 0 ? (
             <div className="cart-empty">
+              <RoyalFruitWordmark className="cart-empty-wordmark" />
               <p className="cart-empty-title">הסל ריק</p>
               <p className="muted">הוסיפו פריטים מדפי הפירות והירקות.</p>
               <div className="cart-empty-links">
@@ -98,6 +101,23 @@ export function Cart() {
             </div>
           ) : (
             <div className="cart-order-bubble">
+              <div className="cart-order-head">
+                <div>
+                  <RoyalFruitWordmark className="cart-order-wordmark" />
+                  <h2>הסל שלכם לפני שליחה</h2>
+                  <p className="muted">בדקו כמויות, מלאו פרטים, וההזמנה תיפתח כהודעת וואטסאפ מסודרת לאורי.</p>
+                </div>
+                <div className="cart-order-head-stats" aria-label="סיכום סל">
+                  <span>
+                    <strong>{totalItemCount}</strong>
+                    פריטים
+                  </span>
+                  <span>
+                    <strong>{cartEstimate.hasAnyKnown ? `~${cartEstimate.knownTotal.toLocaleString("he-IL")} ₪` : "לתיאום"}</strong>
+                    סכום משוער
+                  </span>
+                </div>
+              </div>
               <ul className="cart-lines">
                 {lines.map((line) => {
                   const step = line.qtyStep ?? 1;

@@ -19,8 +19,8 @@ function shuffle<T>(items: T[]): T[] {
 
 export function Testimonials() {
   usePageSeo({
-    title: "Royal Fruit | המלצות לקוחות",
-    description: "לקוחות פרטיים ועסקיים מספרים על השירות, האיכות והטריות של Royal Fruit.",
+    title: "Royal Fruit | המלצות על פירות וירקות פרימיום",
+    description: "לקוחות פרטיים ועסקיים מספרים על השירות, האיכות, הטריות והמשלוחים של Royal Fruit באזור המרכז וגוש דן.",
   });
 
   const testimonials = useMemo(() => shuffle(TESTIMONIALS), [TESTIMONIALS]);
