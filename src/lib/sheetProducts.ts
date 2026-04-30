@@ -189,7 +189,7 @@ export function resolveSheetCsvFetchUrl(configured: string): string {
 }
 
 async function fetchCsvText(url: string): Promise<string> {
-  const res = await fetch(url, { cache: "default", credentials: "omit", mode: "cors" });
+  const res = await fetch(url, { cache: "no-store", credentials: "omit", mode: "cors" });
   if (!res.ok) {
     throw new Error(
       `טעינת הגיליון נכשלה (קוד ${res.status}). אם זה מסביבה מקומית, הריצו npm run dev / npm run preview עם פרוקסי ב-Vite. בפריסה, ודאו קובץ _redirects ב-Netlify או פרוקסי מקביל.`,

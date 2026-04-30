@@ -12,7 +12,7 @@ type SheetProductsCacheEntry = {
   fetchedAt: number;
 };
 
-const SHEET_PRODUCTS_CACHE_TTL_MS = 5 * 60 * 1000;
+const SHEET_PRODUCTS_CACHE_TTL_MS = 30 * 1000;
 const sheetProductsCache = new Map<string, SheetProductsCacheEntry>();
 const inflightLoads = new Map<string, Promise<SheetProduct[]>>();
 
