@@ -21,14 +21,30 @@ export function useScrollReveal(routeKey: string) {
     if (!root) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const mobileViewport = window.matchMedia("(max-width: 760px)");
+    /** כמו פריצת המובייל ב־index.css (@media max-width: 960px) — מתחת לכך אל תשאירו תוכן דינמי ב־opacity:0 */
+    const mobileViewport = window.matchMedia("(max-width: 960px)");
     const revealImmediately = (el: Element) => {
       el.classList.add("scroll-reveal", "is-scroll-visible");
     };
 
-    if (reduceMotion.matches || mobileViewport.matches || typeof IntersectionObserver === "undefined") {
+    if (reduceMotion.matches || typeof IntersectionObserver === "undefined") {
       root.querySelectorAll(REVEAL_SELECTOR).forEach(revealImmediately);
       return;
+    }
+
+    if (mobileViewport.matches) {
+      root.querySelectorAll(REVEAL_SELECTOR).forEach(revealImmediately);
+      const mo = new MutationObserver(() => {
+        root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
+          if (!el.classList.contains("scroll-reveal")) {
+            revealImmediately(el);
+          } else if (!el.classList.contains("is-scroll-visible")) {
+            el.classList.add("is-scroll-visible");
+          }
+        });
+      });
+      mo.observe(root, { childList: true, subtree: true });
+      return () => mo.disconnect();
     }
 
     const seen = new WeakSet<Element>();
