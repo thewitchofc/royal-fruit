@@ -44,16 +44,25 @@ function matchesSearch(value: string, query: string) {
 
 function rowMatchesSearch(row: PriceRow, query: string) {
   if (!query) return true;
-  if (matchesSearch(row.name, query)) return true;
-  if (row.unit?.trim() && matchesSearch(row.unit, query)) return true;
-  if (row.description?.trim() && matchesSearch(row.description, query)) return true;
-  return false;
+  return matchesSearch(row.name, query);
 }
 
 function filterRows(rows: PriceRow[] | undefined, query: string) {
   if (!rows?.length) return [];
   if (!query) return rows;
   return rows.filter((row) => rowMatchesSearch(row, query));
+}
+
+function dedupeRowsByName(rows: PriceRow[] | undefined, seenNames: Set<string>) {
+  if (!rows?.length) return [];
+  const uniqueRows: PriceRow[] = [];
+  for (const row of rows) {
+    const normalizedName = normalizeText(row.name);
+    if (!normalizedName || seenNames.has(normalizedName)) continue;
+    seenNames.add(normalizedName);
+    uniqueRows.push(row);
+  }
+  return uniqueRows;
 }
 
 function filterSubsections(subsections: PriceSubsection[] | undefined, query: string) {
@@ -168,10 +177,16 @@ export function PriceListSections({
   const CategoryHeadingTag = (categoryHeadingRank === 3 ? "h3" : "h2") as "h2" | "h3";
   const SubHeadingTag = (categoryHeadingRank === 3 ? "h4" : "h3") as "h3" | "h4";
   const filteredCategories = useMemo(() => {
+    const seenNames = new Set<string>();
     return categories
       .map((cat) => {
-        const rows = filterRows(cat.rows, normalizedSearch);
-        const subsections = filterSubsections(cat.subsections, normalizedSearch);
+        const rows = dedupeRowsByName(filterRows(cat.rows, normalizedSearch), seenNames);
+        const subsections = filterSubsections(cat.subsections, normalizedSearch)
+          .map((sub) => ({
+            ...sub,
+            rows: dedupeRowsByName(sub.rows, seenNames),
+          }))
+          .filter((sub) => sub.rows.length > 0);
         return {
           ...cat,
           rows,
