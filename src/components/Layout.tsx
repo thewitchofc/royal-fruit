@@ -15,8 +15,7 @@ import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
 import { warmSheetProductsCache } from "../hooks/useSheetProducts";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
-/** יחד עם `<link rel="preload" href="/images/brand/logo.webp">` ב-index.html, אותו URL ל-LCP */
-const LOGO_WEBP_URL = "/images/brand/logo.webp";
+/** יחד עם preload ב־index ל־`/images/brand/brand-logo.png` — PNG עקבי בכל הדפדפנים (WebP לעיתים לא מוגש בפריסה) */
 const LOGO_PNG_URL = "/images/brand/brand-logo.png";
 const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
 const DEV_CREDIT_URL = "https://thewitch.co.il";
@@ -149,17 +148,14 @@ export function Layout({ children }: { children: ReactNode }) {
             tabIndex={isNarrowViewport ? -1 : undefined}
           >
             <span className="brand-logo-wrap">
-              <picture>
-                <source srcSet={LOGO_WEBP_URL} type="image/webp" />
-                <img
-                  src={LOGO_PNG_URL}
-                  alt={isNarrowViewport ? "" : "Royal Fruit"}
-                  className="brand-logo"
-                  width={800}
-                  height={546}
-                  decoding="async"
-                />
-              </picture>
+              <img
+                src={LOGO_PNG_URL}
+                alt={isNarrowViewport ? "" : "Royal Fruit"}
+                className="brand-logo"
+                width={326}
+                height={84}
+                decoding="async"
+              />
             </span>
           </NavLink>
           <button
@@ -184,17 +180,14 @@ export function Layout({ children }: { children: ReactNode }) {
             aria-label="Royal Fruit, מעבר לדף הבית"
             onClick={() => setOpen(false)}
           >
-            <picture>
-              <source srcSet={LOGO_WEBP_URL} type="image/webp" />
-              <img
-                src={LOGO_PNG_URL}
-                alt=""
-                className="header-nav-compact-logo-img"
-                width={48}
-                height={48}
-                decoding="async"
-              />
-            </picture>
+            <img
+              src={LOGO_PNG_URL}
+              alt=""
+              className="header-nav-compact-logo-img"
+              width={326}
+              height={84}
+              decoding="async"
+            />
           </NavLink>
           <nav id="main-nav" className={`main-nav ${open ? "is-open" : ""}`} aria-label="ניווט ראשי">
             {links.map(({ to, label }) => (
@@ -237,17 +230,14 @@ export function Layout({ children }: { children: ReactNode }) {
       <main id="main-content" className="main-area" tabIndex={-1}>
         <div className="mobile-main-logo-wrap">
           <NavLink to="/" className="mobile-main-logo-link" end aria-label="Royal Fruit, מעבר לדף הבית">
-            <picture>
-              <source srcSet={LOGO_WEBP_URL} type="image/webp" />
-              <img
-                src={LOGO_PNG_URL}
-                alt=""
-                className="mobile-main-logo-img"
-                width={360}
-                height={110}
-                decoding="async"
-              />
-            </picture>
+            <img
+              src={LOGO_PNG_URL}
+              alt=""
+              className="mobile-main-logo-img"
+              width={326}
+              height={84}
+              decoding="async"
+            />
           </NavLink>
         </div>
         <nav className="mobile-quick-nav" aria-label="קישורים מהירים במובייל">
