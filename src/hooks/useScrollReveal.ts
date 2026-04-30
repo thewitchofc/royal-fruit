@@ -15,6 +15,10 @@ const REVEAL_SELECTOR = [
   ".contact-aside",
 ].join(",");
 
+function isInsidePriceMenuBody(el: Element) {
+  return Boolean(el.closest(".price-menu-body"));
+}
+
 export function useScrollReveal(routeKey: string) {
   useEffect(() => {
     const root = document.getElementById("main-content");
@@ -29,7 +33,13 @@ export function useScrollReveal(routeKey: string) {
 
     if (reduceMotion.matches || typeof IntersectionObserver === "undefined") {
       root.querySelectorAll(REVEAL_SELECTOR).forEach(revealImmediately);
-      return;
+      const mo = new MutationObserver(() => {
+        root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
+          if (!el.classList.contains("is-scroll-visible")) revealImmediately(el);
+        });
+      });
+      mo.observe(root, { childList: true, subtree: true });
+      return () => mo.disconnect();
     }
 
     if (mobileViewport.matches) {
@@ -66,6 +76,10 @@ export function useScrollReveal(routeKey: string) {
       root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
+        if (isInsidePriceMenuBody(el)) {
+          revealImmediately(el);
+          return;
+        }
         el.classList.add("scroll-reveal");
         observer.observe(el);
       });

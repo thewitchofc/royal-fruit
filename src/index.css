@@ -72,6 +72,17 @@ html {
   transform: translate3d(0, 0, 0);
 }
 
+/**
+ * מחירון פירות/ירקות: הסקשן כולו + תוכן async (Sheets) לא אמורים להישאר בשקיפות 0 בזמן שה־observer
+ * או טעינה מחודשת מחכים — אחרת נראה כאילו «התפריט לא נפתח» במובייל/טאבלט.
+ */
+.price-menu-body.section.scroll-reveal,
+.price-menu-body.section .scroll-reveal {
+  opacity: 1 !important;
+  transform: none !important;
+  will-change: auto !important;
+}
+
 .page-transition-shell {
   animation: page-transition-in 0.34s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
@@ -122,6 +133,8 @@ body {
   line-height: 1.7;
   font-size: 1.05rem;
   padding-top: 0;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* עוטף פורטל לכותרת, בלי גובה בתזרים (הכותרת position:fixed) */
@@ -275,6 +288,7 @@ a {
 
 .app-shell {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   background: transparent;
@@ -3720,6 +3734,17 @@ main,
   .hero {
     padding-top: clamp(0.95rem, 3vw, 1.55rem);
   }
+
+  /* מעל כפתורי וואטסאפ וסל צפים (+ home indicator בספארי) */
+  .main-area {
+    padding-bottom: calc(5.25rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  /* יעדי נגיעה ברורים בניווט המהיר */
+  .mobile-quick-nav-link {
+    min-height: 2.75rem;
+    box-sizing: border-box;
+  }
 }
 
 @media (max-width: 960px) and (prefers-reduced-motion: reduce) {
@@ -4142,9 +4167,12 @@ main,
   }
 
   .price-menu-qty-btn {
-    width: 1.28rem;
-    height: 1.28rem;
-    font-size: 0.78rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    min-width: 44px;
+    min-height: 44px;
+    font-size: 1rem;
+    border-radius: 12px;
   }
 
   .price-menu-qty-badge {
@@ -5248,9 +5276,11 @@ main,
   }
 
   .cart-qty-btn {
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 7px;
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 44px;
+    min-height: 44px;
+    border-radius: 9px;
   }
 
   .cart-qty-val {
@@ -5777,6 +5807,17 @@ main,
 }
 
 @media (max-width: 560px) {
+  .hero-title {
+    font-size: clamp(1.85rem, 7vw, 2.55rem);
+    line-height: 1.14;
+    overflow-wrap: anywhere;
+  }
+
+  .hero-lead.home-hero-supporting {
+    overflow-wrap: anywhere;
+    max-width: 100%;
+  }
+
   .page-title,
   .contact-page-title,
   .about-hero .page-title,
@@ -5824,12 +5865,15 @@ main,
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding-top: calc(1rem + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  padding-inline-start: calc(1rem + env(safe-area-inset-left, 0px));
+  padding-inline-end: calc(1rem + env(safe-area-inset-right, 0px));
 }
 
 .gallery-lightbox-img {
   max-width: min(92vw, 1100px);
-  max-height: 90vh;
+  max-height: calc(90vh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px));
   width: auto;
   height: auto;
   aspect-ratio: 4 / 5;
@@ -5847,7 +5891,7 @@ main,
 
 .gallery-lightbox-close {
   position: fixed;
-  top: 1rem;
+  top: calc(1rem + env(safe-area-inset-top, 0px));
   inset-inline-end: 1rem;
   width: 44px;
   height: 44px;
