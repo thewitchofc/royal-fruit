@@ -34,15 +34,21 @@ export function SheetPriceListAsMenu({
   const state = useSheetProducts(csvUrl);
 
   if (!csvUrl) {
-    if (!import.meta.env.DEV) {
-      return null;
-    }
     return (
-      <div className="sheet-products-config-hint">
+      <div className="sheet-products-error sheet-products-config-hint-prod" role="status">
         <p className="muted small">
-          (מצב פיתוח) מחירון דינמי: הגדירו <code>VITE_PRICE_SHEET_VIA_PROXY=1</code> ו־
-          <code>GOOGLE_SHEETS_PRODUCTS_CSV_URL</code> (מומלץ) או <code>VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL</code> ב־
-          <code>.env</code>, והריצו <code>npm run dev</code>.
+          {import.meta.env.DEV ? (
+            <>
+              מחירון דינמי לא מוגדר: הוסיפו <code>VITE_PRICE_SHEET_VIA_PROXY=1</code> ו־
+              <code>GOOGLE_SHEETS_PRODUCTS_CSV_URL</code> ל־<code>.env</code>, או בשינוי ישן:{" "}
+              <code>VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL</code>. לבדיקה מהטלפון ברשת: <code>npm run dev:lan</code>.
+            </>
+          ) : (
+            <>
+              לא הצלחנו להציג מחירון כי חסר חיבור לגיליון בהגדרות האתר. מומלץ לנסות שוב מאוחר יותר, לפתוח ממכשיר אחר, או
+              ליצור קשר עם העסק לקבלת מחירים עדכניים.
+            </>
+          )}
         </p>
       </div>
     );

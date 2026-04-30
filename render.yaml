@@ -1,0 +1,22 @@
+# Render.com — אתר SPA + פרוקסי מחירון ב־/price-sheet.csv
+# https://render.com/docs/blueprint-spec
+services:
+  - type: web
+    name: royal-fruit-premium
+    runtime: node
+    plan: free
+    region: frankfurt # או מאזור אחר קרוב ללקוחות
+    buildCommand: npm ci && npm run build
+    startCommand: node server.mjs
+    envVars:
+      - key: NODE_VERSION
+        value: "20.11.1"
+      # בשלב ה-Build ובזמן ריצה: כתובת האתר (SEO, OG)
+      - key: VITE_SITE_URL
+        sync: false
+      # ב-Build בלבד: המחירון נטען מ־/price-sheet.csv (אותו דומיין)
+      - key: VITE_PRICE_SHEET_VIA_PROXY
+        value: "1"
+      # בזמן ריצה של server.mjs: כתובת ה-CSV מהגוגל שיטס (לא חובה למסור ל-VITE_)
+      - key: GOOGLE_SHEETS_PRODUCTS_CSV_URL
+        sync: false
