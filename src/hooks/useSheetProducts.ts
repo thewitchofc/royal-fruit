@@ -20,11 +20,6 @@ function isFresh(entry: SheetProductsCacheEntry): boolean {
   return Date.now() - entry.fetchedAt < SHEET_PRODUCTS_CACHE_TTL_MS;
 }
 
-function clearSheetFetchState(csvUrl: string) {
-  sheetProductsCache.delete(csvUrl);
-  inflightLoads.delete(csvUrl);
-}
-
 function loadAndCacheSheetProducts(csvUrl: string): Promise<SheetProduct[]> {
   const ongoing = inflightLoads.get(csvUrl);
   if (ongoing) return ongoing;
@@ -71,40 +66,16 @@ export function useSheetProducts(csvUrl: string | undefined): SheetProductsState
     }
 
     let cancelled = false;
-    let retried = false;
-
-    const finalizeError = (e: unknown) => {
-      if (cancelled) return;
-      const message = e instanceof Error ? e.message : "שגיאה בטעינת הנתונים";
-      setState({ status: "error", message });
-    };
-
-    const kick = () => {
-      loadAndCacheSheetProducts(key)
-        .then((products) => {
-          if (!cancelled) setState({ status: "ok", products });
-        })
-        .catch((e: unknown) => {
-          if (cancelled || retried) return;
-          retried = true;
-          clearSheetFetchState(key);
-          window.setTimeout(() => {
-            if (cancelled) return;
-            setState({ status: "loading" });
-            kickRetry();
-          }, 1600);
-        });
-    };
-
-    const kickRetry = () => {
-      loadAndCacheSheetProducts(key)
-        .then((products) => {
-          if (!cancelled) setState({ status: "ok", products });
-        })
-        .catch(finalizeError);
-    };
-
-    kick();
+    loadAndCacheSheetProducts(key)
+      .then((products) => {
+        if (!cancelled) setState({ status: "ok", products });
+      })
+      .catch((e: unknown) => {
+        if (!cancelled) {
+          const message = e instanceof Error ? e.message : "שגיאה בטעינת הנתונים";
+          setState({ status: "error", message });
+        }
+      });
     return () => {
       cancelled = true;
     };

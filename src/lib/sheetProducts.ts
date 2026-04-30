@@ -169,22 +169,6 @@ export function parseProductsCsv(text: string): SheetProduct[] {
 /** נתיב ציבורי בודד בדפדפן, הגיליון נמשך בשרת (Netlify) או במידלוור Vite */
 export const PRICE_SHEET_PUBLIC_PATH = "/price-sheet.csv";
 
-/**
- * fetch יחסי (" /price-sheet.csv") לפי המקור הנוכחי + Vite BASE_URL —
- * נחוץ כשגולשים מהטלפון ב־LAN (לא localhost) וכשהאתר תחת תת־נתיב.
- */
-export function resolveBrowserAbsoluteFetchUrl(url: string): string {
-  if (typeof window === "undefined") return url;
-  if (/^https?:\/\//i.test(url)) return url;
-
-  const base = import.meta.env.BASE_URL ?? "/";
-  const origin = window.location.origin;
-  const basePath = base.endsWith("/") ? base.slice(0, -1) : base;
-  const root = `${origin}${basePath}`;
-  const path = url.startsWith("/") ? url : `/${url}`;
-  return `${root}${path}`;
-}
-
 export function resolveSheetCsvFetchUrl(configured: string): string {
   if (!configured) return configured;
   if (configured.startsWith("/")) {
@@ -205,28 +189,7 @@ export function resolveSheetCsvFetchUrl(configured: string): string {
 }
 
 async function fetchCsvText(url: string): Promise<string> {
-  const resolvedUrl = resolveBrowserAbsoluteFetchUrl(url);
-
-  const ctrl = new AbortController();
-  const tid = setTimeout(() => ctrl.abort(), 28000);
-
-  let res: Response;
-  try {
-    res = await fetch(resolvedUrl, {
-      cache: "no-store",
-      credentials: "omit",
-      mode: "cors",
-      signal: ctrl.signal,
-    });
-  } catch (e: unknown) {
-    if (e instanceof Error && e.name === "AbortError") {
-      throw new Error("זמן ההמתנה לטעינת המחירון נגמר — בדקו חיבור לאינטרנט או נסו שוב.");
-    }
-    throw e;
-  } finally {
-    clearTimeout(tid);
-  }
-
+  const res = await fetch(url, { cache: "default", credentials: "omit", mode: "cors" });
   if (!res.ok) {
     throw new Error(
       `טעינת הגיליון נכשלה (קוד ${res.status}). אם זה מסביבה מקומית, הריצו npm run dev / npm run preview עם פרוקסי ב-Vite. בפריסה, ודאו קובץ _redirects ב-Netlify או פרוקסי מקביל.`,

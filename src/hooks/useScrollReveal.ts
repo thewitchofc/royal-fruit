@@ -15,46 +15,20 @@ const REVEAL_SELECTOR = [
   ".contact-aside",
 ].join(",");
 
-function isInsidePriceMenuBody(el: Element) {
-  return Boolean(el.closest(".price-menu-body"));
-}
-
 export function useScrollReveal(routeKey: string) {
   useEffect(() => {
     const root = document.getElementById("main-content");
     if (!root) return;
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    /** כמו פריצת המובייל ב־index.css (@media max-width: 960px) — מתחת לכך אל תשאירו תוכן דינמי ב־opacity:0 */
-    const mobileViewport = window.matchMedia("(max-width: 960px)");
+    const mobileViewport = window.matchMedia("(max-width: 760px)");
     const revealImmediately = (el: Element) => {
       el.classList.add("scroll-reveal", "is-scroll-visible");
     };
 
-    if (reduceMotion.matches || typeof IntersectionObserver === "undefined") {
+    if (reduceMotion.matches || mobileViewport.matches || typeof IntersectionObserver === "undefined") {
       root.querySelectorAll(REVEAL_SELECTOR).forEach(revealImmediately);
-      const mo = new MutationObserver(() => {
-        root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
-          if (!el.classList.contains("is-scroll-visible")) revealImmediately(el);
-        });
-      });
-      mo.observe(root, { childList: true, subtree: true });
-      return () => mo.disconnect();
-    }
-
-    if (mobileViewport.matches) {
-      root.querySelectorAll(REVEAL_SELECTOR).forEach(revealImmediately);
-      const mo = new MutationObserver(() => {
-        root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
-          if (!el.classList.contains("scroll-reveal")) {
-            revealImmediately(el);
-          } else if (!el.classList.contains("is-scroll-visible")) {
-            el.classList.add("is-scroll-visible");
-          }
-        });
-      });
-      mo.observe(root, { childList: true, subtree: true });
-      return () => mo.disconnect();
+      return;
     }
 
     const seen = new WeakSet<Element>();
@@ -76,10 +50,6 @@ export function useScrollReveal(routeKey: string) {
       root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
-        if (isInsidePriceMenuBody(el)) {
-          revealImmediately(el);
-          return;
-        }
         el.classList.add("scroll-reveal");
         observer.observe(el);
       });
