@@ -441,9 +441,8 @@ main,
 
 .header-nav-compact-logo-img {
   display: block;
-  width: auto;
-  height: 40px;
-  max-width: min(160px, 28vw);
+  width: 42px;
+  height: 42px;
   object-fit: contain;
   filter:
     drop-shadow(0 3px 12px rgba(255, 255, 255, 0.18))
@@ -3580,9 +3579,9 @@ main,
   }
 
   .mobile-main-logo-img {
-    width: min(320px, 92vw);
+    width: min(280px, 84vw);
     height: auto;
-    max-height: min(22vh, 92px);
+    max-height: 22vh;
     object-fit: contain;
     display: block;
     margin-inline: auto;
