@@ -1,7 +1,7 @@
-import { SITE_OG_IMAGE_PATH } from "./siteConfig";
+import { SITE_BRAND_LOGO_PATH, SITE_OG_IMAGE_PATH } from "./siteConfig";
 
 /** נתיב תמונת Open Graph, לשימוש עם absoluteUrl() בלבד */
-export { SITE_OG_IMAGE_PATH };
+export { SITE_BRAND_LOGO_PATH, SITE_OG_IMAGE_PATH };
 
 /**
  * בסיס הדומיין לקנוניקל, OG ומפת אתר.
@@ -26,7 +26,12 @@ export function absoluteUrl(pathOrUrl: string): string {
   return base ? `${base}${path}` : path;
 }
 
-/** כתובת מוחלטת לתמונת OG (מומלץ ב-meta JSON-LD) */
+/** כתובת מוחלטת לתמונת OG / שיתוף קישור */
 export function absoluteOgImageUrl(): string {
   return absoluteUrl(SITE_OG_IMAGE_PATH);
+}
+
+/** כתובת מוחלטת ללוגו המותג (סכימה, לא תמונת קישור) */
+export function absoluteBrandLogoUrl(): string {
+  return absoluteUrl(SITE_BRAND_LOGO_PATH);
 }

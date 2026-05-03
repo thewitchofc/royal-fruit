@@ -52,10 +52,19 @@
       crossorigin
       href="https://fonts.gstatic.com/s/heebo/v28/NGS6v5_NC0k9P9H2TbFhsqMA.woff2"
     />
+    <!-- טעינת פונטים לא חוסמת רינדור (משפר TBT / Speed Index); noscript לסוכנים בלי JS -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
+    <noscript>
+      <link
+        href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

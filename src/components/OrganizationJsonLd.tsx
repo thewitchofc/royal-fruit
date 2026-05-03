@@ -11,7 +11,7 @@ import {
   GOOGLE_BUSINESS_PROFILE_URL,
   GOOGLE_MAPS_URL,
 } from "../lib/business";
-import { absoluteOgImageUrl, getSiteUrl } from "../lib/siteUrl";
+import { absoluteBrandLogoUrl, absoluteOgImageUrl, getSiteUrl } from "../lib/siteUrl";
 
 /** Schema.org GroceryStore, תואם המלצות Google לעסק מקומי */
 export function OrganizationJsonLd() {
@@ -35,7 +35,7 @@ export function OrganizationJsonLd() {
       areaServed: ["ישראל", BUSINESS_AREA_SERVED],
       priceRange: "₪₪",
       image: absoluteOgImageUrl(),
-      logo: absoluteOgImageUrl(),
+      logo: absoluteBrandLogoUrl(),
       hasMap: GOOGLE_MAPS_URL,
       sameAs,
       contactPoint: {

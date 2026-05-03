@@ -1,7 +1,7 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { formatArticleDate, getArticleBySlug } from "../data/articles";
 import { usePageSeo } from "../lib/seo";
-import { absoluteOgImageUrl, absoluteUrl } from "../lib/siteUrl";
+import { absoluteBrandLogoUrl, absoluteUrl } from "../lib/siteUrl";
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -34,7 +34,7 @@ export function ArticlePage() {
             publisher: {
               "@type": "Organization",
               name: "Royal Fruit",
-              logo: { "@type": "ImageObject", url: absoluteOgImageUrl() },
+              logo: { "@type": "ImageObject", url: absoluteBrandLogoUrl() },
             },
             mainEntityOfPage: {
               "@type": "WebPage",

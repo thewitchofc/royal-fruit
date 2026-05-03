@@ -2,8 +2,11 @@
  * קבועי SEO / אתר ללא תלות ב-runtime (ניתן לייבא מ-vite.config ומהדפדפן).
  */
 
-/** נתיב תמונת OG ב-public, תמיד עם absoluteUrl() ב-meta ו-JSON-LD */
-export const SITE_OG_IMAGE_PATH = "/images/seo/og-image.png" as const;
+/** תמונת שיתוף (WhatsApp / פייסבוק וכו׳) — אותו רקע כמו הירו בדסקטופ */
+export const SITE_OG_IMAGE_PATH = "/images/backgrounds/header-fruits-bg.png" as const;
+
+/** לוגו המותג ל־JSON-LD (publisher / Organization), לא לתמונת קישור */
+export const SITE_BRAND_LOGO_PATH = "/images/brand/brand-logo.png" as const;
 
 /**
  * Placeholder לבילד כש־VITE_SITE_URL חסר, לא דומיין אמיתי; חובה להגדיר URL בפרודקשן.

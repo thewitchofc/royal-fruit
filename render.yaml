@@ -11,9 +11,9 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "20.11.1"
-      # בשלב ה-Build ובזמן ריצה: כתובת האתר (SEO, OG)
+      # בשלב ה-Build ובזמן ריצה: כתובת האתר (SEO, OG) — ללא סלאש בסוף
       - key: VITE_SITE_URL
-        sync: false
+        value: "https://royalfruit.co.il"
       # ב-Build בלבד: המחירון נטען מ־/price-sheet.csv (אותו דומיין)
       - key: VITE_PRICE_SHEET_VIA_PROXY
         value: "1"

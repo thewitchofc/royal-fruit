@@ -68,6 +68,19 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes("node_modules")) return;
+            if (id.includes("lucide-react")) return "vendor-lucide";
+            if (id.includes("react-router")) return "vendor-router";
+            if (id.includes("react-dom")) return "vendor-react-dom";
+            if (id.includes("/react/") || id.endsWith("node_modules/react/index.js")) return "vendor-react";
+          },
+        },
+      },
+    },
     test: {
       environment: "jsdom",
       setupFiles: "./src/setupTests.ts",
