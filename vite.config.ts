@@ -135,7 +135,19 @@ export default defineConfig(({ mode }) => {
           writeFileSync(resolve(outDir, "sitemap.xml"), sitemap, "utf8");
           writeFileSync(
             resolve(outDir, "robots.txt"),
-            `User-agent: *\nAllow: /\n\nSitemap: ${siteUrl}/sitemap.xml\n`,
+            [
+              "User-agent: *",
+              "Allow: /",
+              "",
+              "User-agent: facebookexternalhit",
+              "Allow: /",
+              "",
+              "User-agent: Facebot",
+              "Allow: /",
+              "",
+              `Sitemap: ${siteUrl}/sitemap.xml`,
+              "",
+            ].join("\n"),
             "utf8",
           );
         },
