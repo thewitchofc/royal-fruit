@@ -61,7 +61,7 @@ export function Testimonials() {
               <div className="testimonial-stars" aria-label="דירוג מומלץ">
                 <span aria-hidden>★★★★★</span>
               </div>
-              <p className="testimonial-quote">&ldquo;{featuredTestimonial.quote}&rdquo;</p>
+              <p className="testimonial-quote">{featuredTestimonial.quote}</p>
               <footer className="testimonial-meta">
                 <span className="testimonial-author">{featuredTestimonial.author}</span>
                 <span className="testimonial-role">{featuredTestimonial.role}</span>
@@ -77,7 +77,7 @@ export function Testimonials() {
                     <div className="testimonial-stars" aria-label="דירוג מומלץ">
                       <span aria-hidden>★★★★★</span>
                     </div>
-                    <p className="testimonial-quote">&ldquo;{t.quote}&rdquo;</p>
+                    <p className="testimonial-quote">{t.quote}</p>
                     <footer className="testimonial-meta">
                       <span className="testimonial-author">{t.author}</span>
                       <span className="testimonial-role">{t.role}</span>

@@ -198,16 +198,18 @@ export function Home() {
           </p>
           <div className="home-testimonials-grid">
             <blockquote className="home-inline-testimonial">
-              <p>«משלוחים קבועים לבת ים — פירות טריים, הענבים במיוחד, ותמיד בטווח שסיכמנו. ממליץ בחום.»</p>
+              <p>משלוחים קבועים לבת ים, פירות טריים, הענבים במיוחד, ותמיד בטווח שסיכמנו. ממליץ בחום.</p>
               <footer>שי, בת ים</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>«מזמינה כל שבת מגש וירקות. כשמשהו חסר כותבים מראש ומציעים חלופה טובה — מרגישה מטופלת.»</p>
+              <p>מזמינה כל שבת מגש וירקות. כשמשהו חסר כותבים מראש ומציעים חלופה טובה, מרגישה מטופלת.</p>
               <footer>מורן, חולון</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>«מארז לחג היה מושלם — יפה, טעים, והגיע בזמן גם כשהיה עמוס. כל המשפחה התלהבה.»</p>
-              <footer>ליאור וטל, חולון</footer>
+              <p>
+                אני צריך שקילה מדויקת לדיאטה. מבקשים בוואטסאפ חצי קילו ומקבלים בדיוק את זה, אמינים.
+              </p>
+              <footer>דניאל, תל אביב</footer>
             </blockquote>
           </div>
         </div>
