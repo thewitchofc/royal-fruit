@@ -17,6 +17,11 @@ services:
       # ב-Build בלבד: המחירון נטען מ־/price-sheet.csv (אותו דומיין)
       - key: VITE_PRICE_SHEET_VIA_PROXY
         value: "1"
+      # אופציונלי: קישור מלא לטופס ביקורת או VITE_GOOGLE_BUSINESS_PLACE_ID — ראו .env.example
+      - key: VITE_GOOGLE_WRITE_REVIEW_URL
+        sync: false
+      - key: VITE_GOOGLE_BUSINESS_PLACE_ID
+        sync: false
       # בזמן ריצה של server.mjs: כתובת ה-CSV מהגוגל שיטס (לא חובה למסור ל-VITE_)
       - key: GOOGLE_SHEETS_PRODUCTS_CSV_URL
         sync: false

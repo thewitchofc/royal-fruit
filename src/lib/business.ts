@@ -58,11 +58,11 @@ export const GOOGLE_MAPS_URL =
  */
 export const GOOGLE_BUSINESS_PROFILE_URL = GOOGLE_MAPS_URL;
 
-/** קישור שיתוף רשמי מ-Google Business (מפנה לפרופיל / ביקורות) */
+/** קישור שיתוף רשמי מ-Google Business (פרופיל / לוח ידע; ל־sameAs ב־Schema) */
 const GOOGLE_BUSINESS_SHARE_DEFAULT = "https://share.google/WID9w7ONpVmEehvjr";
 
 /**
- * קישור לפרופיל וביקורות ב-Google (sameAs ב־Schema, כפתורים באתר).
+ * קישור לפרופיל ב-Google (sameAs, קישור משני כשיש קישור נפרד לביקורת).
  * VITE_GOOGLE_BUSINESS_GPAGE ב־.env דורס את ברירת המחדל.
  */
 const gPageEnv =
@@ -71,15 +71,31 @@ const gPageEnv =
     : "";
 export const GOOGLE_BUSINESS_GPAGE_URL = gPageEnv || GOOGLE_BUSINESS_SHARE_DEFAULT;
 
-const writeReviewEnv =
+const placeIdEnv =
+  typeof import.meta.env.VITE_GOOGLE_BUSINESS_PLACE_ID === "string"
+    ? import.meta.env.VITE_GOOGLE_BUSINESS_PLACE_ID.trim()
+    : "";
+
+const writeReviewUrlEnv =
   typeof import.meta.env.VITE_GOOGLE_WRITE_REVIEW_URL === "string"
     ? import.meta.env.VITE_GOOGLE_WRITE_REVIEW_URL.trim()
     : "";
-/** קישור לדירוג; אם לא הוגדר בנפרד — אותו קישור כמו לפרופיל */
-export const GOOGLE_WRITE_REVIEW_URL = writeReviewEnv || GOOGLE_BUSINESS_GPAGE_URL;
+
+function googleWriteReviewFromPlaceId(placeId: string): string {
+  return `https://search.google.com/local/writereview?placeid=${encodeURIComponent(placeId)}`;
+}
+
+/**
+ * קישור לטופס השארת ביקורת בגוגל.
+ * סדר עדיפות: VITE_GOOGLE_WRITE_REVIEW_URL (מומלץ, מהעסק בגוגל) → Place ID → קישור השיתוף.
+ */
+export const GOOGLE_WRITE_REVIEW_URL =
+  writeReviewUrlEnv ||
+  (placeIdEnv ? googleWriteReviewFromPlaceId(placeIdEnv) : "") ||
+  GOOGLE_BUSINESS_GPAGE_URL;
 
 /** טקסטים לכפתורי ביקורת (אחידים באתר) */
 export const GOOGLE_REVIEW_CTA_HINT = "מרוצים מהשירות? נשמח לביקורת קצרה.";
-export const GOOGLE_REVIEW_CTA_LABEL = "דרגו אותנו בגוגל";
-/** קישור לפרופיל / סיכום ביקורות ב-Google (כמו בלוח הידע בחיפוש) */
+export const GOOGLE_REVIEW_CTA_LABEL = "השארת ביקורת בגוגל";
+/** קישור לפרופיל / קריאת ביקורות ב-Google (מוצג רק כשהוא שונה מקישור הביקורת) */
 export const GOOGLE_BUSINESS_PAGE_CTA_LABEL = "ביקורות ופרופיל בגוגל";
