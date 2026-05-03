@@ -5,6 +5,8 @@ import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import {
   BUSINESS_AREA_SERVED,
   BUSINESS_TRUST_CUSTOMERS_LINE,
+  GOOGLE_BUSINESS_GPAGE_URL,
+  GOOGLE_BUSINESS_PAGE_CTA_LABEL,
 } from "../lib/business";
 import { usePageSeo } from "../lib/seo";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
@@ -195,6 +197,15 @@ export function Home() {
             <Link to="/testimonials" className="price-menu-tel">
               עוד המלצות
             </Link>
+            {" · "}
+            <a
+              href={GOOGLE_BUSINESS_GPAGE_URL}
+              className="price-menu-tel"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {GOOGLE_BUSINESS_PAGE_CTA_LABEL}
+            </a>
           </p>
           <div className="home-testimonials-grid">
             <blockquote className="home-inline-testimonial">

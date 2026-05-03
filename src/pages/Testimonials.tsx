@@ -1,6 +1,8 @@
 import { Fragment, useMemo } from "react";
 import { Link } from "react-router-dom";
 import {
+  GOOGLE_BUSINESS_GPAGE_URL,
+  GOOGLE_BUSINESS_PAGE_CTA_LABEL,
   GOOGLE_REVIEW_CTA_HINT,
   GOOGLE_REVIEW_CTA_LABEL,
   GOOGLE_WRITE_REVIEW_URL,
@@ -56,6 +58,25 @@ export function Testimonials() {
             </div>
           </div>
 
+          <div className="testimonials-google-bar" role="navigation" aria-label="Royal Fruit בגוגל">
+            <a
+              href={GOOGLE_BUSINESS_GPAGE_URL}
+              className="testimonials-google-bar-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {GOOGLE_BUSINESS_PAGE_CTA_LABEL}
+            </a>
+            <a
+              href={GOOGLE_WRITE_REVIEW_URL}
+              className="testimonials-google-bar-link testimonials-google-bar-link--accent"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {GOOGLE_REVIEW_CTA_LABEL}
+            </a>
+          </div>
+
           {featuredTestimonial ? (
             <article className="testimonial-card testimonial-card-featured">
               <div className="testimonial-stars" aria-label="דירוג מומלץ">
@@ -86,16 +107,26 @@ export function Testimonials() {
                 </li>
                 {index === 3 ? (
                   <li>
-                    <div className="testimonials-review-inline" aria-label="השארת ביקורת בגוגל">
+                    <div className="testimonials-review-inline" aria-label="ביקורות בגוגל">
                       <p>{GOOGLE_REVIEW_CTA_HINT}</p>
-                      <a
-                        href={GOOGLE_WRITE_REVIEW_URL}
-                        className="testimonials-review-inline-link"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {GOOGLE_REVIEW_CTA_LABEL}
-                      </a>
+                      <div className="testimonials-review-inline-actions">
+                        <a
+                          href={GOOGLE_BUSINESS_GPAGE_URL}
+                          className="testimonials-review-inline-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {GOOGLE_BUSINESS_PAGE_CTA_LABEL}
+                        </a>
+                        <a
+                          href={GOOGLE_WRITE_REVIEW_URL}
+                          className="testimonials-review-inline-link"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {GOOGLE_REVIEW_CTA_LABEL}
+                        </a>
+                      </div>
                       <span className="testimonials-review-stars" aria-hidden>
                         ★★★★★
                       </span>

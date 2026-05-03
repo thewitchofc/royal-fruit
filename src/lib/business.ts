@@ -59,20 +59,27 @@ export const GOOGLE_MAPS_URL =
  */
 export const GOOGLE_BUSINESS_PROFILE_URL = GOOGLE_MAPS_URL;
 
+/** פרופיל Google Business ציבורי (ביקורות ופרטי עסק), ללא /review */
+const GOOGLE_BUSINESS_GPAGE_LISTING_DEFAULT = "https://g.page/r/CVeM2UapKGpbEBM";
+
 /**
- * קישור קנוני לפרופיל Google Business (למשל https://g.page/...) עבור sameAs ב־Schema.
- * אופציונלי: אפשר גם להגדיר VITE_GOOGLE_BUSINESS_GPAGE ב־.env, הוא יגבר על הערך כאן.
+ * קישור קנוני לפרופיל Google Business עבור sameAs ב־Schema וקישורים באתר.
+ * VITE_GOOGLE_BUSINESS_GPAGE ב־.env דורס את ברירת המחדל אם צריך.
  */
 const gPageEnv =
   typeof import.meta.env.VITE_GOOGLE_BUSINESS_GPAGE === "string"
     ? import.meta.env.VITE_GOOGLE_BUSINESS_GPAGE.trim()
     : "";
-/** הדביקו כאן את כתובת ה־g.page כשקיימת; ריק = שימוש ב־GOOGLE_BUSINESS_PROFILE_URL */
-export const GOOGLE_BUSINESS_GPAGE_URL = gPageEnv || "";
+export const GOOGLE_BUSINESS_GPAGE_URL = gPageEnv || GOOGLE_BUSINESS_GPAGE_LISTING_DEFAULT;
 
-/** קישור רשמי לביקורת ב-Google Business Profile */
-export const GOOGLE_WRITE_REVIEW_URL = "https://g.page/r/CVeM2UapKGpbEBM/review";
+const listingForReview = GOOGLE_BUSINESS_GPAGE_URL.replace(/\/$/, "");
+/** קישור לדף כתיבת ביקורת (אותו פרופיל כמו GOOGLE_BUSINESS_GPAGE_URL) */
+export const GOOGLE_WRITE_REVIEW_URL = listingForReview.endsWith("/review")
+  ? listingForReview
+  : `${listingForReview}/review`;
 
 /** טקסטים לכפתורי ביקורת (אחידים באתר) */
 export const GOOGLE_REVIEW_CTA_HINT = "מרוצים מהשירות? נשמח לביקורת קצרה.";
 export const GOOGLE_REVIEW_CTA_LABEL = "דרגו אותנו בגוגל";
+/** קישור לפרופיל / סיכום ביקורות ב-Google (כמו בלוח הידע בחיפוש) */
+export const GOOGLE_BUSINESS_PAGE_CTA_LABEL = "ביקורות ופרופיל בגוגל";
