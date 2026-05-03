@@ -54,29 +54,29 @@ export const GOOGLE_MAPS_URL =
   "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent("האורגים 7, חולון Royal Fruit");
 
 /**
- * פרופיל Google Business / רשימה בגוגל, כרגע מצביע לחיפוש במפות.
- * מומלץ להחליף בכתובת הקבועה מלוח הבקרה של Google Business Profile (למשל g.page/...)
+ * פרופיל Google Business / רשימה בגוגל: ברירת מחדל חיפוש במפות אם אין קישור ייעודי.
  */
 export const GOOGLE_BUSINESS_PROFILE_URL = GOOGLE_MAPS_URL;
 
-/** פרופיל Google Business ציבורי (ביקורות ופרטי עסק), ללא /review */
-const GOOGLE_BUSINESS_GPAGE_LISTING_DEFAULT = "https://g.page/r/CVeM2UapKGpbEBM";
+/** קישור שיתוף רשמי מ-Google Business (מפנה לפרופיל / ביקורות) */
+const GOOGLE_BUSINESS_SHARE_DEFAULT = "https://share.google/WID9w7ONpVmEehvjr";
 
 /**
- * קישור קנוני לפרופיל Google Business עבור sameAs ב־Schema וקישורים באתר.
- * VITE_GOOGLE_BUSINESS_GPAGE ב־.env דורס את ברירת המחדל אם צריך.
+ * קישור לפרופיל וביקורות ב-Google (sameAs ב־Schema, כפתורים באתר).
+ * VITE_GOOGLE_BUSINESS_GPAGE ב־.env דורס את ברירת המחדל.
  */
 const gPageEnv =
   typeof import.meta.env.VITE_GOOGLE_BUSINESS_GPAGE === "string"
     ? import.meta.env.VITE_GOOGLE_BUSINESS_GPAGE.trim()
     : "";
-export const GOOGLE_BUSINESS_GPAGE_URL = gPageEnv || GOOGLE_BUSINESS_GPAGE_LISTING_DEFAULT;
+export const GOOGLE_BUSINESS_GPAGE_URL = gPageEnv || GOOGLE_BUSINESS_SHARE_DEFAULT;
 
-const listingForReview = GOOGLE_BUSINESS_GPAGE_URL.replace(/\/$/, "");
-/** קישור לדף כתיבת ביקורת (אותו פרופיל כמו GOOGLE_BUSINESS_GPAGE_URL) */
-export const GOOGLE_WRITE_REVIEW_URL = listingForReview.endsWith("/review")
-  ? listingForReview
-  : `${listingForReview}/review`;
+const writeReviewEnv =
+  typeof import.meta.env.VITE_GOOGLE_WRITE_REVIEW_URL === "string"
+    ? import.meta.env.VITE_GOOGLE_WRITE_REVIEW_URL.trim()
+    : "";
+/** קישור לדירוג; אם לא הוגדר בנפרד — אותו קישור כמו לפרופיל */
+export const GOOGLE_WRITE_REVIEW_URL = writeReviewEnv || GOOGLE_BUSINESS_GPAGE_URL;
 
 /** טקסטים לכפתורי ביקורת (אחידים באתר) */
 export const GOOGLE_REVIEW_CTA_HINT = "מרוצים מהשירות? נשמח לביקורת קצרה.";

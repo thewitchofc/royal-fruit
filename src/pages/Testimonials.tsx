@@ -27,6 +27,7 @@ export function Testimonials() {
 
   const testimonials = useMemo(() => shuffle(TESTIMONIALS), [TESTIMONIALS]);
   const [featuredTestimonial, ...restTestimonials] = testimonials;
+  const googleReviewUrlDistinct = GOOGLE_WRITE_REVIEW_URL !== GOOGLE_BUSINESS_GPAGE_URL;
 
   return (
     <div className="page">
@@ -61,20 +62,26 @@ export function Testimonials() {
           <div className="testimonials-google-bar" role="navigation" aria-label="Royal Fruit בגוגל">
             <a
               href={GOOGLE_BUSINESS_GPAGE_URL}
-              className="testimonials-google-bar-link"
+              className={
+                googleReviewUrlDistinct
+                  ? "testimonials-google-bar-link"
+                  : "testimonials-google-bar-link testimonials-google-bar-link--accent"
+              }
               target="_blank"
               rel="noopener noreferrer"
             >
               {GOOGLE_BUSINESS_PAGE_CTA_LABEL}
             </a>
-            <a
-              href={GOOGLE_WRITE_REVIEW_URL}
-              className="testimonials-google-bar-link testimonials-google-bar-link--accent"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {GOOGLE_REVIEW_CTA_LABEL}
-            </a>
+            {googleReviewUrlDistinct ? (
+              <a
+                href={GOOGLE_WRITE_REVIEW_URL}
+                className="testimonials-google-bar-link testimonials-google-bar-link--accent"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {GOOGLE_REVIEW_CTA_LABEL}
+              </a>
+            ) : null}
           </div>
 
           {featuredTestimonial ? (
@@ -118,14 +125,16 @@ export function Testimonials() {
                         >
                           {GOOGLE_BUSINESS_PAGE_CTA_LABEL}
                         </a>
-                        <a
-                          href={GOOGLE_WRITE_REVIEW_URL}
-                          className="testimonials-review-inline-link"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {GOOGLE_REVIEW_CTA_LABEL}
-                        </a>
+                        {googleReviewUrlDistinct ? (
+                          <a
+                            href={GOOGLE_WRITE_REVIEW_URL}
+                            className="testimonials-review-inline-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {GOOGLE_REVIEW_CTA_LABEL}
+                          </a>
+                        ) : null}
                       </div>
                       <span className="testimonials-review-stars" aria-hidden>
                         ★★★★★

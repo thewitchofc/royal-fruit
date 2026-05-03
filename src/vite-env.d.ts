@@ -11,8 +11,10 @@ interface ImportMetaEnv {
   readonly VITE_GOOGLE_SHEETS_DIRECT?: string;
   /** "1" = טעינת מחירון מ־/price-sheet.csv בלבד (URL הגיליון רק בשרת או במידלוור dev) */
   readonly VITE_PRICE_SHEET_VIA_PROXY?: string;
-  /** קישור g.page או פרופיל Google Business ל־sameAs ב־JSON-LD */
+  /** קישור שיתוף Google Business / g.page / מפות — ל־sameAs ולכפתורי ביקורות */
   readonly VITE_GOOGLE_BUSINESS_GPAGE?: string;
+  /** אופציונלי: קישור נפרד לכתיבת ביקורת (אם שונה מ־VITE_GOOGLE_BUSINESS_GPAGE) */
+  readonly VITE_GOOGLE_WRITE_REVIEW_URL?: string;
   /** מפתח Google Maps לדפדפן, להפעלת השלמת כתובות בסל (להגביל לדומיין ב-Google Cloud) */
   readonly VITE_GOOGLE_MAPS_API_KEY?: string;
   /** URL סקריפט נגישות חיצוני (למשל לאחר רישום ל«נגיש בקליק»), רק כשיש ערך */
