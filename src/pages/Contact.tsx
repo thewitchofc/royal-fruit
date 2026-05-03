@@ -6,6 +6,7 @@ import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import {
   BUSINESS_ADDRESS_LINE,
   BUSINESS_AREA_SERVED,
+  BUSINESS_CONTACT_FIRST_NAME,
   BUSINESS_FACEBOOK_URL,
   BUSINESS_HOURS_SUMMARY,
   BUSINESS_INSTAGRAM_URL,
@@ -82,7 +83,7 @@ export function Contact() {
     setSummary(null);
 
     const text = [
-      "שלום אורי, פנייה חדשה מאתר Royal Fruit.",
+      "שלום, פנייה חדשה מאתר Royal Fruit.",
       "",
       `שם מלא: ${name || "לא צוין"}`,
       `טלפון: ${phone || "לא צוין"}`,
@@ -104,7 +105,7 @@ export function Contact() {
           <p className="eyebrow">יצירת קשר</p>
           <h1 className="page-title contact-page-title">שירות פרימיום מתחיל בשיחה מדויקת</h1>
           <p className="page-lead muted">
-            ספרו לנו מה צריך להגיע, לאן ומתי. אורי יחזור אליכם עם התאמה אישית, זמינות ותיאום מהיר.
+            ספרו לנו מה צריך להגיע, לאן ומתי. נחזור אליכם עם התאמה אישית, זמינות ותיאום מהיר.
           </p>
         </div>
       </section>
@@ -114,7 +115,7 @@ export function Contact() {
           <form id="contact-form" className="contact-form" onSubmit={onSubmit} noValidate>
             <div className="contact-form-head">
               <RoyalFruitWordmark className="contact-form-wordmark" />
-              <h2>פנייה מהירה לאורי</h2>
+              <h2>פנייה מהירה בוואטסאפ</h2>
             </div>
             {summary ? (
               <p className="contact-form-summary-error" role="alert">
@@ -204,7 +205,7 @@ export function Contact() {
               <textarea name="message" rows={5} placeholder="תארו תאריך, היקף וכל דגש מיוחד..." />
             </label>
             <button type="submit" className="btn btn-primary contact-submit">
-              שליחה לוואטסאפ לאורי
+              שליחה לוואטסאפ
             </button>
             {sent ? (
               <p className="form-feedback" role="status">
@@ -225,7 +226,7 @@ export function Contact() {
               <a href={`tel:${BUSINESS_PHONE_E164}`} className="contact-info-value">
                 {BUSINESS_PHONE}
               </a>
-              <p>אורי</p>
+              <p>{BUSINESS_CONTACT_FIRST_NAME}</p>
             </div>
 
             <div className="contact-info-card">

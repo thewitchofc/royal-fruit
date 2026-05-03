@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { FAQ_SECTION_LABELS, FAQ_SECTION_ORDER, faqItemsBySection } from "../data/faq";
+import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { usePageSeo } from "../lib/seo";
 
 export function Faq() {
@@ -19,9 +20,9 @@ export function Faq() {
           <p className="eyebrow">שאלות נפוצות</p>
           <h1 className="page-title">שאלות נפוצות לפני הזמנה</h1>
           <p className="page-lead muted">
-            תשובות קצרות על הזמנות, משלוחים, איסוף ואיכות. לשאלה נוספת אפשר להתקשר לאורי ב־
-            <a href="tel:0505113009" className="faq-inline-tel">
-              050-5113009
+            תשובות קצרות על הזמנות, משלוחים, איסוף ואיכות. לשאלה נוספת אפשר להתקשר ב־
+            <a href={`tel:${BUSINESS_PHONE_E164}`} className="faq-inline-tel">
+              {BUSINESS_PHONE} ({BUSINESS_CONTACT_FIRST_NAME})
             </a>
             .
           </p>
@@ -41,7 +42,7 @@ export function Faq() {
               <span>איכות פרימיום</span>
             </div>
             <Link to="/contact" className="btn btn-primary faq-service-cta">
-              פנייה לאורי
+              יצירת קשר
             </Link>
           </div>
 

@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
+import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { usePageSeo } from "../lib/seo";
 
 export function Accessibility() {
@@ -93,10 +94,10 @@ export function Accessibility() {
             <p>
               אם מצאתם רכיב שאינו נגיש או שקשה להשתמש בו (למשל קורא מסך לא מקריא נכון, או מקשים אינם
               מגיעים לתוכן), אנא פנו אלינו ונשתדל לטפל בהקדם:{" "}
-              <a href="tel:0505113009" className="legal-inline-link">
-                050-5113009
+              <a href={`tel:${BUSINESS_PHONE_E164}`} className="legal-inline-link">
+                {BUSINESS_PHONE}
               </a>{" "}
-              (אורי) או{" "}
+              ({BUSINESS_CONTACT_FIRST_NAME}) או{" "}
               <Link to="/contact" className="legal-inline-link">
                 טופס יצירת קשר
               </Link>

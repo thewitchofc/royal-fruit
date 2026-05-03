@@ -24,7 +24,7 @@ export function deliveryMinimumStatus(
   if (!estimate.hasAnyKnown) {
     return {
       ok: false,
-      message: `מינימום הזמנה למשלוח ${MIN_DELIVERY_ORDER_NIS} ₪. לא ניתן לחשב סכום מהפריטים בסל, הוסיפו פריטים עם מחיר מהמחירון או התקשרו לאורי.`,
+      message: `מינימום הזמנה למשלוח ${MIN_DELIVERY_ORDER_NIS} ₪. לא ניתן לחשב סכום מהפריטים בסל, הוסיפו פריטים עם מחיר מהמחירון או התקשרו לטלפון בעמוד יצירת הקשר.`,
     };
   }
   if (estimate.knownTotal < MIN_DELIVERY_ORDER_NIS) {

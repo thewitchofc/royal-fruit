@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Apple, Cherry, Circle, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { PriceCategory } from "../data/priceList";
-import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
+import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { PRICE_LIST_META, type PriceListBannerMeta } from "../data/priceList";
 import { getProduceShortDescription } from "../data/priceList";
 import { useCart } from "../context/CartContext";
@@ -317,7 +317,7 @@ export function PriceListSections({
         <a href={`tel:${BUSINESS_PHONE_E164}`} className="price-menu-tel">
           {BUSINESS_PHONE}
         </a>{" "}
-        (אורי), אפשר גם לבנות סל ולשלוח מ־
+        ({BUSINESS_CONTACT_FIRST_NAME}), אפשר גם לבנות סל ולשלוח מ־
         <Link to="/cart" className="price-menu-tel">
           עגלת הקניות
         </Link>

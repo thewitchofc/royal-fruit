@@ -130,7 +130,7 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
     id: "cart-upsell-lemons",
     emoji: "fruit",
     name: "לימונים להשלמה",
-    priceLabel: "לתיאום מול אורי",
+    priceLabel: "לתיאום ישיר",
     unit: "מומלץ לסלטים, דגים ואירוח",
     categoryPath: "מוצרים משלימים",
     reason: "מתאים במיוחד אם יש בסל ירקות לסלט, עלים או דגים.",
@@ -140,7 +140,7 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
     id: "cart-upsell-mint",
     emoji: "veg",
     name: "נענע טרייה",
-    priceLabel: "לתיאום מול אורי",
+    priceLabel: "לתיאום ישיר",
     unit: "לתה, לימונדה ופלטות אירוח",
     categoryPath: "מוצרים משלימים",
     reason: "משלימה לימונים, פירות קיץ, שתייה קרה ופלטות אירוח.",
@@ -150,7 +150,7 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
     id: "cart-upsell-cherry-tomatoes",
     emoji: "veg",
     name: "עגבניות שרי",
-    priceLabel: "לתיאום מול אורי",
+    priceLabel: "לתיאום ישיר",
     unit: "תוספת קלה לסלט או אירוח",
     categoryPath: "מוצרים משלימים",
     reason: "אם כבר יש ירקות, זו השלמה קלה לסלט או לשולחן.",
@@ -160,7 +160,7 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
     id: "cart-upsell-medjool",
     emoji: "fruit",
     name: "תמר מג׳הול",
-    priceLabel: "לתיאום מול אורי",
+    priceLabel: "לתיאום ישיר",
     unit: "משדרג סל מתוק או מגש",
     categoryPath: "מוצרים משלימים",
     reason: "מתאים ליד פירות עונה, מגשים ומתוקים טבעיים.",
@@ -170,7 +170,7 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
     id: "cart-upsell-avocado",
     emoji: "fruit",
     name: "אבוקדו",
-    priceLabel: "לתיאום מול אורי",
+    priceLabel: "לתיאום ישיר",
     unit: "לבשלות לפי היום או מחר",
     categoryPath: "מוצרים משלימים",
     reason: "אם יש ירקות לסלט, אבוקדו יכול לסגור את המנה.",
@@ -180,7 +180,7 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
     id: "cart-upsell-herbs",
     emoji: "veg",
     name: "עשבי תיבול",
-    priceLabel: "לתיאום מול אורי",
+    priceLabel: "לתיאום ישיר",
     unit: "פטרוזיליה, כוסברה או שמיר לפי מלאי",
     categoryPath: "מוצרים משלימים",
     reason: "השלמה טבעית לירקות, סלטים ובישול ביתי.",
@@ -220,7 +220,7 @@ function getCartUpsellSuggestions(lines: { name: string; categoryPath: string; u
 export function Cart() {
   usePageSeo({
     title: "Royal Fruit | סל קניות",
-    description: "בנו הזמנה ושלחו לוואטסאפ של אורי, כולל סכום משוערך ומינימום הזמנה למשלוח.",
+    description: "בנו הזמנה ושלחו לוואטסאפ, כולל סכום משוערך ומינימום הזמנה למשלוח.",
     noIndex: true,
   });
 
@@ -368,7 +368,7 @@ export function Cart() {
           <p className="eyebrow">סל קניות</p>
           <h1 className="page-title">בונים הזמנה, ושולחים לוואטסאפ</h1>
           <p className="page-lead muted">
-            התשלום והמשלוח מתואמים ישירות עם אורי בוואטסאפ אחרי השליחה. זה לא חיוב באתר. מינימום
+            התשלום והמשלוח מתואמים ישירות בוואטסאפ אחרי השליחה. זה לא חיוב באתר. מינימום
             הזמנה למשלוח: <strong>{MIN_DELIVERY_ORDER_NIS} ₪</strong> (לפי סכום משוערך מהמחירון).
           </p>
         </div>
@@ -395,7 +395,7 @@ export function Cart() {
               <div className="cart-order-head">
                 <div>
                   <h2>הסל שלכם</h2>
-                  <p className="muted">בדקו כמויות, בחרו משלוח או איסוף ושלחו לאורי.</p>
+                  <p className="muted">בדקו כמויות, בחרו משלוח או איסוף ושלחו בוואטסאפ.</p>
                 </div>
                 <div className="cart-order-head-stats" aria-label="סיכום סל">
                   <span>
@@ -467,13 +467,13 @@ export function Cart() {
                     {cartEstimate.unknownLineCount > 0 ? (
                       <p className="cart-estimate-note muted small">
                         בנוסף <strong>{cartEstimate.unknownLineCount}</strong> סוגי פריטים ללא מחיר ברור
-                        במחירון, המחיר הסופי ייסגר מול אורי.
+                        במחירון, המחיר הסופי ייסגר בתיאום.
                       </p>
                     ) : null}
                   </>
                 ) : (
                   <p className="cart-estimate-note muted small">
-                    לא ניתן לחשב סכום משוערך מהטקסט במחירון, אורי יעדכן מחיר בוואטסאפ.
+                    לא ניתן לחשב סכום משוערך מהטקסט במחירון; המחיר יעודכן בוואטסאפ.
                   </p>
                 )}
               </div>
@@ -698,7 +698,7 @@ export function Cart() {
                         <option value="13:00-17:00">13:00-17:00</option>
                         <option value="17:00-21:00">17:00-21:00</option>
                         <option value="בהקדם האפשרי, עד כ-4 שעות">בהקדם האפשרי, עד כ־4 שעות</option>
-                        <option value="לתיאום מול אורי">לתיאום מול אורי</option>
+                        <option value="לתיאום ישיר">לתיאום ישיר</option>
                       </select>
                       <small className="cart-delivery-window-note">
                         משלוחים בתיאום 24/6, בכפוף למלאי וזמינות.
@@ -726,7 +726,7 @@ export function Cart() {
                   disabled={!canSubmitOrder}
                 >
                   <MessageCircle className="btn-whatsapp-icon" aria-hidden />
-                  שלח הזמנה לוואטסאפ של אורי
+                  שלח הזמנה לוואטסאפ
                 </button>
 
                 {sentHint ? (
@@ -736,7 +736,7 @@ export function Cart() {
                 ) : null}
 
                 <p className="cart-legal muted small">
-                  הכפתור פותח וואטסאפ עם פרטי ההזמנה. מחיר סופי ומלאי יאושרו מול אורי.
+                  הכפתור פותח וואטסאפ עם פרטי ההזמנה. מחיר סופי ומלאי יאושרו בתיאום.
                 </p>
               </form>
             </div>

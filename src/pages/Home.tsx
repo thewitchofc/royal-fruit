@@ -134,7 +134,7 @@ export function Home() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                לבניית סל עם אורי
+                לבניית סל בוואטסאפ
               </a>
             </article>
           </div>
@@ -198,16 +198,16 @@ export function Home() {
           </p>
           <div className="home-testimonials-grid">
             <blockquote className="home-inline-testimonial">
-              <p>«שירות מעולה ופירות ברמה גבוהה, ממליץ בחום!»</p>
-              <footer>דני, ראשון לציון</footer>
+              <p>«פעמיים הזמנתי משלוח — פעם איחור קטן, פעם בול בזמן. הענבים תמיד אכילים גם כשלא אותו זן.»</p>
+              <footer>שי, בת ים</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>«קונים פה כל שבוע, איכות יציבה ויחס אישי. לא מחליפים.»</p>
-              <footer>לקוח קבוע</footer>
+              <p>«אם אין משהו במלאי הם כותבים בוואטסאפ לפני, לא מחליפים בלי לשאול. בשבילי זה נורמלי יותר מסופר.»</p>
+              <footer>מורן, חולון</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>«המארז לחג היה מהמם, כל המשפחה שאלה מאיפה. תודה!»</p>
-              <footer>נועה, חולון</footer>
+              <p>«לחג היה עמוס אז אמרו מראש שיש עיכוב. המארז בסוף הגיע טעים, לא רק יפה לתמונה.»</p>
+              <footer>ליאור וטל, חולון</footer>
             </blockquote>
           </div>
         </div>
@@ -220,7 +220,7 @@ export function Home() {
             <article className="feature-card">
               <h3>כותבים מה צריך</h3>
               <p>
-                רשימת קניות, אירוח, סלטייה או סל שבועי. מספיק להתחיל בכיוון כללי ואורי כבר יעזור לדייק.
+                רשימת קניות, אירוח, סלטייה או סל שבועי. מספיק להתחיל בכיוון כללי ונעזור לדייק לפי המלאי.
               </p>
             </article>
             <article className="feature-card">
@@ -264,7 +264,7 @@ export function Home() {
           <RoyalFruitWordmark className="home-final-cta-wordmark" />
           <h2>רוצים סל מדויק להיום או למחר?</h2>
           <p className="muted">
-            שלחו הודעה קצרה לאורי, ונכוון אתכם לפי המלאי הטרי, הבשלות והתקציב.
+            שלחו הודעה קצרה בוואטסאפ, ונכוון אתכם לפי המלאי הטרי, הבשלות והתקציב.
           </p>
           <div className="home-final-cta-actions">
             <a

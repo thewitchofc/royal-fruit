@@ -4,6 +4,9 @@ export const BUSINESS_NAME = "Royal Fruit";
 
 export const BUSINESS_PHONE = "050-5113009";
 export const BUSINESS_PHONE_E164 = "+972505113009";
+
+/** שם ליצירת קשר — מוצג באתר רק ליד מספר הטלפון */
+export const BUSINESS_CONTACT_FIRST_NAME = "אורי";
 export const BUSINESS_ADDRESS_LINE = "האורגים 7, חולון";
 
 /** תיאור קצר ל-Schema.org (LocalBusiness / GroceryStore), שם המותג בתחילה לזיהוי מותג */
@@ -12,7 +15,7 @@ export const BUSINESS_SCHEMA_DESCRIPTION =
 
 /** אזור שירות, טקסט אחיד לפוטר, FAQ ותיאום ציפיות */
 export const BUSINESS_AREA_SERVED =
-  "אזור המרכז וגוש דן, כולל חולון, בת ים, ראשון לציון, תל אביב והסביבה. המשלוחים והאיסוף מתואמים מול אורי, ליישוב או לאזור ספציפי כדאי לוודא בטלפון לפני ההזמנה.";
+  "אזור המרכז וגוש דן, כולל חולון, בת ים, ראשון לציון, תל אביב והסביבה. המשלוחים והאיסוף מתואמים מראש; ליישוב או לאזור ספציפי כדאי לוודא בטלפון לפני ההזמנה.";
 
 /** שורת אמון ליד CTA (ללא «בכל הארץ», בהתאם לאזור המשלוח בלבד) */
 export const BUSINESS_TRUST_CUSTOMERS_LINE = "מאות לקוחות מרוצים באזור המרכז וגוש דן";
@@ -24,7 +27,9 @@ export const DELIVERY_ZONES_SUMMARY = BUSINESS_AREA_SERVED;
 export const BUSINESS_HOURS_SUMMARY =
   "סגורים בשישי בערב ובשבת בבוקר. מחוץ לחלון הזה, שירות רציף (24/6). לתיאום איסוף, משלוח או שאלה: " +
   BUSINESS_PHONE +
-  ".";
+  " (" +
+  BUSINESS_CONTACT_FIRST_NAME +
+  ").";
 
 /**
  * שעות פתיחה ל־Schema.org (OpeningHoursSpecification).

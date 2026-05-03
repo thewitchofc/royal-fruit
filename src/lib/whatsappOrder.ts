@@ -2,7 +2,7 @@ import type { CartLine } from "../cart/types";
 import { estimateCartTotal } from "./cartEstimate";
 import { cartTotalDisplayUnits } from "./cartItemCount";
 
-/** מספר וואטסאפ בפורמט בינלאומי ללא + (אורי) */
+/** מספר וואטסאפ בפורמט בינלאומי ללא + */
 export const ORI_WHATSAPP_E164 = "972505113009";
 
 /** הודעת פתיחה מברירת מחדל מקישורים באתר (המרות) */
@@ -106,10 +106,10 @@ export function buildOrderMessage(params: {
   parts.push(`כמות פריטים: ${totalUnits}`);
   parts.push(
     `סכום משוערך: ${
-      estimate.hasAnyKnown ? `~${estimate.knownTotal.toLocaleString("he-IL")} ₪` : "לתיאום מול אורי"
+      estimate.hasAnyKnown ? `~${estimate.knownTotal.toLocaleString("he-IL")} ₪` : "לתיאום בוואטסאפ"
     }`,
   );
-  parts.push("המחיר הסופי תלוי במשקל, מלאי ותיאום מול אורי.");
+  parts.push("המחיר הסופי תלוי במשקל, מלאי ותיאום בוואטסאפ.");
 
   if (notes.trim()) {
     parts.push("", "*הערות*", notes.trim());

@@ -277,7 +277,7 @@ export function Layout({ children }: { children: ReactNode }) {
                 className="btn btn-primary btn-whatsapp footer-wa-cta"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="שליחת הודעה בוואטסאפ לאורי, נפתח בלשונית חדשה"
+                aria-label="שליחת הודעה בוואטסאפ להזמנה, נפתח בלשונית חדשה"
               >
                 <MessageCircle className="btn-whatsapp-icon" aria-hidden />
                 וואטסאפ
@@ -324,7 +324,7 @@ export function Layout({ children }: { children: ReactNode }) {
         className="whatsapp-fab"
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="פתיחת צ'אט וואטסאפ עם אורי, נפתח בלשונית חדשה"
+        aria-label="פתיחת צ'אט וואטסאפ להזמנה, נפתח בלשונית חדשה"
       >
         <WhatsAppGlyph className="whatsapp-fab-icon" />
       </a>

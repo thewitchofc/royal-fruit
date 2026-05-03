@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
+import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { usePageSeo } from "../lib/seo";
 
 export function Returns() {
@@ -69,10 +70,10 @@ export function Returns() {
 
             <h2>7. יצירת קשר</h2>
             <p>
-              <a href="tel:0505113009" className="legal-inline-link">
-                050-5113009
+              <a href={`tel:${BUSINESS_PHONE_E164}`} className="legal-inline-link">
+                {BUSINESS_PHONE}
               </a>{" "}
-              (אורי)
+              ({BUSINESS_CONTACT_FIRST_NAME})
               {", "}
               <Link to="/contact" className="legal-inline-link">
                 טופס יצירת קשר
