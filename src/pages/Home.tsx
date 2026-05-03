@@ -198,15 +198,15 @@ export function Home() {
           </p>
           <div className="home-testimonials-grid">
             <blockquote className="home-inline-testimonial">
-              <p>«פעמיים הזמנתי משלוח — פעם איחור קטן, פעם בול בזמן. הענבים תמיד אכילים גם כשלא אותו זן.»</p>
+              <p>«משלוחים קבועים לבת ים — פירות טריים, הענבים במיוחד, ותמיד בטווח שסיכמנו. ממליץ בחום.»</p>
               <footer>שי, בת ים</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>«אם אין משהו במלאי הם כותבים בוואטסאפ לפני, לא מחליפים בלי לשאול. בשבילי זה נורמלי יותר מסופר.»</p>
+              <p>«מזמינה כל שבת מגש וירקות. כשמשהו חסר כותבים מראש ומציעים חלופה טובה — מרגישה מטופלת.»</p>
               <footer>מורן, חולון</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>«לחג היה עמוס אז אמרו מראש שיש עיכוב. המארז בסוף הגיע טעים, לא רק יפה לתמונה.»</p>
+              <p>«מארז לחג היה מושלם — יפה, טעים, והגיע בזמן גם כשהיה עמוס. כל המשפחה התלהבה.»</p>
               <footer>ליאור וטל, חולון</footer>
             </blockquote>
           </div>
