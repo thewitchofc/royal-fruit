@@ -111,6 +111,15 @@ export function getProduceShortDescription(name: string): string {
     "מלפפון אורגני בלה מאיה": "מלפפון אורגני בטעם נקי ורענן, פריך במיוחד.",
     "עגבניות אורגניות בלה מאיה": "עגבניות אורגניות מאוזנות למטבח יומי ולרוטב.",
     "מלפפון חמוץ בעבודת יד": "כבישה ביתית עם קראנץ' וחמיצות מאוזנת.",
+    "אגוזי לוז": "חלווה שומשום עם אגוזי לוז; טעם אגוזי קלאסי ומרקם פריך.",
+    פיסטק: "חלווה שומשום עם פיסטוק; טעם אגוזי־ירוק ומרקם עשיר.",
+    פקאן: "חלווה שומשום עם פקאן; קראנץ' אגוזי ומתיקות עמוקה.",
+    "טעם של פעם": "חלווה קלאסית בטעם מסורתי; רכה ומתקתקת.",
+    "טחינה אתיופית": "טחינה גולמית ארומטית; למריחה, למרקים ולתיבול.",
+    "טחינה מלאה עם וניל טהור": "טחינה מלאה עם ניחוח וניל עדין; מתאימה למתיקות קלה.",
+    "טחינה עם אגוזי לוז וקקאו": "שילוב אגוזי לוז וקקאו בטחינה; גוף קרמי ועשיר.",
+    "קרם פיסטוק": "ממרח קרם פיסטוק; מתיקות מאוזנת ומרקם חלק.",
+    "קרם אגוזי לוז": "ממרח קרם אגוזי לוז; קרמי, אגוזי ונוח למריחה.",
   };
 
   if (byExact[n]) return byExact[n];
@@ -205,6 +214,15 @@ export function getProduceImage(name: string, description?: string): string | un
     "בקבוק מיץ תפוחים וגזר 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
     "בקבוק מיץ תפוחים וסלק 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
     "בקבוק מיץ תפוחים וחבוש 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
+    "אגוזי לוז": "/images/catalog/halva-aguzi-looz.png",
+    פיסטק: "/images/gallery/colorful-cauliflower.webp",
+    פקאן: "/images/gallery/dates-walnut-pack.webp",
+    "טעם של פעם": "/images/gallery/passion-fruit-oranges.webp",
+    "טחינה אתיופית": "/images/gallery/premium-delivery-box.webp",
+    "טחינה מלאה עם וניל טהור": "/images/gallery/premium-delivery-box.webp",
+    "טחינה עם אגוזי לוז וקקאו": "/images/gallery/premium-delivery-box.webp",
+    "קרם פיסטוק": "/images/gallery/colorful-cauliflower.webp",
+    "קרם אגוזי לוז": "/images/catalog/halva-aguzi-looz.png",
   };
   const exact = byExactName[n];
   if (exact) return exact;
@@ -222,6 +240,8 @@ export function getProduceImage(name: string, description?: string): string | un
   if (/(מלפפון|עגבני|גזר|אבוקדו|דלעת|תרד|אפונה|שום|בצל|אספרגוס|ירק|vegetable|veg)/.test(text)) {
     return "/images/gallery/fresh-produce-box.webp";
   }
+  if (/(טחינה|קרם\s*פיסטוק|קרם\s*אגוזי)/.test(n)) return "/images/gallery/premium-delivery-box.webp";
+  if (/(חלווה|halva|halvah)/.test(text)) return "/images/gallery/dates-walnut-pack.webp";
   return "/images/gallery/mixed-fruit-box.webp";
 }
 
@@ -247,10 +267,7 @@ export const FRUIT_PRICE_CATEGORIES: PriceCategory[] = [
       },
       {
         title: "סברס",
-        rows: [
-          { emoji: "🌵", name: "סברס", price: "35₪, 2 יח׳ 60₪" },
-          { emoji: "🌵", name: "סברס (לק״ג)", price: "55₪ לק״ג" },
-        ],
+        rows: [{ emoji: "🌵", name: "סברס", price: "35₪, 2 יח׳ 60₪ · 55₪ לק״ג" }],
       },
     ],
   },

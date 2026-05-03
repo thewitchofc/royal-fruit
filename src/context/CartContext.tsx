@@ -1,6 +1,8 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from "react";
 import type { CartLine, CartLineInput } from "../cart/types";
 import { cartTotalDisplayUnits } from "../lib/cartItemCount";
+import { formatPriceLabelForDisplay, formatUnitWordsWithLamed } from "../lib/priceDisplay";
+import { findSheetProductByName, type SheetProduct } from "../lib/sheetProducts";
 
 type CartContextValue = {
   lines: CartLine[];
@@ -10,6 +12,8 @@ type CartContextValue = {
   setQty: (id: string, qty: number) => void;
   removeLine: (id: string) => void;
   clearCart: () => void;
+  /** מעדכן מחיר/יחידה/קטגוריה לפי גיליון לשורות שנוספו ממחירון דינמי (id מתחיל ב־sheet-) */
+  syncLinesFromSheetProducts: (products: SheetProduct[]) => void;
 };
 
 const CartContext = createContext<CartContextValue | null>(null);
@@ -25,6 +29,35 @@ function withStep(qty: number, step: number): number {
     return normalizeQty(capped * 0.5);
   }
   return normalizeQty(Math.round(qty / step) * step);
+}
+
+function isSheetBackedCartLineId(id: string): boolean {
+  return id.startsWith("sheet-");
+}
+
+function mergeLineWithSheetProduct(line: CartLine, hit: SheetProduct): CartLine {
+  const nextPrice = formatPriceLabelForDisplay(hit.price.trim() || line.priceLabel);
+  const nextUnit = hit.unit.trim() ? formatUnitWordsWithLamed(hit.unit.trim()) : undefined;
+  const nextPath = hit.category.trim() || line.categoryPath;
+  const nextUnavailable = hit.available ? undefined : true;
+  return {
+    ...line,
+    priceLabel: nextPrice,
+    unit: nextUnit,
+    categoryPath: nextPath,
+    sheetUnavailable: nextUnavailable,
+    sheetMissing: undefined,
+  };
+}
+
+function linesEqualSheetMerge(a: CartLine, b: CartLine): boolean {
+  return (
+    a.priceLabel === b.priceLabel &&
+    (a.unit ?? "") === (b.unit ?? "") &&
+    a.categoryPath === b.categoryPath &&
+    (a.sheetUnavailable === true) === (b.sheetUnavailable === true) &&
+    (a.sheetMissing === true) === (b.sheetMissing === true)
+  );
 }
 
 export function CartProvider({ children }: { children: ReactNode }) {
@@ -61,11 +94,32 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const clearCart = useCallback(() => setLines([]), []);
 
+  const syncLinesFromSheetProducts = useCallback((products: SheetProduct[]) => {
+    if (!products.length) return;
+    setLines((prev) => {
+      let changed = false;
+      const next = prev.map((line) => {
+        if (!isSheetBackedCartLineId(line.id)) return line;
+        const hit = findSheetProductByName(line.name, products);
+        if (!hit) {
+          const flagged = line.sheetMissing ? line : { ...line, sheetMissing: true };
+          if (flagged !== line) changed = true;
+          return flagged;
+        }
+        const merged = mergeLineWithSheetProduct(line, hit);
+        if (linesEqualSheetMerge(line, merged)) return line;
+        changed = true;
+        return merged;
+      });
+      return changed ? next : prev;
+    });
+  }, []);
+
   const totalItemCount = useMemo(() => cartTotalDisplayUnits(lines), [lines]);
 
   const value = useMemo(
-    () => ({ lines, totalItemCount, addItem, setQty, removeLine, clearCart }),
-    [lines, totalItemCount, addItem, setQty, removeLine, clearCart],
+    () => ({ lines, totalItemCount, addItem, setQty, removeLine, clearCart, syncLinesFromSheetProducts }),
+    [lines, totalItemCount, addItem, setQty, removeLine, clearCart, syncLinesFromSheetProducts],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

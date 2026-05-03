@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { Apple, Cherry, Circle, MessageCircle, Star, Truck, Zap } from "lucide-react";
+import { Apple, Cherry, Circle, MessageCircle, RefreshCw, Star, Truck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { CartLineInput } from "../cart/types";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
@@ -8,7 +8,12 @@ import { estimateCartTotal } from "../lib/cartEstimate";
 import { deliveryMinimumStatus, MIN_DELIVERY_ORDER_NIS } from "../lib/cartPolicies";
 import { isPlausibleFullName, isPlausibleIsraeliPhone } from "../lib/formValidation";
 import { buildOrderMessage, whatsappOrderUrl } from "../lib/whatsappOrder";
+import { ROUTES } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
+import { getGoogleSheetsProductsCsvUrl, type SheetProduct } from "../lib/sheetProducts";
+import { invalidateSheetProductsCache, useSheetProducts } from "../hooks/useSheetProducts";
+
+const EMPTY_SHEET_PRODUCTS: SheetProduct[] = [];
 
 type GoogleAutocompletePlace = {
   address_components?: Array<{
@@ -189,7 +194,10 @@ const CART_UPSELL_SUGGESTIONS: CartUpsellSuggestion[] = [
 ];
 
 function normalizeCartText(value: string) {
-  return value.toLocaleLowerCase("he-IL").replace(/[״׳'"]/g, "");
+  return value
+    .toLocaleLowerCase("he-IL")
+    .replace(/קוסברה/g, "כוסברה")
+    .replace(/[״׳'"]/g, "");
 }
 
 function cartLineSearchText(line: { name: string; categoryPath: string; unit?: string }) {
@@ -224,7 +232,16 @@ export function Cart() {
     noIndex: true,
   });
 
-  const { lines, totalItemCount, addItem, setQty, removeLine, clearCart } = useCart();
+  const { lines, totalItemCount, addItem, setQty, removeLine, clearCart, syncLinesFromSheetProducts } = useCart();
+  const sheetCsvUrl = getGoogleSheetsProductsCsvUrl();
+  const [sheetReloadNonce, setSheetReloadNonce] = useState(0);
+  const sheetState = useSheetProducts(sheetCsvUrl, sheetReloadNonce);
+  const sheetProductsForSync = sheetState.status === "ok" ? sheetState.products : EMPTY_SHEET_PRODUCTS;
+
+  useEffect(() => {
+    if (sheetProductsForSync.length === 0) return;
+    syncLinesFromSheetProducts(sheetProductsForSync);
+  }, [sheetProductsForSync, syncLinesFromSheetProducts]);
   const cartEstimate = useMemo(() => estimateCartTotal(lines), [lines]);
   const deliveryOk = useMemo(() => deliveryMinimumStatus(lines, cartEstimate), [lines, cartEstimate]);
   const [fulfillmentMethod, setFulfillmentMethod] = useState<FulfillmentMethod>("delivery");
@@ -338,7 +355,9 @@ export function Cart() {
       return;
     }
     if (fulfillmentMethod === "delivery" && isWeekendDateInput(deliveryDate)) {
-      setFormError("כרגע אין אפשרות לבחור משלוח בשישי או שבת.");
+      setFormError(
+        "כרגע אין אפשרות לבחור משלוח בתאריך של שישי או שבת. בשבת העסק סגור כל היום והלילה עד ראשון בבוקר; בשישי תואמו מראש לחלון המשלוח.",
+      );
       return;
     }
     setFormError(null);
@@ -380,13 +399,22 @@ export function Cart() {
             <div className="cart-empty">
               <RoyalFruitWordmark className="cart-empty-wordmark" />
               <p className="cart-empty-title">הסל ריק</p>
-              <p className="muted">הוסיפו פריטים מדפי הפירות והירקות.</p>
+              <p className="muted">הוסיפו פריטים מדפי המחירון.</p>
               <div className="cart-empty-links">
-                <Link to="/fruits" className="btn btn-primary">
-                  פירות פרימיום
+                <Link to={ROUTES.shop.fruits} className="btn btn-primary">
+                  פירות מובחרים
                 </Link>
-                <Link to="/vegetables" className="btn btn-primary">
-                  ירקות פרימיום
+                <Link to={ROUTES.shop.juices} className="btn btn-primary">
+                  מיצים טבעיים
+                </Link>
+                <Link to={ROUTES.ready.sweets} className="btn btn-primary">
+                  חלווה וממרחים
+                </Link>
+                <Link to={ROUTES.ready.meals} className="btn btn-primary">
+                  מטבח טרי
+                </Link>
+                <Link to={ROUTES.shop.vegetables} className="btn btn-primary">
+                  ירקות טריים
                 </Link>
               </div>
             </div>
@@ -396,6 +424,30 @@ export function Cart() {
                 <div>
                   <h2>הסל שלכם</h2>
                   <p className="muted">בדקו כמויות, בחרו משלוח או איסוף ושלחו בוואטסאפ.</p>
+                  {sheetCsvUrl ? (
+                    <div className="cart-sheet-sync-row">
+                      <p className="muted small cart-sheet-sync-hint">
+                        {sheetState.status === "loading"
+                          ? "טוען מחירים מהגיליון…"
+                          : sheetState.status === "error"
+                            ? "לא הצלחנו לטעון את הגיליון — המחירים בסל הם כפי שנוספו. אפשר לרענן או לעדכן מהמחירון."
+                            : "מחירים וקטגוריות לפריטים מהמחירון מסתנכרנים מהגיליון כשנכנסים לסל וברענון."}
+                      </p>
+                      {sheetState.status !== "loading" ? (
+                        <button
+                          type="button"
+                          className="btn btn-ghost cart-sheet-refresh"
+                          onClick={() => {
+                            invalidateSheetProductsCache(sheetCsvUrl);
+                            setSheetReloadNonce((n) => n + 1);
+                          }}
+                        >
+                          <RefreshCw size={16} strokeWidth={2} aria-hidden />
+                          רענן מהגיליון
+                        </button>
+                      ) : null}
+                    </div>
+                  ) : null}
                 </div>
                 <div className="cart-order-head-stats" aria-label="סיכום סל">
                   <span>
@@ -417,12 +469,24 @@ export function Cart() {
                       <CartItemIcon symbol={line.emoji} />
                     </span>
                     <div className="cart-line-body">
-                      <div className="cart-line-title">{line.name}</div>
-                      <div className="cart-line-price small">
-                        <span className="cart-line-price-main">{line.priceLabel}</span>
-                        {line.unit?.trim() ? (
-                          <span className="cart-line-unit muted">{line.unit.trim()}</span>
+                      <div className="cart-line-heading">
+                        <div className="cart-line-title">{line.name}</div>
+                        {line.sheetMissing ? (
+                          <p className="cart-line-sheet-flag muted small" role="status">
+                            לא נמצא במחירון העדכני — אולי שינוי שם בגיליון. אפשר להסיר או להוסיף מחדש מהמחירון.
+                          </p>
                         ) : null}
+                        {line.sheetUnavailable ? (
+                          <p className="cart-line-sheet-flag cart-line-sheet-flag--warn small" role="status">
+                            מסומן בגיליון כלא זמין כרגע — ודאו מול המוכר לפני השליחה.
+                          </p>
+                        ) : null}
+                        <div className="cart-line-price small">
+                          <span className="cart-line-price-main">{line.priceLabel}</span>
+                          {line.unit?.trim() ? (
+                            <span className="cart-line-unit muted">{line.unit.trim()}</span>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
                     <div className="cart-line-qty">
@@ -681,7 +745,9 @@ export function Cart() {
                         onChange={(e) => {
                           setDeliveryDate(e.target.value);
                           setFormError(
-                            isWeekendDateInput(e.target.value) ? "כרגע אין אפשרות לבחור משלוח בשישי או שבת." : null,
+                            isWeekendDateInput(e.target.value)
+                              ? "אין משלוח בשישי או בשבת (בשבת סגורים עד ראשון בבוקר)."
+                              : null,
                           );
                         }}
                         required
@@ -701,7 +767,7 @@ export function Cart() {
                         <option value="לתיאום ישיר">לתיאום ישיר</option>
                       </select>
                       <small className="cart-delivery-window-note">
-                        משלוחים בתיאום 24/6, בכפוף למלאי וזמינות.
+                        משלוחים בתיאום 24/6, בכפוף למלאי וזמינות. אין משלוח בתאריך של שישי או שבת (בשבת העסק סגור כל היום עד ראשון בבוקר).
                       </small>
                     </label>
                   </>

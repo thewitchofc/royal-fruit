@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { PriceCategory } from "../data/priceList";
 import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { PRICE_LIST_META, type PriceListBannerMeta } from "../data/priceList";
-import { getProduceShortDescription } from "../data/priceList";
+import { getProduceImage, getProduceShortDescription } from "../data/priceList";
 import { useCart } from "../context/CartContext";
 import type { CartLineInput } from "../cart/types";
 import type { PriceRow, PriceSubsection } from "../data/priceList";
@@ -32,6 +32,7 @@ function formatQty(qty: number) {
 function normalizeText(value: string) {
   return value
     .toLowerCase()
+    .replace(/קוסברה/g, "כוסברה")
     .replace(/["'״׳]/g, "")
     .replace(/\s+/g, " ")
     .trim();
@@ -90,10 +91,16 @@ function PriceRowView({
   const { addItem, lines, setQty } = useCart();
   const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
   const step = item.qtyStep ?? 1;
+  const thumb = getProduceImage(item.name, description);
+  const showLeft = Boolean(thumb) || showEmojis;
 
   return (
-    <li className={`price-menu-row${showEmojis ? "" : " no-emoji"}`}>
-      {showEmojis ? (
+    <li className={`price-menu-row${showLeft ? "" : " no-emoji"}${thumb ? " price-menu-row--with-thumb" : ""}`}>
+      {thumb ? (
+        <span className="price-menu-emoji price-menu-emoji--thumb" aria-hidden>
+          <img src={thumb} alt="" className="price-menu-thumb" width={36} height={36} />
+        </span>
+      ) : showEmojis ? (
         <span className="price-menu-emoji" aria-hidden>
           <ProduceIcon symbol={item.emoji} />
         </span>
@@ -145,7 +152,7 @@ function ProduceIcon({ symbol }: { symbol: string }) {
   if (symbol === "veg" || symbol === "🥬" || symbol === "🥑" || symbol === "🥒" || symbol === "🥕" || symbol === "🌽" || symbol === "🧅" || symbol === "🍅") {
     return <Circle size={14} className="price-menu-icon price-menu-icon--primary" />;
   }
-  if (symbol === "🧃") return <Circle size={14} className="price-menu-icon price-menu-icon--primary" />;
+  if (symbol === "juice" || symbol === "🧃" || symbol === "🍲") return <Circle size={14} className="price-menu-icon price-menu-icon--primary" />;
   if (symbol === "🍓" || symbol === "🍒") return <Cherry size={18} className="price-menu-icon price-menu-icon--primary" />;
   if (symbol === "🍇" || symbol === "🍎" || symbol === "fruit") return <Apple size={18} className="price-menu-icon price-menu-icon--primary" />;
   return <Circle size={14} className="price-menu-icon price-menu-icon--muted" />;
@@ -161,7 +168,14 @@ type Props = {
   categoryHeadingRank?: 2 | 3;
   /** קידומת ייחודית ל־id של שדה החיפוש (כשיש יותר ממחירון אחד באותו עמוד) */
   searchFieldIdPrefix?: string;
+  /** מחלקה נוספת על שורש המחירון (למשל ערכת צבעים לדף חלווה) */
+  embedClassName?: string;
+  searchFieldLabel?: string;
+  searchFieldPlaceholder?: string;
 };
+
+const DEFAULT_SEARCH_LABEL = "חיפוש מהיר בדוכן";
+const DEFAULT_SEARCH_PLACEHOLDER = "חיפוש מהיר בכל המחירון — לדוגמה: ענבים, אבוקדו, בקבוק…";
 
 export function PriceListSections({
   categories,
@@ -170,6 +184,9 @@ export function PriceListSections({
   listMeta,
   categoryHeadingRank = 2,
   searchFieldIdPrefix = "price-menu",
+  embedClassName,
+  searchFieldLabel = DEFAULT_SEARCH_LABEL,
+  searchFieldPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
 }: Props) {
   const meta = listMeta === undefined ? PRICE_LIST_META : listMeta;
   const [search, setSearch] = useState("");
@@ -197,7 +214,7 @@ export function PriceListSections({
   }, [categories, normalizedSearch]);
 
   return (
-    <div className="price-menu-embed">
+    <div className={["price-menu-embed", embedClassName].filter(Boolean).join(" ")}>
       {meta ? (
         <p className="price-menu-banner muted">
           <strong>{meta.title}</strong>
@@ -217,13 +234,13 @@ export function PriceListSections({
 
       <div className="price-menu-search price-menu-search--global">
         <label htmlFor={`${searchFieldIdPrefix}-search`}>
-          <span className="price-menu-search-label">חיפוש מהיר בדוכן</span>
+          <span className="price-menu-search-label">{searchFieldLabel}</span>
           <input
             id={`${searchFieldIdPrefix}-search`}
             type="search"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="חיפוש מהיר בכל המחירון — לדוגמה: ענבים, אבוקדו, בקבוק…"
+            placeholder={searchFieldPlaceholder}
             autoComplete="off"
           />
         </label>

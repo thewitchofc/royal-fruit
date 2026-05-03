@@ -99,6 +99,8 @@ export function buildOrderMessage(params: {
     if (priceBits.length > 0) {
       parts.push(`  ${priceBits.join(", ")}`);
     }
+    if (line.sheetUnavailable) parts.push("  (מסומן לא זמין במחירון)");
+    if (line.sheetMissing) parts.push("  (לא נמצא במחירון — לאשר מולכם)");
   });
 
   const totalUnits = cartTotalDisplayUnits(lines);

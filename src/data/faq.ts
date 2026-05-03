@@ -1,4 +1,4 @@
-import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE } from "../lib/business";
+import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_HOURS_SUMMARY, BUSINESS_PHONE } from "../lib/business";
 
 export type FaqSectionId = "general" | "private" | "business" | "events";
 
@@ -28,8 +28,7 @@ export const FAQ_ITEMS: FaqItem[] = [
     id: "hours",
     section: "general",
     question: "מתי אפשר להגיע או לדבר עם נציג?",
-    answer:
-      "העסק סגור בשישי בערב ובשבת בבוקר, מחוץ לזה השירות רציף (24/6). איסוף עצמי מהחנות מומלץ לתאם מראש כדי שהסחורה תהיה ארוזה ומוכנה.",
+    answer: BUSINESS_HOURS_SUMMARY,
   },
   {
     id: "pickup",

@@ -10,6 +10,10 @@ export type CartLine = {
   categoryPath: string;
   /** קפיצת כמות: יחידות רגילות = 1, פריטים לק״ג = 0.5 */
   qtyStep?: number;
+  /** מסונכרן מהגיליון: השורה סומנה כלא זמינה */
+  sheetUnavailable?: boolean;
+  /** מסונכרן מהגיליון: לא נמצאה התאמה לשם (אולי שינוי שם בגיליון) */
+  sheetMissing?: boolean;
   qty: number;
 };
 

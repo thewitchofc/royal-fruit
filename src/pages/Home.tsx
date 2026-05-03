@@ -8,6 +8,7 @@ import {
   GOOGLE_REVIEW_CTA_LABEL,
   GOOGLE_WRITE_REVIEW_URL,
 } from "../lib/business";
+import { ROUTES } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
 
@@ -76,11 +77,14 @@ export function Home() {
             </a>
             <p className="hero-cta-hint">שלחו מה אתם צריכים, אנחנו נעזור לדייק את הסל</p>
             <div className="hero-secondary-actions" aria-label="מעבר למחירונים">
-              <Link className="btn btn-ghost" to="/fruits">
-                לראות פירות
+              <Link className="btn btn-ghost" to={ROUTES.shop.fruits}>
+                פירות מובחרים
               </Link>
-              <Link className="btn btn-ghost" to="/vegetables">
-                לראות ירקות
+              <Link className="btn btn-ghost" to={ROUTES.shop.juices}>
+                מיצים טבעיים
+              </Link>
+              <Link className="btn btn-ghost" to={ROUTES.shop.vegetables}>
+                ירקות טריים
               </Link>
             </div>
           </div>
@@ -108,7 +112,7 @@ export function Home() {
               </span>
               <h3>פירות בשלים בדיוק לזמן שלכם</h3>
               <p>ענבים, פירות עונה, הדרים ומיוחדים שנבחרים לפי טעם, מרקם ונראות.</p>
-              <Link to="/fruits" className="home-card-link">
+              <Link to={ROUTES.shop.fruits} className="home-card-link">
                 לפתיחת מחירון פירות
               </Link>
             </article>
@@ -119,7 +123,7 @@ export function Home() {
               </span>
               <h3>ירקות נקיים, חזקים ומוכנים לעבודה</h3>
               <p>עלים, שורשים, ירקות לסלט ולבישול, עם דגש על טריות שמחזיקה.</p>
-              <Link to="/vegetables" className="home-card-link">
+              <Link to={ROUTES.shop.vegetables} className="home-card-link">
                 לפתיחת מחירון ירקות
               </Link>
             </article>
@@ -194,7 +198,7 @@ export function Home() {
           </h2>
           <p className="muted wide home-testimonials-intro">
             לקוחות משתפים מהניסיון שלהם,{" "}
-            <Link to="/testimonials" className="price-menu-tel">
+            <Link to={ROUTES.reviews} className="price-menu-tel">
               עוד המלצות
             </Link>
             {" · "}
@@ -213,7 +217,7 @@ export function Home() {
               <footer>שי, בת ים</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
-              <p>מזמינה כל שבת מגש וירקות. כשמשהו חסר כותבים מראש ומציעים חלופה טובה, מרגישה מטופלת.</p>
+              <p>מזמינה מראש לקראת השבת מגש וירקות. כשמשהו חסר כותבים מראש ומציעים חלופה טובה, מרגישה מטופלת.</p>
               <footer>מורן, חולון</footer>
             </blockquote>
             <blockquote className="home-inline-testimonial">
@@ -266,7 +270,7 @@ export function Home() {
             </p>
             <p className="muted wide home-local-seo-copy">{BUSINESS_AREA_SERVED}</p>
           </div>
-          <Link className="home-audience-link align-self" to="/contact">
+          <Link className="home-audience-link align-self" to={ROUTES.contact}>
             יצירת קשר
           </Link>
         </div>
@@ -289,7 +293,7 @@ export function Home() {
               <MessageCircle className="btn-whatsapp-icon" aria-hidden />
               שליחת הודעה בוואטסאפ
             </a>
-            <Link className="btn btn-ghost" to="/fruits">
+            <Link className="btn btn-ghost" to={ROUTES.shop.fruits}>
               צפייה במחירון
             </Link>
           </div>

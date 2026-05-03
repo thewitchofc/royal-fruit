@@ -11,7 +11,8 @@
     "preview": "vite preview",
     "start": "node server.mjs",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "sheet:push": "node scripts/push-price-rows-to-sheets.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.8.0",
@@ -25,6 +26,7 @@
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@vitejs/plugin-react": "^4.3.3",
+    "googleapis": "^171.4.0",
     "jsdom": "^25.0.1",
     "sharp": "^0.33.5",
     "typescript": "~5.6.2",

@@ -1,0 +1,565 @@
+/**
+ * Navbar פרימיום — זכוכית, קישורים כהים + קו תחתון, דרופדאון לבן, CTA, מובייל slide + אקורדיון.
+ * מחובר ל־Layout: `.header-nav-bar.rf-premium-header` + ל־Navbar.tsx: `.rf-navbar*`
+ */
+
+/* ——— שורת כותרת קבועה (זכוכית) ——— */
+@media (min-width: 961px) {
+  .header-nav-bar.rf-premium-header {
+    background: rgba(255, 254, 249, 0.78) !important;
+    backdrop-filter: blur(18px) saturate(1.12);
+    -webkit-backdrop-filter: blur(18px) saturate(1.12);
+    border-bottom: 1px solid rgba(24, 33, 23, 0.08) !important;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.88) inset,
+      0 10px 36px rgba(24, 33, 23, 0.07) !important;
+  }
+
+  .header-nav-bar.rf-premium-header .rf-premium-header__inner {
+    align-items: center;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 0.65rem;
+    padding-block: 0.55rem 0.62rem;
+    padding-inline: clamp(0.45rem, 1.8vw, 1.1rem);
+  }
+
+  .header-nav-bar.rf-premium-header .header-nav-compact-logo-img {
+    filter: drop-shadow(0 1px 2px rgba(24, 33, 23, 0.1));
+  }
+}
+
+/* ——— מעטפת ניווט דסקטופ ——— */
+.rf-navbar {
+  position: relative;
+  z-index: 3;
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.35rem 0.55rem;
+}
+
+.rf-navbar__desktop {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.15rem 0.35rem;
+  width: 100%;
+}
+
+/* ——— קישורי שורה + טריגר דרופדאון (כהה + קו תחתון) ——— */
+.rf-navbar__link,
+.rf-navbar__trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.52rem 0.75rem 0.44rem;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  line-height: 1.35;
+  color: #142a0f;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.22s ease, background 0.22s ease;
+}
+
+.rf-navbar__link::after,
+.rf-navbar__trigger::after {
+  content: "";
+  position: absolute;
+  left: 0.55rem;
+  right: 0.55rem;
+  bottom: 0.2rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--green);
+  transform: scaleX(0);
+  transform-origin: center;
+  opacity: 0.88;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease;
+  pointer-events: none;
+}
+
+.rf-navbar__link:hover,
+.rf-navbar__trigger:hover {
+  color: var(--green);
+  background: rgba(33, 101, 12, 0.05);
+}
+
+.rf-navbar__link:hover::after,
+.rf-navbar__trigger:hover::after {
+  transform: scaleX(1);
+}
+
+.rf-navbar__link:focus-visible,
+.rf-navbar__trigger:focus-visible {
+  outline: 2px solid rgba(33, 101, 12, 0.45);
+  outline-offset: 3px;
+}
+
+.rf-navbar__link.is-active,
+.rf-navbar__trigger.is-active {
+  color: #0d1f09;
+  font-weight: 800;
+  background: rgba(211, 164, 71, 0.14);
+}
+
+.rf-navbar__link.is-active::after,
+.rf-navbar__trigger.is-active::after {
+  transform: scaleX(1);
+  background: linear-gradient(90deg, var(--green), #2d6a12);
+}
+
+.rf-navbar__trigger-chevron {
+  width: 0.92em;
+  height: 0.92em;
+  opacity: 0.55;
+  transition: transform 0.26s ease, opacity 0.2s ease;
+}
+
+.rf-navbar__dropdown:hover .rf-navbar__trigger-chevron,
+.rf-navbar__dropdown:focus-within .rf-navbar__trigger-chevron,
+.rf-navbar__dropdown.is-open .rf-navbar__trigger-chevron {
+  transform: rotate(-180deg);
+  opacity: 0.85;
+}
+
+/* ——— דרופדאון ——— */
+.rf-navbar__dropdown {
+  position: relative;
+  z-index: 0;
+}
+
+.rf-navbar__dropdown:is(:hover, :focus-within, .is-open) {
+  /* מעל שכני שורה כדי שהחפיפה של הפאנל לא תישב מתחת לטריגר אחר */
+  z-index: 50;
+}
+
+.rf-navbar__panel {
+  position: absolute;
+  left: 50%;
+  right: auto;
+  /* חפיפה על הטריגר: בלי «חור» בין הכפתור לקופסה (mouseleave / תחושת רווח), תוך שמירה על אוויר פנימי לתוכן */
+  top: 100%;
+  margin-top: -14px;
+  transform: translate(-50%, 8px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(10.25rem, 1fr));
+  gap: 0.4rem;
+  min-width: min(22.5rem, calc(100vw - 2.25rem));
+  padding: calc(0.65rem + 0.45rem + 14px) 0.7rem 0.65rem;
+  border-radius: 20px;
+  background: #fffef9;
+  border: 1px solid rgba(24, 33, 23, 0.08);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.75) inset,
+    0 18px 48px rgba(24, 33, 23, 0.1),
+    0 6px 20px rgba(33, 101, 12, 0.06);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.26s ease,
+    visibility 0s linear 0.26s,
+    transform 0.3s cubic-bezier(0.2, 0.85, 0.2, 1);
+  z-index: 40;
+}
+
+.rf-navbar__dropdown:hover .rf-navbar__panel,
+.rf-navbar__dropdown:focus-within .rf-navbar__panel,
+.rf-navbar__dropdown.is-open .rf-navbar__panel {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate(-50%, 0);
+  transition:
+    opacity 0.26s ease,
+    visibility 0s linear 0s,
+    transform 0.3s cubic-bezier(0.2, 0.85, 0.2, 1);
+}
+
+.rf-navbar__panel-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 2.7rem;
+  padding: 0.48rem 0.6rem;
+  border-radius: 14px;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #142a0f;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rf-navbar__panel-link:hover {
+  background: rgba(33, 101, 12, 0.07);
+  color: var(--green);
+  transform: translate3d(-3px, 0, 0);
+}
+
+.rf-navbar__panel-link.is-active {
+  background: rgba(211, 164, 71, 0.2);
+  color: #0d1f09;
+  font-weight: 800;
+}
+
+/* ——— CTA דסקטופ ——— */
+.rf-navbar__cta {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.42rem;
+  flex: 0 0 auto;
+  min-height: 2.35rem;
+  padding: 0.48rem 1.15rem;
+  border-radius: 14px;
+  text-decoration: none;
+  font-size: 0.86rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: linear-gradient(145deg, #25d366, #128c7e 55%, #0f7a5c);
+  border: 1px solid rgba(24, 33, 23, 0.12);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+    0 10px 26px rgba(20, 140, 90, 0.28);
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.22s ease;
+}
+
+.rf-navbar__cta:hover {
+  transform: scale(1.045);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+    0 14px 34px rgba(20, 140, 90, 0.38);
+}
+
+.rf-navbar__cta-icon {
+  width: 1.05em;
+  height: 1.05em;
+}
+
+/* ——— מובייל: backdrop ——— */
+.rf-navbar__backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: rgba(8, 20, 7, 0.45);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.26s ease, visibility 0s linear 0.26s;
+}
+
+.rf-navbar__backdrop.is-open {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.26s ease, visibility 0s linear 0s;
+}
+
+/* ——— מובייל: מגש ——— */
+.rf-navbar__sheet {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-end: 0;
+  width: min(22.5rem, 92vw);
+  max-width: 100%;
+  z-index: 10001;
+  background: linear-gradient(175deg, rgba(8, 27, 7, 0.98) 0%, rgba(16, 48, 14, 0.97) 45%, rgba(7, 18, 7, 0.99) 100%);
+  border-inline-start: 1px solid rgba(222, 181, 93, 0.28);
+  box-shadow: -12px 0 48px rgba(7, 18, 7, 0.35);
+  transform: translate3d(105%, 0, 0);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0.34s;
+}
+
+.rf-navbar__sheet.is-open {
+  transform: translate3d(0, 0, 0);
+  visibility: visible;
+  pointer-events: auto;
+  transition:
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+    visibility 0s linear 0s;
+}
+
+.rf-navbar__sheet-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  height: 100%;
+  min-height: 0;
+  padding: calc(0.85rem + env(safe-area-inset-top, 0px)) 1rem 1rem;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.rf-navbar__sheet-head {
+  text-align: center;
+  padding-bottom: 0.5rem;
+  margin-bottom: 0.15rem;
+  border-bottom: 1px solid rgba(222, 181, 93, 0.22);
+}
+
+.rf-navbar__sheet-kicker {
+  margin: 0 0 0.15rem;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(222, 181, 93, 0.85);
+}
+
+.rf-navbar__sheet-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.rf-navbar__sheet-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.65rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 12px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(222, 181, 93, 0.18);
+  transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.rf-navbar__sheet-link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(222, 181, 93, 0.32);
+  color: #fff;
+}
+
+.rf-navbar__sheet-link.is-active {
+  color: #16320f;
+  border-color: rgba(222, 181, 93, 0.72);
+  background: linear-gradient(135deg, #fff8df, #deb55d 48%, #f8e7b4);
+}
+
+.rf-navbar__sheet-link--solo {
+  width: 100%;
+}
+
+.rf-navbar__accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.rf-navbar__acc-item {
+  border-radius: 14px;
+  border: 1px solid rgba(222, 181, 93, 0.15);
+  background: rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+}
+
+.rf-navbar__acc-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 0.5rem;
+  padding: 0.62rem 0.75rem;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.94);
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 800;
+  text-align: start;
+  cursor: pointer;
+  transition: background 0.18s ease;
+}
+
+.rf-navbar__acc-trigger:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.rf-navbar__acc-trigger.has-active-child {
+  color: rgba(255, 236, 180, 0.98);
+}
+
+.rf-navbar__acc-chevron {
+  width: 1.1rem;
+  height: 1.1rem;
+  flex-shrink: 0;
+  opacity: 0.75;
+  transition: transform 0.26s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rf-navbar__acc-item.is-open .rf-navbar__acc-chevron {
+  transform: rotate(-180deg);
+}
+
+.rf-navbar__acc-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.rf-navbar__acc-item.is-open .rf-navbar__acc-panel {
+  grid-template-rows: 1fr;
+}
+
+.rf-navbar__acc-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.rf-navbar__acc-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0 0.55rem 0.65rem;
+}
+
+.rf-navbar__sheet-footer {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(222, 181, 93, 0.2);
+}
+
+.rf-navbar__sheet-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  width: 100%;
+  padding: 0.72rem 1rem;
+  border-radius: 14px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(145deg, #25d366, #128c7e 55%, #0f7a5c);
+  border: 1px solid rgba(24, 33, 23, 0.12);
+  box-shadow: 0 10px 28px rgba(20, 140, 90, 0.35);
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.22s ease;
+}
+
+.rf-navbar__sheet-cta:hover {
+  transform: scale(1.03);
+  box-shadow: 0 14px 34px rgba(20, 140, 90, 0.42);
+}
+
+/* ——— רספונסיביות ——— */
+@media (min-width: 961px) {
+  .rf-navbar__desktop {
+    display: flex;
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .rf-navbar__cta {
+    display: inline-flex;
+    margin-inline-start: auto;
+  }
+
+  .rf-navbar__backdrop,
+  .rf-navbar__sheet {
+    display: none !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .rf-navbar__cta {
+    display: none;
+  }
+}
+
+/* טאבלט / מסך צר: דרופדאון עמודה אחת בלי צל */
+@media (max-width: 1100px) {
+  .rf-navbar__panel {
+    grid-template-columns: 1fr;
+    min-width: min(18rem, calc(100vw - 2rem));
+    box-shadow: none;
+    border: 1px solid rgba(24, 33, 23, 0.1);
+    background: #fffef9;
+  }
+}
+
+@media (max-width: 520px) {
+  .rf-navbar__panel {
+    min-width: min(17rem, calc(100vw - 1.75rem));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rf-navbar__link,
+  .rf-navbar__trigger,
+  .rf-navbar__link::after,
+  .rf-navbar__trigger::after,
+  .rf-navbar__panel,
+  .rf-navbar__panel-link,
+  .rf-navbar__cta,
+  .rf-navbar__backdrop,
+  .rf-navbar__sheet,
+  .rf-navbar__sheet-link,
+  .rf-navbar__sheet-cta,
+  .rf-navbar__trigger-chevron,
+  .rf-navbar__acc-chevron,
+  .rf-navbar__acc-panel {
+    transition: none;
+  }
+
+  .rf-navbar__panel-link:hover {
+    transform: none;
+  }
+
+  .rf-navbar__cta:hover,
+  .rf-navbar__sheet-cta:hover {
+    transform: none;
+  }
+
+  .rf-navbar__sheet.is-open {
+    transform: translate3d(0, 0, 0);
+  }
+
+  .rf-navbar__sheet:not(.is-open) {
+    transform: translate3d(105%, 0, 0);
+  }
+}

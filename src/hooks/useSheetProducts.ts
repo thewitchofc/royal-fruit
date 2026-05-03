@@ -45,7 +45,15 @@ export function warmSheetProductsCache(csvUrl: string | undefined): void {
   void loadAndCacheSheetProducts(key);
 }
 
-export function useSheetProducts(csvUrl: string | undefined): SheetProductsState {
+/** מנקה מטמון CSV כדי לטעון מחדש מהגיליון (למשל אחרי עדכון במסמך) */
+export function invalidateSheetProductsCache(csvUrl: string | undefined): void {
+  const key = csvUrl?.trim();
+  if (!key) return;
+  sheetProductsCache.delete(key);
+  inflightLoads.delete(key);
+}
+
+export function useSheetProducts(csvUrl: string | undefined, reloadNonce = 0): SheetProductsState {
   const [state, setState] = useState<SheetProductsState>({ status: "idle" });
 
   useEffect(() => {
@@ -53,6 +61,11 @@ export function useSheetProducts(csvUrl: string | undefined): SheetProductsState
     if (!key) {
       setState({ status: "idle" });
       return;
+    }
+
+    if (reloadNonce > 0) {
+      sheetProductsCache.delete(key);
+      inflightLoads.delete(key);
     }
 
     const cached = sheetProductsCache.get(key);
@@ -79,7 +92,7 @@ export function useSheetProducts(csvUrl: string | undefined): SheetProductsState
     return () => {
       cancelled = true;
     };
-  }, [csvUrl]);
+  }, [csvUrl, reloadNonce]);
 
   return state;
 }

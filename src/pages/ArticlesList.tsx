@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { ARTICLES, formatArticleDate } from "../data/articles";
+import { blogArticlePath } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
 
 export function ArticlesList() {
@@ -44,10 +45,10 @@ export function ArticlesList() {
                     {formatArticleDate(article.publishedAt)}
                   </time>
                   <h2 className="article-card-title">
-                    <Link to={`/articles/${article.slug}`}>{article.title}</Link>
+                    <Link to={blogArticlePath(article.slug)}>{article.title}</Link>
                   </h2>
                   <p className="article-card-excerpt muted">{article.excerpt}</p>
-                  <Link to={`/articles/${article.slug}`} className="article-card-more">
+                  <Link to={blogArticlePath(article.slug)} className="article-card-more">
                     המשך קריאה
                   </Link>
                 </article>

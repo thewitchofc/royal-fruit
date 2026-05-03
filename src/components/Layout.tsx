@@ -10,7 +10,9 @@ import { CookieConsent } from "./CookieConsent";
 import { SiteBottomWhatsappBar } from "./SiteBottomWhatsappBar";
 import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibilityLoader";
 import { RoyalFruitWordmark } from "./RoyalFruitWordmark";
+import { Navbar } from "./Navbar";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
+import { ROUTES } from "../lib/publicRoutes";
 import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
 import { warmSheetProductsCache } from "../hooks/useSheetProducts";
 import { useScrollReveal } from "../hooks/useScrollReveal";
@@ -19,18 +21,6 @@ import { useScrollReveal } from "../hooks/useScrollReveal";
 const LOGO_PNG_URL = "/images/brand/brand-logo.png";
 const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
 const DEV_CREDIT_URL = "https://thewitch.co.il";
-
-const links = [
-  { to: "/", label: "דף בית" },
-  { to: "/fruits", label: "פירות פרימיום" },
-  { to: "/vegetables", label: "ירקות פרימיום" },
-  { to: "/gallery", label: "גלריה" },
-  { to: "/testimonials", label: "המלצות" },
-  { to: "/articles", label: "מאמרים" },
-  { to: "/about", label: "אודות העסק" },
-  { to: "/faq", label: "שאלות נפוצות" },
-  { to: "/contact", label: "יצירת קשר" },
-];
 
 function CartGlyph({ className }: { className?: string }) {
   return (
@@ -128,12 +118,6 @@ export function Layout({ children }: { children: ReactNode }) {
     return () => window.clearTimeout(t);
   }, []);
 
-  const prefetchPricePages = () => {
-    void import("../pages/Fruits");
-    void import("../pages/Vegetables");
-    warmSheetProductsCache(getGoogleSheetsProductsCsvUrl());
-  };
-
   const header = (
     <header ref={headerRef} className="site-header">
       <div className="container header-stack">
@@ -171,8 +155,8 @@ export function Layout({ children }: { children: ReactNode }) {
           </button>
         </div>
       </div>
-      <div className="header-nav-bar">
-        <div className="container header-nav-inner">
+      <div className="header-nav-bar rf-premium-header">
+        <div className="container header-nav-inner rf-premium-header__inner">
           <NavLink
             to="/"
             className="header-nav-compact-logo"
@@ -189,31 +173,7 @@ export function Layout({ children }: { children: ReactNode }) {
               decoding="async"
             />
           </NavLink>
-          <nav id="main-nav" className={`main-nav ${open ? "is-open" : ""}`} aria-label="ניווט ראשי">
-            {links.map(({ to, label }) => (
-              <NavLink
-                key={to}
-                to={to}
-                className={({ isActive }) => `nav-link ${isActive ? "active" : ""}`}
-                end={to === "/"}
-                onClick={() => setOpen(false)}
-                onMouseEnter={to === "/fruits" || to === "/vegetables" ? prefetchPricePages : undefined}
-                onFocus={to === "/fruits" || to === "/vegetables" ? prefetchPricePages : undefined}
-              >
-                {label}
-              </NavLink>
-            ))}
-          </nav>
-          <a
-            className="header-wa-link"
-            href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="פתיחת צ'אט וואטסאפ להזמנה, נפתח בלשונית חדשה"
-          >
-            <MessageCircle className="header-wa-link-icon" aria-hidden />
-            להזמנה
-          </a>
+          <Navbar mobileOpen={open} onNavigate={() => setOpen(false)} />
         </div>
       </div>
     </header>
@@ -241,20 +201,29 @@ export function Layout({ children }: { children: ReactNode }) {
           </NavLink>
         </div>
         <nav className="mobile-quick-nav" aria-label="קישורים מהירים במובייל">
-          <NavLink to="/fruits" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
-            פירות פרימיום
+          <NavLink to={ROUTES.shop.fruits} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            פירות מובחרים
           </NavLink>
-          <NavLink to="/vegetables" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
-            ירקות פרימיום
+          <NavLink to={ROUTES.shop.juices} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            מיצים טבעיים
           </NavLink>
-          <NavLink to="/gallery" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink to={ROUTES.ready.sweets} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            חלווה וממרחים
+          </NavLink>
+          <NavLink to={ROUTES.ready.meals} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            מטבח טרי
+          </NavLink>
+          <NavLink to={ROUTES.shop.vegetables} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            ירקות טריים
+          </NavLink>
+          <NavLink to={ROUTES.gallery} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
             גלריה
           </NavLink>
-          <NavLink to="/cart" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink to={ROUTES.cart} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
             סל קניות
           </NavLink>
-          <NavLink to="/contact" className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
-            יצירת קשר
+          <NavLink to={ROUTES.contact} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+            צור קשר
           </NavLink>
         </nav>
         {children}

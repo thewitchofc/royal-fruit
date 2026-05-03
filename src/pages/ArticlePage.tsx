@@ -1,12 +1,14 @@
 import { Link, Navigate, useParams } from "react-router-dom";
 import { formatArticleDate, getArticleBySlug } from "../data/articles";
 import { usePageSeo } from "../lib/seo";
+import { ROUTES, blogArticlePath } from "../lib/publicRoutes";
 import { absoluteBrandLogoUrl, absoluteUrl } from "../lib/siteUrl";
 
 export function ArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const article = slug ? getArticleBySlug(slug) : undefined;
 
+  const canonicalArticlePath = article ? blogArticlePath(article.slug) : ROUTES.blog;
 
   usePageSeo({
     title: article ? `Royal Fruit | ${article.title}` : "Royal Fruit | מאמר",
@@ -16,7 +18,7 @@ export function ArticlePage() {
   });
 
   if (!article) {
-    return <Navigate to="/articles" replace />;
+    return <Navigate to={ROUTES.blog} replace />;
   }
 
   return (
@@ -38,7 +40,7 @@ export function ArticlePage() {
             },
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": absoluteUrl(`/articles/${article.slug}`),
+              "@id": absoluteUrl(canonicalArticlePath),
             },
           }),
         }}
@@ -46,7 +48,7 @@ export function ArticlePage() {
       <section className="page-hero articles-hero article-detail-hero">
         <div className="container narrow">
           <p className="eyebrow">
-            <Link to="/articles" className="article-back-link">
+            <Link to={ROUTES.blog} className="article-back-link">
               ← חזרה למאמרים
             </Link>
           </p>
@@ -64,11 +66,13 @@ export function ArticlePage() {
           ))}
           <p className="article-cta muted">
             רוצים ליישם את זה בסל הבא?{" "}
-            <Link to="/fruits">פירות פרימיום</Link>
+            <Link to={ROUTES.shop.fruits}>פירות מובחרים</Link>
             {", "}
-            <Link to="/vegetables">ירקות פרימיום</Link>
+            <Link to={ROUTES.shop.juices}>מיצים טבעיים</Link>
             {", "}
-            <Link to="/contact">יצירת קשר</Link>
+            <Link to={ROUTES.shop.vegetables}>ירקות טריים</Link>
+            {", "}
+            <Link to={ROUTES.contact}>צור קשר</Link>
           </p>
         </div>
       </section>
