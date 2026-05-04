@@ -26,6 +26,12 @@ type SheetPriceListAsMenuProps = {
   priceMenuEmbedClassName?: string;
   priceMenuSearchLabel?: string;
   priceMenuSearchPlaceholder?: string;
+  /** תמונות מוצר בכרטיס/שורה — false בפירות/ירקות/מיצים/מטבח */
+  showProductImages?: boolean;
+  /** כותרות קטגוריה מהגיליון שלא להציג (למשל כשכבר יש כרטיסים סטטיים לאותם מוצרים) */
+  excludeCategoryTitles?: readonly string[];
+  /** false = בלי חיפוש במחירון */
+  showPriceMenuSearch?: boolean;
 };
 
 export function SheetPriceListAsMenu({
@@ -40,6 +46,9 @@ export function SheetPriceListAsMenu({
   priceMenuEmbedClassName,
   priceMenuSearchLabel,
   priceMenuSearchPlaceholder,
+  showProductImages = true,
+  excludeCategoryTitles,
+  showPriceMenuSearch = true,
 }: SheetPriceListAsMenuProps) {
   const csvUrl = getGoogleSheetsProductsCsvUrl();
   const [reloadNonce, setReloadNonce] = useState(0);
@@ -127,13 +136,18 @@ export function SheetPriceListAsMenu({
     defaultEmoji,
     page,
   });
-  const categories = singleCategoryTitle
+  let categories: PriceCategory[] = singleCategoryTitle
     ? mergeCategoriesToSingleList(groupedCategories, {
         id: `${idPrefix}-all`,
         title: singleCategoryTitle,
         emoji: defaultEmoji,
       })
     : groupedCategories;
+
+  if (excludeCategoryTitles?.length) {
+    const drop = new Set(excludeCategoryTitles.map((t) => t.trim()));
+    categories = categories.filter((c) => !drop.has(c.title.trim()));
+  }
 
   if (import.meta.env.DEV) {
     const dups = findDuplicateDisplayNamesInCategories(categories);
@@ -143,6 +157,9 @@ export function SheetPriceListAsMenu({
   }
 
   if (!categories.length) {
+    if (excludeCategoryTitles?.length) {
+      return null;
+    }
     const hint =
       page === "all"
         ? "אין כרגע פריטים זמינים להצגה במחירון."
@@ -167,6 +184,8 @@ export function SheetPriceListAsMenu({
       embedClassName={priceMenuEmbedClassName}
       searchFieldLabel={priceMenuSearchLabel}
       searchFieldPlaceholder={priceMenuSearchPlaceholder}
+      showProductImages={showProductImages}
+      showSearch={showPriceMenuSearch}
     />
   );
 }

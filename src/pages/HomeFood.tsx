@@ -1,15 +1,19 @@
 import { Link } from "react-router-dom";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { SheetPriceListAsMenu } from "../components/SheetPriceListAsMenu";
+import { useCart } from "../context/CartContext";
+import type { CartLineInput } from "../cart/types";
+import { formatPriceLabelForDisplay } from "../lib/priceDisplay";
 import { usePageSeo } from "../lib/seo";
 
 type PickleTier = { weight: string; price: number };
 
-type PickleProduct = { name: string; tiers: readonly PickleTier[] };
+type PickleProduct = { name: string; tiers: readonly PickleTier[]; image?: string };
 
 const PICKLED_HOME_KITCHEN: readonly PickleProduct[] = [
   {
     name: "עלי גפן חמוצים",
+    image: "/images/catalog/kitchen-grape-leaves.png",
     tiers: [
       { weight: "250 גרם", price: 35 },
       { weight: "500 גרם", price: 65 },
@@ -18,6 +22,7 @@ const PICKLED_HOME_KITCHEN: readonly PickleProduct[] = [
   },
   {
     name: "כרוב חמוץ",
+    image: "/images/catalog/kitchen-sauerkraut.png",
     tiers: [
       { weight: "250 גרם", price: 45 },
       { weight: "500 גרם", price: 80 },
@@ -26,6 +31,7 @@ const PICKLED_HOME_KITCHEN: readonly PickleProduct[] = [
   },
   {
     name: "בצל חמוץ מתוק",
+    image: "/images/catalog/kitchen-sweet-onion.png",
     tiers: [
       { weight: "250 גרם", price: 40 },
       { weight: "500 גרם", price: 75 },
@@ -34,12 +40,71 @@ const PICKLED_HOME_KITCHEN: readonly PickleProduct[] = [
   },
 ] as const;
 
+function kitchenTierLineId(productName: string, weight: string) {
+  return `kitchen::${productName.trim()}::${weight.trim()}`;
+}
+
+function kitchenTierCartLine(product: PickleProduct, tier: PickleTier): CartLineInput {
+  return {
+    id: kitchenTierLineId(product.name, tier.weight),
+    emoji: "🍲",
+    name: `${product.name} · ${tier.weight}`,
+    priceLabel: formatPriceLabelForDisplay(String(tier.price)),
+    unit: "לפריט",
+    categoryPath: "מטבח טרי",
+    qtyStep: 1,
+  };
+}
+
+function formatQtyBadge(qty: number) {
+  return Number.isInteger(qty) ? String(qty) : qty.toFixed(1);
+}
+
+function KitchenPickleTierQty({ item }: { item: CartLineInput }) {
+  const { addItem, lines, setQty } = useCart();
+  const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
+  const step = item.qtyStep ?? 1;
+
+  return (
+    <div className="kitchen-pickle-qty">
+      <div className="price-menu-add-wrap kitchen-pickle-qty-wrap">
+        <button
+          type="button"
+          className="price-menu-qty-btn"
+          aria-label={`הפחת כמות ${item.name}`}
+          onClick={() => setQty(item.id, inCartQty - step)}
+          disabled={inCartQty < step / 2}
+        >
+          −
+        </button>
+        <span className="price-menu-qty-badge" aria-label={`בסל: ${formatQtyBadge(inCartQty)}`}>
+          {formatQtyBadge(inCartQty)}
+        </span>
+        <button
+          type="button"
+          className="price-menu-qty-btn"
+          aria-label={`הוסף כמות ${item.name}`}
+          onClick={() => {
+            if (inCartQty <= 0) {
+              addItem(item);
+              return;
+            }
+            setQty(item.id, inCartQty + step);
+          }}
+        >
+          +
+        </button>
+      </div>
+    </div>
+  );
+}
+
 /** דף בסיס: מטבח טרי + מחירון מגיליון עם type או category «אוכל ביתי» */
 export function HomeFood() {
   usePageSeo({
-    title: "Royal Fruit | מטבח טרי — חמוצים בעבודת יד",
+    title: "Royal Fruit | מטבח טרי — ממולאים לפי משקל",
     description:
-      "מטבח טרי: הזמנות יומיים מראש. עלי גפן חמוצים, כרוב חמוץ ובצל חמוץ מתוק — לפי משקל. ממולאים בכל טוב בעבודת יד. הזמנה בוואטסאפ ומשלוחים באזור המרכז וגוש דן.",
+      "מטבח טרי — ממולאים לפי משקל: עלי גפן חמוצים, כרוב חמוץ ובצל חמוץ מתוק. הזמנות יומיים מראש, בעבודת יד. הזמנה בוואטסאפ ומשלוחים באזור המרכז וגוש דן.",
   });
 
   return (
@@ -47,11 +112,11 @@ export function HomeFood() {
       <section className="page-hero juices-hero">
         <div className="container narrow">
           <p className="eyebrow">מטבח טרי</p>
-          <h1 className="page-title juices-page-title">חמוצים ובישול ביתי</h1>
+          <h1 className="page-title juices-page-title">ממולאים לפי משקל</h1>
           <p className="page-lead muted">
             <strong className="kitchen-lead-strong">שימו לב: הזמנות יומיים מראש.</strong>
             <br />
-            ממולאים בכל טוב בעבודת יד.
+            עלי גפן חמוצים, כרוב חמוץ ובצל חמוץ מתוק — ממולאים בכל טוב בעבודת יד.
           </p>
         </div>
       </section>
@@ -61,9 +126,9 @@ export function HomeFood() {
           <div className="juices-intro-card kitchen-intro-card" aria-label="מטבח טרי ב־Royal Fruit">
             <div>
               <RoyalFruitWordmark className="juices-intro-wordmark" />
-              <h2>מטבח טרי — חמוצים לפי משקל</h2>
+              <h2>מטבח טרי — ממולאים לפי משקל</h2>
               <p className="kitchen-intro-note">
-                הזמנות יומיים מראש · ממולאים בכל טוב בעבודת יד
+                הזמנות יומיים מראש · בישול ביתי בעבודת יד
               </p>
             </div>
             <div className="juices-intro-points">
@@ -79,18 +144,30 @@ export function HomeFood() {
           <div className="kitchen-pickles-grid" role="list">
             {PICKLED_HOME_KITCHEN.map((product) => (
               <article key={product.name} className="kitchen-pickle-card" role="listitem">
+                {product.image ? (
+                  <div className="kitchen-pickle-media">
+                    <img
+                      src={product.image}
+                      alt=""
+                      aria-hidden
+                      className="kitchen-pickle-img"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                ) : null}
                 <h3 className="kitchen-pickle-title">{product.name}</h3>
-                <dl className="kitchen-pickle-prices">
+                <div className="kitchen-pickle-prices">
                   {product.tiers.map((tier) => (
                     <div key={tier.weight} className="kitchen-pickle-row">
-                      <dt>{tier.weight}</dt>
-                      <dd>
-                        {tier.price}
-                        &nbsp;₪
-                      </dd>
+                      <div className="kitchen-pickle-row-info">
+                        <span className="kitchen-pickle-weight">{tier.weight}</span>
+                        <span className="kitchen-pickle-price">{formatPriceLabelForDisplay(String(tier.price))}</span>
+                      </div>
+                      <KitchenPickleTierQty item={kitchenTierCartLine(product, tier)} />
                     </div>
                   ))}
-                </dl>
+                </div>
               </article>
             ))}
           </div>
@@ -101,8 +178,10 @@ export function HomeFood() {
             emojiStrip=""
             showEmojis={false}
             page="homeFood"
-            listMeta={{ title: "מטבח טרי" }}
-            singleCategoryTitle="אוכל ביתי זמין היום"
+            listMeta={null}
+            excludeCategoryTitles={PICKLED_HOME_KITCHEN.map((p) => p.name)}
+            priceMenuEmbedClassName="price-menu-embed--premium-cards"
+            showProductImages={false}
           />
         </div>
       </section>

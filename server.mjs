@@ -72,6 +72,24 @@ async function servePriceSheetCsv(res) {
   }
 }
 
+/** כותרות מטמון ל־Render (ב־Netlify זה ב־netlify.toml) — JS/CSS עם hash, HTML בלי שמירה ארוכה, תמונות קטלוג קצרות */
+function cacheControlForPublicPath(pathname) {
+  const p = pathname.replace(/\\/g, "/");
+  if (p === "/" || p.endsWith(".html")) {
+    return "no-cache, private, must-revalidate";
+  }
+  if (p.startsWith("/assets/")) {
+    return "public, max-age=31536000, immutable";
+  }
+  if (p.startsWith("/images/catalog/")) {
+    return "public, max-age=300, stale-while-revalidate=86400";
+  }
+  if (p.startsWith("/images/")) {
+    return "public, max-age=3600";
+  }
+  return null;
+}
+
 function tryStatic(pathname, res) {
   const rel = pathname === "/" ? "index.html" : pathname.slice(1);
   const filePath = safeResolvedPath(rel);
@@ -81,7 +99,10 @@ function tryStatic(pathname, res) {
   const ext = path.extname(filePath).toLowerCase();
   const type = MIME[ext] || "application/octet-stream";
   const buf = fs.readFileSync(filePath);
-  sendBuffer(res, 200, { "Content-Type": type }, buf);
+  const headers = { "Content-Type": type };
+  const cc = cacheControlForPublicPath(pathname);
+  if (cc) headers["Cache-Control"] = cc;
+  sendBuffer(res, 200, headers, buf);
   return true;
 }
 
@@ -109,7 +130,10 @@ const server = http.createServer((req, res) => {
     return;
   }
   const buf = fs.readFileSync(indexPath);
-  sendBuffer(res, 200, { "Content-Type": "text/html; charset=utf-8" }, buf);
+  sendBuffer(res, 200, {
+    "Content-Type": "text/html; charset=utf-8",
+    "Cache-Control": "no-cache, private, must-revalidate",
+  }, buf);
 });
 
 server.listen(PORT, () => {

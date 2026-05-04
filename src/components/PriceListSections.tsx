@@ -10,6 +10,7 @@ import type { CartLineInput } from "../cart/types";
 import type { PriceRow, PriceSubsection } from "../data/priceList";
 import { formatPriceLabelForDisplay, formatUnitWordsWithLamed } from "../lib/priceDisplay";
 import { isKgPricingLabel } from "../lib/kgPricing";
+import { formatPremiumCardPriceLine } from "../lib/premiumProductCardPrice";
 
 function makeRowId(catId: string, subKey: string, name: string) {
   return `${catId}::${subKey}::${name}`.replace(/\s+/g, " ").trim();
@@ -18,6 +19,12 @@ function makeRowId(catId: string, subKey: string, name: string) {
 /** קטגוריית «מיוחדים», רוחב מוגבל */
 function isSpecialsCategoryTitle(title: string) {
   return title.trim() === "מיוחדים";
+}
+
+/** מדור טעמי חלווה בגיליון (כמו halvaSheetCategorySortOrder bucket 0) — יחידה 350 גרם */
+function isHalvaFlavorSheetCategory(title: string) {
+  const t = title.trim().replace(/\s+/g, " ");
+  return t === "חלווה בטעם" || (t.includes("חלווה") && t.includes("בטעם")) || t === "חלווה";
 }
 
 function rowPricingTextForKg(row: PriceRow, fallbackLabel: string) {
@@ -83,16 +90,71 @@ function PriceRowView({
   item,
   description,
   showEmojis,
+  productCardLayout,
+  showProductImages = true,
 }: {
   item: CartLineInput;
   description: string;
   showEmojis: boolean;
+  productCardLayout?: boolean;
+  /** תמונות מוצר מהקטלוג — רק בדף חלווה; בשאר המחירונים false */
+  showProductImages?: boolean;
 }) {
   const { addItem, lines, setQty } = useCart();
   const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
   const step = item.qtyStep ?? 1;
-  const thumb = getProduceImage(item.name, description);
+  const thumb = showProductImages ? getProduceImage(item.name, description) : undefined;
   const showLeft = Boolean(thumb) || showEmojis;
+
+  const qtyBlock = (
+    <div className={productCardLayout ? "price-menu-card-actions" : "price-menu-add-wrap"}>
+      <button
+        type="button"
+        className="price-menu-qty-btn"
+        aria-label={`הפחת כמות ${item.name}`}
+        onClick={() => setQty(item.id, inCartQty - step)}
+        disabled={inCartQty < step / 2}
+      >
+        −
+      </button>
+      <span className="price-menu-qty-badge" aria-label={`בסל: ${formatQty(inCartQty)}`}>
+        {formatQty(inCartQty)}
+      </span>
+      <button
+        type="button"
+        className="price-menu-qty-btn"
+        aria-label={`הוסף כמות ${item.name}`}
+        onClick={() => {
+          if (inCartQty <= 0) {
+            addItem(item);
+            return;
+          }
+          setQty(item.id, inCartQty + step);
+        }}
+      >
+        +
+      </button>
+    </div>
+  );
+
+  if (productCardLayout) {
+    return (
+      <li className="price-menu-row price-menu-row--product-card">
+        <div className="price-menu-card-media">
+          {thumb ? (
+            <img src={thumb} alt="" className="price-menu-card-img" loading="lazy" decoding="async" />
+          ) : (
+            <div className="price-menu-card-img-placeholder" aria-hidden />
+          )}
+        </div>
+        <div className="price-menu-card-footer">
+          <span className="price-menu-card-name">{item.name}</span>
+          <span className="price-menu-card-price-line">{formatPremiumCardPriceLine(item.priceLabel, item.unit)}</span>
+          {qtyBlock}
+        </div>
+      </li>
+    );
+  }
 
   return (
     <li className={`price-menu-row${showLeft ? "" : " no-emoji"}${thumb ? " price-menu-row--with-thumb" : ""}`}>
@@ -109,34 +171,7 @@ function PriceRowView({
         <span className="price-menu-name">{item.name}</span>
         <span className="price-menu-desc">{description}</span>
       </span>
-      <div className="price-menu-add-wrap">
-        <button
-          type="button"
-          className="price-menu-qty-btn"
-          aria-label={`הפחת כמות ${item.name}`}
-          onClick={() => setQty(item.id, inCartQty - step)}
-          disabled={inCartQty < step / 2}
-        >
-          −
-        </button>
-        <span className="price-menu-qty-badge" aria-label={`בסל: ${formatQty(inCartQty)}`}>
-          {formatQty(inCartQty)}
-        </span>
-        <button
-          type="button"
-          className="price-menu-qty-btn"
-          aria-label={`הוסף כמות ${item.name}`}
-          onClick={() => {
-            if (inCartQty <= 0) {
-              addItem(item);
-              return;
-            }
-            setQty(item.id, inCartQty + step);
-          }}
-        >
-          +
-        </button>
-      </div>
+      {qtyBlock}
       <span className="price-menu-price">
         <span className="price-menu-price-main">{item.priceLabel}</span>
         {item.unit?.trim() ? (
@@ -172,7 +207,15 @@ type Props = {
   embedClassName?: string;
   searchFieldLabel?: string;
   searchFieldPlaceholder?: string;
+  /** כרטיס מוצר מינימלי (תמונה גדולה, בלי תיאור) — ברירת מחדל לפי מחלקת embed ב־embedClassName */
+  productCardLayout?: boolean;
+  /** תמונות מוצר — false בפירות/ירקות/מיצים/מטבח; true בחלווה */
+  showProductImages?: boolean;
+  /** false = בלי שורת חיפוש (לדפים עם מעט פריטים שכבר מוצגים למעלה) */
+  showSearch?: boolean;
 };
+
+const PREMIUM_PRODUCT_CARD_EMBED = "price-menu-embed--premium-cards";
 
 const DEFAULT_SEARCH_LABEL = "חיפוש מהיר בדוכן";
 const DEFAULT_SEARCH_PLACEHOLDER = "חיפוש מהיר בכל המחירון — לדוגמה: ענבים, אבוקדו, בקבוק…";
@@ -187,7 +230,16 @@ export function PriceListSections({
   embedClassName,
   searchFieldLabel = DEFAULT_SEARCH_LABEL,
   searchFieldPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
+  productCardLayout: productCardLayoutProp,
+  showProductImages = true,
+  showSearch = true,
 }: Props) {
+  const productCardLayout =
+    productCardLayoutProp ??
+    Boolean(
+      embedClassName?.includes("price-menu-embed--halva-sweets") ||
+        embedClassName?.includes(PREMIUM_PRODUCT_CARD_EMBED),
+    );
   const meta = listMeta === undefined ? PRICE_LIST_META : listMeta;
   const [search, setSearch] = useState("");
   const normalizedSearch = normalizeText(search);
@@ -232,19 +284,21 @@ export function PriceListSections({
         </p>
       ) : null}
 
-      <div className="price-menu-search price-menu-search--global">
-        <label htmlFor={`${searchFieldIdPrefix}-search`}>
-          <span className="price-menu-search-label">{searchFieldLabel}</span>
-          <input
-            id={`${searchFieldIdPrefix}-search`}
-            type="search"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={searchFieldPlaceholder}
-            autoComplete="off"
-          />
-        </label>
-      </div>
+      {showSearch ? (
+        <div className="price-menu-search price-menu-search--global">
+          <label htmlFor={`${searchFieldIdPrefix}-search`}>
+            <span className="price-menu-search-label">{searchFieldLabel}</span>
+            <input
+              id={`${searchFieldIdPrefix}-search`}
+              type="search"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={searchFieldPlaceholder}
+              autoComplete="off"
+            />
+          </label>
+        </div>
+      ) : null}
 
       <div className="price-menu-categories-grid">
         {filteredCategories.map((cat) => (
@@ -267,12 +321,16 @@ export function PriceListSections({
                 {cat.rows.map((row) => {
                   const priceDisplay = row.price ?? "לפי המחירון";
                   const kgLabel = rowPricingTextForKg(row, priceDisplay);
+                  const halvaEmbed = embedClassName?.includes("price-menu-embed--halva-sweets") ?? false;
+                  const unitFromSheet = row.unit?.trim();
+                  const unitDefaultHalva =
+                    halvaEmbed && isHalvaFlavorSheetCategory(cat.title) && !unitFromSheet ? "350 גרם" : unitFromSheet;
                   const item: CartLineInput = {
                     id: makeRowId(cat.id, "_", row.name),
                     emoji: row.emoji,
                     name: row.name,
                     priceLabel: formatPriceLabelForDisplay(row.price ?? priceDisplay),
-                    unit: row.unit?.trim() ? formatUnitWordsWithLamed(row.unit.trim()) : undefined,
+                    unit: unitDefaultHalva ? formatUnitWordsWithLamed(unitDefaultHalva) : undefined,
                     categoryPath: cat.title,
                     qtyStep: isKgPricingLabel(kgLabel) ? 0.5 : 1,
                   };
@@ -283,6 +341,8 @@ export function PriceListSections({
                       item={item}
                       description={description}
                       showEmojis={showEmojis}
+                      productCardLayout={productCardLayout}
+                      showProductImages={showProductImages}
                     />
                   );
                 })}
@@ -299,12 +359,18 @@ export function PriceListSections({
                     {sub.rows.map((row) => {
                       const priceDisplay = row.price ?? (sub.note ? `לפי: ${sub.note}` : "לפי המחירון");
                       const kgLabel = rowPricingTextForKg(row, priceDisplay);
+                      const halvaEmbed = embedClassName?.includes("price-menu-embed--halva-sweets") ?? false;
+                      const unitFromSheet = row.unit?.trim();
+                      const halvaFlavorSection =
+                        isHalvaFlavorSheetCategory(cat.title) || isHalvaFlavorSheetCategory(sub.title);
+                      const unitDefaultHalva =
+                        halvaEmbed && halvaFlavorSection && !unitFromSheet ? "350 גרם" : unitFromSheet;
                       const item: CartLineInput = {
                         id: makeRowId(cat.id, subKey, row.name),
                         emoji: row.emoji,
                         name: row.name,
                         priceLabel: formatPriceLabelForDisplay(row.price ?? priceDisplay),
-                        unit: row.unit?.trim() ? formatUnitWordsWithLamed(row.unit.trim()) : undefined,
+                        unit: unitDefaultHalva ? formatUnitWordsWithLamed(unitDefaultHalva) : undefined,
                         categoryPath: `${cat.title} › ${sub.title}`,
                         qtyStep: isKgPricingLabel(kgLabel) ? 0.5 : 1,
                       };
@@ -315,6 +381,8 @@ export function PriceListSections({
                           item={item}
                           description={description}
                           showEmojis={showEmojis}
+                          productCardLayout={productCardLayout}
+                          showProductImages={showProductImages}
                         />
                       );
                     })}

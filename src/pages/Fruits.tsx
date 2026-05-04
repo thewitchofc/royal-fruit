@@ -48,6 +48,8 @@ export function Fruits() {
               title: "מחירון פירות",
             }}
             singleCategoryTitle="הפירות הזמינים היום"
+            priceMenuEmbedClassName="price-menu-embed--premium-cards"
+            showProductImages={false}
           />
         </div>
       </section>

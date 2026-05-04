@@ -48,6 +48,8 @@ export function Vegetables() {
               title: "מחירון ירקות",
             }}
             singleCategoryTitle="הירקות הזמינים היום"
+            priceMenuEmbedClassName="price-menu-embed--premium-cards"
+            showProductImages={false}
           />
         </div>
       </section>

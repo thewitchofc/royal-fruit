@@ -1,5 +1,6 @@
 # Render.com — אתר SPA + פרוקסי מחירון ב־/price-sheet.csv
 # https://render.com/docs/blueprint-spec
+# הערה: netlify.toml לא חל כאן — מטמון לקבצים סטטיים מוגדר ב־server.mjs
 services:
   - type: web
     name: royal-fruit-premium
@@ -11,7 +12,8 @@ services:
     envVars:
       - key: NODE_VERSION
         value: "20.11.1"
-      # בשלב ה-Build ובזמן ריצה: כתובת האתר (SEO, OG) — ללא סלאש בסוף
+      # בשלב ה-Build ובזמן ריצה: כתובת האתר (sitemap.xml, robots, OG) — ללא סלאש בסוף.
+      # אם השירות נוצר ידנית בלי Blueprint: הוסיפו את אותו משתנה ב-Dashboard → Environment.
       - key: VITE_SITE_URL
         value: "https://royalfruit.co.il"
       # ב-Build בלבד: המחירון נטען מ־/price-sheet.csv (אותו דומיין)

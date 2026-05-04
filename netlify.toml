@@ -26,3 +26,9 @@
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# תמונות קטלוג בלי שם קובץ משתנה — מניעת «עדכון שלא נראה» בגלל CDN/דפדפן
+[[headers]]
+  for = "/images/catalog/*"
+  [headers.values]
+    Cache-Control = "public, max-age=300, stale-while-revalidate=86400"

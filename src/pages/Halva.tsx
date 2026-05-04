@@ -8,7 +8,7 @@ export function Halva() {
   usePageSeo({
     title: "Royal Fruit | חלווה וממרחים — חלווה בטעם",
     description:
-      "חלווה וממרחים: חלווה בטעם (35 ₪) — אגוזי לוז, פיסטק, פקאן, טעם של פעם. ממרחי טחינה וקרם (30 ₪) — טחינה אתיופית, טחינה מלאה עם וניל טהור, טחינה עם אגוזי לוז וקקאו, קרם פיסטוק, קרם אגוזי לוז. הזמנה בוואטסאפ.",
+      "חלווה וממרחים: חלווה בטעם — יחידה 350 גרם (35 ₪): אגוזי לוז, פיסטק, פקאן, טעם של פעם. ממרחי טחינה וקרם (30 ₪) — טחינה אתיופית, טחינה מלאה עם וניל טהור, טחינה עם אגוזי לוז וקקאו, קרם פיסטוק, קרם אגוזי לוז. הזמנה בוואטסאפ.",
   });
 
   return (
@@ -18,7 +18,7 @@ export function Halva() {
           <p className="eyebrow">חלווה וממרחים</p>
           <h1 className="page-title juices-page-title">חלווה בטעם</h1>
           <p className="page-lead muted">
-            חלווה בטעם ב־35&nbsp;₪, ממרחי טחינה וקרם ב־30&nbsp;₪. למטה מחירון אחיד לפי הגיליון: כל קטגוריה וכל מוצר באותה תצוגת כרטיס עם תמונה, מחיר והוספה לסל.
+            חלווה בטעם — יחידה <strong>350&nbsp;גרם</strong> ב־35&nbsp;₪; ממרחי טחינה וקרם ב־30&nbsp;₪. למטה מחירון לפי הגיליון: כל קטגוריה וכל מוצר בכרטיס עם תמונה, מחיר והוספה לסל.
           </p>
         </div>
       </section>
@@ -28,7 +28,7 @@ export function Halva() {
           <header className="halva-catalog-header" aria-label="Royal Fruit — חלווה וממרחים">
             <RoyalFruitWordmark className="halva-catalog-wordmark" />
             <p className="halva-catalog-prices muted">
-              חלווה בטעם <strong>35&nbsp;₪</strong>
+              חלווה בטעם — <strong>350&nbsp;גרם</strong> · <strong>35&nbsp;₪</strong>
               <span className="halva-catalog-prices-sep" aria-hidden>
                 {" "}
                 ·{" "}

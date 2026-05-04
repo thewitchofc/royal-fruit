@@ -48,6 +48,8 @@ export function Juices() {
               title: "מחירון מיצים",
             }}
             singleCategoryTitle="מיצים ושתייה טבעית זמינים היום"
+            priceMenuEmbedClassName="price-menu-embed--premium-cards"
+            showProductImages={false}
           />
         </div>
       </section>
