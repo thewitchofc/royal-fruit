@@ -66,9 +66,86 @@
         rel="stylesheet"
       />
     </noscript>
+    <!-- מסך טעינה לפני React — נעלם כשהאפליקציה נטענת (מחליף את תוכן #root) -->
+    <style>
+      #initial-app-loader {
+        box-sizing: border-box;
+        min-height: 100vh;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem 1rem;
+        font-family:
+          "Heebo",
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          sans-serif;
+        background: linear-gradient(180deg, #f8fdf4 0%, #eef6e8 55%, #e8f2e0 100%);
+        color: #3d5238;
+      }
+      #initial-app-loader .initial-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1.25rem;
+        text-align: center;
+      }
+      #initial-app-loader .initial-spin {
+        position: relative;
+        width: 3rem;
+        height: 3rem;
+      }
+      #initial-app-loader .initial-spinner {
+        position: absolute;
+        inset: 0;
+        border-radius: 50%;
+        border: 2.5px solid rgba(33, 101, 12, 0.14);
+        border-top-color: #21650c;
+        border-right-color: rgba(211, 164, 71, 0.75);
+        animation: initial-app-spin 1s linear infinite;
+      }
+      #initial-app-loader .initial-spinner-inner {
+        position: absolute;
+        inset: 0.42rem;
+        border-radius: 50%;
+        border: 2px solid rgba(33, 101, 12, 0.1);
+        border-bottom-color: rgba(211, 164, 71, 0.85);
+        border-left-color: rgba(33, 101, 12, 0.55);
+        animation: initial-app-spin 0.75s linear infinite reverse;
+      }
+      #initial-app-loader .initial-text {
+        margin: 0;
+        font-size: 1.05rem;
+        font-weight: 600;
+        opacity: 0.85;
+      }
+      @keyframes initial-app-spin {
+        to {
+          transform: rotate(-360deg);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #initial-app-loader .initial-spinner,
+        #initial-app-loader .initial-spinner-inner {
+          animation: none;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div id="initial-app-loader" role="status" aria-live="polite" aria-busy="true">
+        <div class="initial-inner">
+          <div class="initial-spin" aria-hidden="true">
+            <span class="initial-spinner"></span>
+            <span class="initial-spinner-inner"></span>
+          </div>
+          <p class="initial-text">טוען את האתר…</p>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

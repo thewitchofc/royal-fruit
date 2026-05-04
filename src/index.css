@@ -257,15 +257,110 @@ a {
 }
 
 .page-load-fallback {
-  padding: clamp(3rem, 10vw, 6rem) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: min(72vh, 26rem);
+  padding: clamp(2rem, 8vw, 4rem) 1rem;
   text-align: center;
+}
+
+.page-load-fallback-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.35rem;
+  animation: page-load-fallback-in 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes page-load-fallback-in {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.page-load-fallback-visual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ספינר: שני טבעות מסתובבות (נגד כיוון) — ירוק + זהב */
+.page-load-fallback-spinner {
+  position: relative;
+  display: block;
+  width: 3.1rem;
+  height: 3.1rem;
+}
+
+.page-load-fallback-spinner__ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2.5px solid rgba(33, 101, 12, 0.14);
+  border-top-color: var(--green);
+  border-inline-end-color: rgba(211, 164, 71, 0.75);
+  animation: page-load-fallback-spin 1s linear infinite;
+}
+
+.page-load-fallback-spinner__ring--inner {
+  inset: 0.42rem;
+  border-width: 2px;
+  border-color: rgba(33, 101, 12, 0.1);
+  border-bottom-color: rgba(211, 164, 71, 0.85);
+  border-inline-start-color: rgba(33, 101, 12, 0.55);
+  animation-direction: reverse;
+  animation-duration: 0.75s;
+}
+
+@keyframes page-load-fallback-spin {
+  to {
+    transform: rotate(-360deg);
+  }
 }
 
 .page-load-fallback-text {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: 1.02rem;
   font-weight: 600;
   color: var(--muted);
+  letter-spacing: 0.02em;
+  animation: page-load-fallback-text-pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes page-load-fallback-text-pulse {
+  0%,
+  100% {
+    opacity: 0.78;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-load-fallback-inner {
+    animation: none;
+  }
+
+  .page-load-fallback-spinner__ring,
+  .page-load-fallback-spinner__ring--inner {
+    animation: none;
+  }
+
+  .page-load-fallback-text {
+    animation: none;
+    opacity: 1;
+  }
 }
 
 .app-shell {
@@ -325,7 +420,8 @@ a {
   right: auto;
   width: 100%;
   max-width: 100%;
-  z-index: 5;
+  /* מעל תוכן העמוד — דרופדאונים לא נדחקים מאחורי .main-area / סקשנים */
+  z-index: 40;
   pointer-events: auto;
   background: transparent;
   box-shadow: none;
@@ -383,7 +479,7 @@ main,
 
 .header-nav-inner {
   position: relative;
-  z-index: 3;
+  z-index: 4;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

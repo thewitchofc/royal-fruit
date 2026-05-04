@@ -2,9 +2,10 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { PageLoadFallback } from "./components/PageLoadFallback";
-import { Home } from "./pages/Home";
 import { ROUTES } from "./lib/publicRoutes";
 
+/** דף הבית כ־lazy — כדי ש־Suspense יציג מסך טעינה גם בריענון ל־/ (אחרי טעינת המנה הראשית) */
+const Home = lazy(() => import("./pages/Home").then((m) => ({ default: m.Home })));
 const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
 const Fruits = lazy(() => import("./pages/Fruits").then((m) => ({ default: m.Fruits })));
 const Vegetables = lazy(() => import("./pages/Vegetables").then((m) => ({ default: m.Vegetables })));

@@ -6,7 +6,7 @@
 /* ——— מעטפת ניווט דסקטופ ——— */
 .rf-navbar {
   position: relative;
-  z-index: 3;
+  z-index: 30;
   flex: 1 1 auto;
   min-width: 0;
   display: flex;
@@ -27,11 +27,15 @@
 
 /* כדור זכוכית סביב הקישורים — כמו `.main-nav` לפני מצב הזכוכית הבהירה */
 @media (min-width: 961px) {
+  /**
+   * אין overflow על המכל — overflow-x/y גוזרים את פאנל הדרופדאון (נראה כמו «מאחורי הדף»).
+   * במסך צר הקישורים נשברים לשורות (wrap); גלילה אופקית כאן הייתה חותכת את הפאנל.
+   */
   .rf-navbar__desktop--classic {
     position: relative;
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     justify-content: center;
-    row-gap: 0;
+    row-gap: 0.35rem;
     column-gap: 0.5rem;
     flex: 1 1 auto;
     min-width: 0;
@@ -45,20 +49,7 @@
     box-shadow:
       0 0 0 1px rgba(255, 255, 255, 0.07) inset,
       0 10px 28px rgba(0, 0, 0, 0.12);
-    overflow-x: auto;
-    overflow-y: hidden;
-    overscroll-behavior-x: contain;
-    scrollbar-width: thin;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .rf-navbar__desktop--classic::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  .rf-navbar__desktop--classic::-webkit-scrollbar-thumb {
-    background: rgba(24, 33, 23, 0.18);
-    border-radius: 999px;
+    overflow: visible;
   }
 
   .rf-navbar__desktop--classic::before {
@@ -164,41 +155,51 @@
 .rf-navbar__dropdown {
   position: relative;
   z-index: 0;
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: max-content;
+  max-width: 100%;
 }
 
 .rf-navbar__dropdown:is(:hover, :focus-within, .is-open) {
   /* מעל שכני שורה כדי שהחפיפה של הפאנל לא תישב מתחת לטריגר אחר */
-  z-index: 50;
+  z-index: 80;
 }
 
 .rf-navbar__panel {
   position: absolute;
   left: 50%;
   right: auto;
-  /* חפיפה על הטריגר: בלי «חור» בין הכפתור לקופסה (mouseleave / תחושת רווח), תוך שמירה על אוויר פנימי לתוכן */
-  top: 100%;
-  margin-top: -14px;
-  transform: translate(-50%, 8px);
+  top: calc(100% + 0.18rem);
+  margin-top: 0;
+  transform: translateX(-50%) translateY(4px);
   display: grid;
-  grid-template-columns: repeat(2, minmax(10.25rem, 1fr));
-  gap: 0.4rem;
-  min-width: min(22.5rem, calc(100vw - 2.25rem));
-  padding: calc(0.65rem + 0.45rem + 14px) 0.7rem 0.65rem;
-  border-radius: 20px;
-  background: #fffef9;
-  border: 1px solid rgba(24, 33, 23, 0.08);
+  grid-template-columns: 1fr;
+  justify-items: stretch;
+  gap: 0.2rem;
+  /* רוחב לפי תוכן — בלי קופסה ריקה ליד שלושה קישורים */
+  width: max-content;
+  min-width: min(11.25rem, calc(100vw - 1.5rem));
+  max-width: min(17rem, calc(100vw - 1.5rem));
+  padding: 0.38rem 0.35rem;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(255, 254, 249, 0.98) 0%, rgba(242, 249, 236, 0.96) 100%);
+  border: 1px solid rgba(222, 181, 93, 0.36);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.75) inset,
-    0 18px 48px rgba(24, 33, 23, 0.1),
-    0 6px 20px rgba(33, 101, 12, 0.06);
+    0 0 0 1px rgba(255, 255, 255, 0.65) inset,
+    0 14px 36px rgba(8, 27, 7, 0.14),
+    0 4px 14px rgba(33, 101, 12, 0.07);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
   transition:
-    opacity 0.26s ease,
-    visibility 0s linear 0.26s,
-    transform 0.3s cubic-bezier(0.2, 0.85, 0.2, 1);
-  z-index: 40;
+    opacity 0.22s ease,
+    visibility 0s linear 0.22s,
+    transform 0.28s cubic-bezier(0.2, 0.85, 0.2, 1);
+  z-index: 90;
 }
 
 .rf-navbar__dropdown:hover .rf-navbar__panel,
@@ -207,35 +208,35 @@
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
-  transform: translate(-50%, 0);
+  transform: translateX(-50%) translateY(0);
   transition:
-    opacity 0.26s ease,
+    opacity 0.22s ease,
     visibility 0s linear 0s,
-    transform 0.3s cubic-bezier(0.2, 0.85, 0.2, 1);
+    transform 0.28s cubic-bezier(0.2, 0.85, 0.2, 1);
 }
 
 .rf-navbar__panel-link {
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  min-height: 2.7rem;
-  padding: 0.48rem 0.6rem;
-  border-radius: 14px;
+  justify-content: flex-start;
+  text-align: start;
+  min-height: 2.2rem;
+  padding: 0.36rem 0.55rem;
+  border-radius: 10px;
   text-decoration: none;
-  font-size: 0.86rem;
+  font-size: 0.84rem;
   font-weight: 600;
   color: #142a0f;
+  line-height: 1.32;
+  white-space: normal;
   transition:
-    background 0.2s ease,
-    color 0.2s ease,
-    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    background 0.18s ease,
+    color 0.18s ease;
 }
 
 .rf-navbar__panel-link:hover {
-  background: rgba(33, 101, 12, 0.07);
+  background: rgba(33, 101, 12, 0.09);
   color: var(--green);
-  transform: translate3d(-3px, 0, 0);
 }
 
 .rf-navbar__panel-link.is-active {
@@ -536,20 +537,10 @@
   }
 }
 
-/* טאבלט / מסך צר: דרופדאון עמודה אחת בלי צל */
+/* מסכים צרים: מניעת בריחה מחוץ לשוליים */
 @media (max-width: 1100px) {
   .rf-navbar__panel {
-    grid-template-columns: 1fr;
-    min-width: min(18rem, calc(100vw - 2rem));
-    box-shadow: none;
-    border: 1px solid rgba(24, 33, 23, 0.1);
-    background: #fffef9;
-  }
-}
-
-@media (max-width: 520px) {
-  .rf-navbar__panel {
-    min-width: min(17rem, calc(100vw - 1.75rem));
+    max-width: min(16.5rem, calc(100vw - 1.25rem));
   }
 }
 
