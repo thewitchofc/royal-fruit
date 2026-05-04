@@ -1,33 +1,7 @@
 /**
- * Navbar פרימיום — זכוכית, קישורים כהים + קו תחתון, דרופדאון לבן, CTA, מובייל slide + אקורדיון.
- * מחובר ל־Layout: `.header-nav-bar.rf-premium-header` + ל־Navbar.tsx: `.rf-navbar*`
+ * Navbar — סרגל כהה (כמו לפני מצב «פרימיום זכוכית»), קטגוריות + דרופדאונים, מובייל slide + אקורדיון.
+ * עיצוב שורת הכותרת: gradient מ־index.css על `.header-nav-bar`; כאן רק תוכן הניווט.
  */
-
-/* ——— שורת כותרת קבועה (זכוכית) ——— */
-@media (min-width: 961px) {
-  .header-nav-bar.rf-premium-header {
-    background: rgba(255, 254, 249, 0.78) !important;
-    backdrop-filter: blur(18px) saturate(1.12);
-    -webkit-backdrop-filter: blur(18px) saturate(1.12);
-    border-bottom: 1px solid rgba(24, 33, 23, 0.08) !important;
-    box-shadow:
-      0 1px 0 rgba(255, 255, 255, 0.88) inset,
-      0 10px 36px rgba(24, 33, 23, 0.07) !important;
-  }
-
-  .header-nav-bar.rf-premium-header .rf-premium-header__inner {
-    align-items: center;
-    justify-content: center;
-    flex-wrap: nowrap;
-    gap: 0.65rem;
-    padding-block: 0.55rem 0.62rem;
-    padding-inline: clamp(0.45rem, 1.8vw, 1.1rem);
-  }
-
-  .header-nav-bar.rf-premium-header .header-nav-compact-logo-img {
-    filter: drop-shadow(0 1px 2px rgba(24, 33, 23, 0.1));
-  }
-}
 
 /* ——— מעטפת ניווט דסקטופ ——— */
 .rf-navbar {
@@ -51,88 +25,139 @@
   width: 100%;
 }
 
-/* ——— קישורי שורה + טריגר דרופדאון (כהה + קו תחתון) ——— */
+/* כדור זכוכית סביב הקישורים — כמו `.main-nav` לפני מצב הזכוכית הבהירה */
+@media (min-width: 961px) {
+  .rf-navbar__desktop--classic {
+    position: relative;
+    flex-wrap: nowrap;
+    justify-content: center;
+    row-gap: 0;
+    column-gap: 0.5rem;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
+    padding: 0.32rem 0.52rem 0.34rem;
+    border-radius: 999px;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.13), rgba(255, 255, 255, 0.06));
+    border: 1px solid rgba(222, 181, 93, 0.22);
+    backdrop-filter: blur(14px);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.07) inset,
+      0 10px 28px rgba(0, 0, 0, 0.12);
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scrollbar-width: thin;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .rf-navbar__desktop--classic::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  .rf-navbar__desktop--classic::-webkit-scrollbar-thumb {
+    background: rgba(24, 33, 23, 0.18);
+    border-radius: 999px;
+  }
+
+  .rf-navbar__desktop--classic::before {
+    content: "";
+    position: absolute;
+    inset: 4px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+  }
+}
+
+/* קישורי שורה + טריגר — טקסט בהיר על סרגל כהה, טפיחות זהב בפעיל (כמו `.nav-link` הישן) */
 .rf-navbar__link,
 .rf-navbar__trigger {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.3rem;
-  padding: 0.52rem 0.75rem 0.44rem;
-  border: none;
-  border-radius: 10px;
+  padding: 0.38rem 0.72rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
   background: transparent;
   font: inherit;
-  font-size: 0.86rem;
-  font-weight: 600;
+  font-size: 0.87rem;
+  font-weight: 800;
   letter-spacing: 0.01em;
   line-height: 1.35;
-  color: #142a0f;
+  color: rgba(255, 255, 255, 0.84);
   text-decoration: none;
   cursor: pointer;
-  transition: color 0.22s ease, background 0.22s ease;
+  flex: 0 0 auto;
+  white-space: nowrap;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
 }
 
 .rf-navbar__link::after,
 .rf-navbar__trigger::after {
-  content: "";
-  position: absolute;
-  left: 0.55rem;
-  right: 0.55rem;
-  bottom: 0.2rem;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--green);
-  transform: scaleX(0);
-  transform-origin: center;
-  opacity: 0.88;
-  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease;
-  pointer-events: none;
+  display: none;
 }
 
 .rf-navbar__link:hover,
 .rf-navbar__trigger:hover {
-  color: var(--green);
-  background: rgba(33, 101, 12, 0.05);
-}
-
-.rf-navbar__link:hover::after,
-.rf-navbar__trigger:hover::after {
-  transform: scaleX(1);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(222, 181, 93, 0.28);
+  transform: translateY(-1px);
+  box-shadow:
+    0 10px 18px rgba(0, 0, 0, 0.12),
+    0 1px 0 rgba(255, 255, 255, 0.12) inset;
 }
 
 .rf-navbar__link:focus-visible,
 .rf-navbar__trigger:focus-visible {
-  outline: 2px solid rgba(33, 101, 12, 0.45);
-  outline-offset: 3px;
+  outline: 2px solid rgba(255, 255, 255, 0.45);
+  outline-offset: 2px;
 }
 
 .rf-navbar__link.is-active,
 .rf-navbar__trigger.is-active {
-  color: #0d1f09;
-  font-weight: 800;
-  background: rgba(211, 164, 71, 0.14);
-}
-
-.rf-navbar__link.is-active::after,
-.rf-navbar__trigger.is-active::after {
-  transform: scaleX(1);
-  background: linear-gradient(90deg, var(--green), #2d6a12);
+  color: #16320f;
+  border-color: rgba(222, 181, 93, 0.76);
+  background:
+    linear-gradient(135deg, #fff8df, #deb55d 48%, #f8e7b4);
+  box-shadow:
+    0 8px 22px rgba(222, 181, 93, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.34) inset;
 }
 
 .rf-navbar__trigger-chevron {
   width: 0.92em;
   height: 0.92em;
-  opacity: 0.55;
+  opacity: 0.72;
+  color: rgba(255, 255, 255, 0.85);
   transition: transform 0.26s ease, opacity 0.2s ease;
+}
+
+.rf-navbar__trigger.is-active .rf-navbar__trigger-chevron {
+  color: #16320f;
+  opacity: 0.9;
+}
+
+.rf-navbar__trigger:hover .rf-navbar__trigger-chevron {
+  color: #fff;
+  opacity: 1;
 }
 
 .rf-navbar__dropdown:hover .rf-navbar__trigger-chevron,
 .rf-navbar__dropdown:focus-within .rf-navbar__trigger-chevron,
 .rf-navbar__dropdown.is-open .rf-navbar__trigger-chevron {
   transform: rotate(-180deg);
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 /* ——— דרופדאון ——— */
@@ -219,36 +244,36 @@
   font-weight: 800;
 }
 
-/* ——— CTA דסקטופ ——— */
+/* ——— CTA דסקטופ ——— (יישור ל־`.header-wa-link` ב־index.css) */
 .rf-navbar__cta {
   display: none;
   align-items: center;
   justify-content: center;
-  gap: 0.42rem;
+  gap: 0.35rem;
   flex: 0 0 auto;
-  min-height: 2.35rem;
-  padding: 0.48rem 1.15rem;
-  border-radius: 14px;
+  min-height: 2.1rem;
+  padding: 0.4rem 0.88rem;
+  border-radius: 999px;
   text-decoration: none;
-  font-size: 0.86rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
+  font-size: 0.88rem;
+  font-weight: 900;
+  letter-spacing: 0.01em;
   color: #fff;
-  background: linear-gradient(145deg, #25d366, #128c7e 55%, #0f7a5c);
-  border: 1px solid rgba(24, 33, 23, 0.12);
+  background:
+    linear-gradient(135deg, rgba(37, 211, 102, 0.96), rgba(19, 132, 59, 0.96));
+  border: 1px solid rgba(222, 181, 93, 0.42);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 10px 26px rgba(20, 140, 90, 0.28);
-  transition:
-    transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.22s ease;
+    0 0 0 1px rgba(255, 255, 255, 0.16) inset,
+    0 10px 24px rgba(20, 164, 74, 0.28);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
 }
 
 .rf-navbar__cta:hover {
-  transform: scale(1.045);
+  transform: translateY(-1px);
+  border-color: rgba(222, 181, 93, 0.7);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
-    0 14px 34px rgba(20, 140, 90, 0.38);
+    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
+    0 14px 30px rgba(20, 164, 74, 0.34);
 }
 
 .rf-navbar__cta-icon {

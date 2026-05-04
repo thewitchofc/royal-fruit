@@ -155,8 +155,8 @@ export function Layout({ children }: { children: ReactNode }) {
           </button>
         </div>
       </div>
-      <div className="header-nav-bar rf-premium-header">
-        <div className="container header-nav-inner rf-premium-header__inner">
+      <div className="header-nav-bar">
+        <div className="container header-nav-inner">
           <NavLink
             to="/"
             className="header-nav-compact-logo"

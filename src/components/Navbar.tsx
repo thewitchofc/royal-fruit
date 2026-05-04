@@ -78,7 +78,7 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
   return (
     <>
       <nav ref={navRootRef} className="rf-navbar" aria-label="ניווט ראשי">
-        <div className="rf-navbar__desktop">
+        <div className="rf-navbar__desktop rf-navbar__desktop--classic">
           <NavLink
             to={NAVBAR_HOME.to}
             end
