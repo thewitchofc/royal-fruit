@@ -14,7 +14,6 @@ export const ROUTES = {
   },
   boxes: {
     fruits: "/boxes/fruits",
-    gifts: "/boxes/gifts",
   },
   about: "/about",
   gallery: "/gallery",

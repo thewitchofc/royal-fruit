@@ -55,7 +55,13 @@ async function servePriceSheetCsv(res) {
     return;
   }
   try {
-    const fr = await fetch(CSV_UPSTREAM, { headers: { Accept: "text/csv,*/*" } });
+    const fr = await fetch(CSV_UPSTREAM, {
+      redirect: "follow",
+      headers: {
+        Accept: "text/csv,*/*",
+        "User-Agent": "Mozilla/5.0 (compatible; RoyalFruitServer/1.0)",
+      },
+    });
     const text = await fr.text();
     if (!fr.ok) {
       sendBuffer(res, 502, { "Content-Type": "text/plain; charset=utf-8" }, `Upstream HTTP ${fr.status}`);

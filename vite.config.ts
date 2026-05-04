@@ -13,8 +13,27 @@ function escapeXml(s: string) {
   return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/"/g, "&quot;");
 }
 
+/** לא להשתמש ב-loadEnv עם קידום ריק — GOOGLE_* לא נטען. */
+function loadEnvForProject(mode: string) {
+  return {
+    ...loadEnv(mode, process.cwd(), "VITE_"),
+    ...loadEnv(mode, process.cwd(), "GOOGLE_"),
+  };
+}
+
+/** קישור דף עריכה בגוגל — לא מחזיר CSV */
+function looksLikeGoogleSheetEditUrlNotCsv(url: string): boolean {
+  try {
+    const u = new URL(url.trim());
+    if (!u.hostname.includes("docs.google.com")) return false;
+    return u.pathname.includes("/edit");
+  } catch {
+    return false;
+  }
+}
+
 export default defineConfig(({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), "");
+  const env = loadEnvForProject(mode);
   const siteUrl = normalizeSiteUrlFromEnv(env.VITE_SITE_URL);
   const ogImageAbs = `${siteUrl}${SITE_OG_IMAGE_PATH}`;
 
@@ -39,7 +58,10 @@ export default defineConfig(({ mode }) => {
       return;
     }
     const csvUrl =
-      env.GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim() || env.VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim();
+      process.env.GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim() ||
+      process.env.VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim() ||
+      env.GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim() ||
+      env.VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim();
     if (!csvUrl) {
       res.statusCode = 503;
       res.setHeader("Content-Type", "text/plain; charset=utf-8");
@@ -48,12 +70,38 @@ export default defineConfig(({ mode }) => {
       );
       return;
     }
-    void fetch(csvUrl, { headers: { Accept: "text/csv,*/*" } })
+    if (looksLikeGoogleSheetEditUrlNotCsv(csvUrl)) {
+      res.statusCode = 502;
+      res.setHeader("Content-Type", "text/plain; charset=utf-8");
+      res.end(
+        "נראה שזה קישור לעריכת הגיליון (/edit) ולא לייצוא CSV. יש להחליף ב-Publish to web → CSV, או …/export?format=csv&gid=מספר_לשונית",
+      );
+      return;
+    }
+    void fetch(csvUrl, {
+      redirect: "follow",
+      headers: {
+        Accept: "text/csv,*/*",
+        "User-Agent": "Mozilla/5.0 (compatible; RoyalFruitDev/1.0)",
+      },
+    })
       .then(async (r) => {
         const text = await r.text();
         if (!r.ok) {
-          res.statusCode = r.status;
-          res.end(text.slice(0, 600));
+          res.statusCode = 502;
+          res.setHeader("Content-Type", "text/plain; charset=utf-8");
+          res.end(
+            `טעינת הגיליון נכשלה (HTTP ${r.status}). בדקו את הקישור ב-GOOGLE_SHEETS_PRODUCTS_CSV_URL.`,
+          );
+          return;
+        }
+        const t = text.trimStart();
+        if (t.startsWith("<!") || text.toLowerCase().includes("<html")) {
+          res.statusCode = 502;
+          res.setHeader("Content-Type", "text/plain; charset=utf-8");
+          res.end(
+            "הגעת HTML במקום CSV. השתמשו בקישור ייצוא: File → Share → Publish to web, או export?format=csv&gid=... — לא בקישור /edit לגיליון.",
+          );
           return;
         }
         res.setHeader("Content-Type", "text/csv; charset=utf-8");
@@ -63,7 +111,8 @@ export default defineConfig(({ mode }) => {
       })
       .catch(() => {
         res.statusCode = 502;
-        res.end("שגיאה בטעינת הגיליון");
+        res.setHeader("Content-Type", "text/plain; charset=utf-8");
+        res.end("שגיאה בטעינת הגיליון מהרשת");
       });
   }
 
@@ -87,15 +136,24 @@ export default defineConfig(({ mode }) => {
       include: ["src/**/*.test.{ts,tsx}"],
     },
     server: {
+      /** true = 0.0.0.0 — נגיש ממכשירים אחרים ברשת המקומית (למשל מובייל) */
+      host: true,
+      port: 5173,
+      /** אם 5173 תפוס, לעצור במקום לעבור ל-5174 — אחרת מחירון ב-5173 מחזיר 503 והדפדפן בכתובת הישנה נראה «ריק» */
+      strictPort: true,
       proxy: sheetsProxy,
     },
     preview: {
+      host: true,
+      port: 4173,
+      strictPort: false,
       proxy: sheetsProxy,
     },
     plugins: [
-      react(),
       {
+        /** לפני middleware של SPA — אחרת /price-sheet.csv יכול להיתפס כ־index.html */
         name: "price-sheet-dev-proxy",
+        enforce: "pre",
         configureServer(server) {
           server.middlewares.use(priceSheetMiddleware);
         },
@@ -103,6 +161,7 @@ export default defineConfig(({ mode }) => {
           server.middlewares.use(priceSheetMiddleware);
         },
       },
+      react(),
       {
         name: "seo-robots-sitemap",
         buildStart() {

@@ -169,7 +169,7 @@ export function getProduceImage(name: string, description?: string): string | un
     "אננס חתוך": "/images/gallery/pineapple-sliced-trays.webp",
     "קיווי קלוף": "/images/gallery/kikoka-gold-kiwi.webp",
     "קיווי ירוק": "/images/gallery/kikoka-gold-kiwi.webp",
-    "בקבוק חומץ תפוחים": "/images/gallery/red-kissabel-apples.webp",
+    "בקבוק חומץ תפוחים": "/images/catalog/apple-cider-vinegar.png",
     "מיקס כרובית טריו": "/images/gallery/colorful-cauliflower.webp",
     "כרובית לבנה": "/images/gallery/colorful-cauliflower.webp",
     "ברוקולי ג׳מבו משק כהן": "/images/gallery/colorful-cauliflower.webp",
@@ -217,10 +217,14 @@ export function getProduceImage(name: string, description?: string): string | un
     "גולדן ברי": "/images/gallery/mixed-fruit-box.webp",
     "פקאן בוואקום": "/images/gallery/dates-walnut-pack.webp",
     "פקאן עם קליפה": "/images/gallery/dates-walnut-pack.webp",
-    "בקבוק מיץ תפוחים 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
-    "בקבוק מיץ תפוחים וגזר 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
-    "בקבוק מיץ תפוחים וסלק 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
-    "בקבוק מיץ תפוחים וחבוש 100% טבעי": "/images/gallery/red-kissabel-apples.webp",
+    "מיץ תפוחים": "/images/catalog/juice-apple.png",
+    "מיץ תפוחים וגזר": "/images/catalog/juice-apple-carrot.png",
+    "מיץ תפוחים וסלק": "/images/catalog/juice-apple-beet.png",
+    "מיץ תפוחים וחבוש": "/images/catalog/juice-apple-quince.png",
+    "בקבוק מיץ תפוחים 100% טבעי": "/images/catalog/juice-apple.png",
+    "בקבוק מיץ תפוחים וגזר 100% טבעי": "/images/catalog/juice-apple-carrot.png",
+    "בקבוק מיץ תפוחים וסלק 100% טבעי": "/images/catalog/juice-apple-beet.png",
+    "בקבוק מיץ תפוחים וחבוש 100% טבעי": "/images/catalog/juice-apple-quince.png",
     "אגוזי לוז": "/images/catalog/halva-oznei-looz.png",
     פיסטק: "/images/catalog/halva-pistachio.png",
     פקאן: "/images/catalog/halva-pecan.png",
@@ -242,6 +246,11 @@ export function getProduceImage(name: string, description?: string): string | un
   if (exact) return exact;
 
   // fallback for dynamic sheet rows so every product gets image
+  if (n.includes("חומץ") && n.includes("תפוח")) return "/images/catalog/apple-cider-vinegar.png";
+  if (n.includes("מיץ תפוחים") && n.includes("גזר")) return "/images/catalog/juice-apple-carrot.png";
+  if (n.includes("מיץ תפוחים") && n.includes("סלק")) return "/images/catalog/juice-apple-beet.png";
+  if (n.includes("מיץ תפוחים") && n.includes("חבוש")) return "/images/catalog/juice-apple-quince.png";
+  if (n.includes("מיץ תפוחים") && !/(גזר|סלק|חבוש)/.test(n)) return "/images/catalog/juice-apple.png";
   if (/(תות|strawber)/.test(text)) return "/images/gallery/white-strawberries.webp";
   if (/(אוכמנ|blueber|פטל|berry)/.test(text)) return "/images/gallery/blueberries-pack.webp";
   if (/(ענב|grape)/.test(text)) return "/images/gallery/diva-green-grapes.webp";
@@ -336,6 +345,7 @@ export const FRUIT_PRICE_CATEGORIES: PriceCategory[] = [
       { emoji: "🧃", name: "בקבוק מיץ תפוחים וגזר 100% טבעי", price: "25₪" },
       { emoji: "🧃", name: "בקבוק מיץ תפוחים וסלק 100% טבעי", price: "25₪" },
       { emoji: "🧃", name: "בקבוק מיץ תפוחים וחבוש 100% טבעי", price: "25₪" },
+      { emoji: "🍎", name: "בקבוק חומץ תפוחים", price: "25₪" },
     ],
     subsections: [
       {
@@ -367,7 +377,6 @@ export const FRUIT_PRICE_CATEGORIES: PriceCategory[] = [
       { emoji: "🍉", name: "אבטיח", price: "12₪ לק״ג" },
       { emoji: "🥜", name: "פקאן בוואקום", price: "40₪ מארז" },
       { emoji: "🥜", name: "פקאן עם קליפה", price: "30₪ מארז" },
-      { emoji: "🍎", name: "בקבוק חומץ תפוחים", price: "25₪" },
     ],
   },
 ];

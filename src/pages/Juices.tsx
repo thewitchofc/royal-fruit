@@ -24,7 +24,7 @@ export function Juices() {
 
       <section id="juices-price-list" className="section sheet-products-page-section price-menu-body juices-section">
         <div className="container juices-premium-shell">
-          <div className="juices-intro-card" aria-label="מיצים ב־Royal Fruit">
+          <div className="juices-intro-card catalog-intro-card--centered" aria-label="מיצים ב־Royal Fruit">
             <div>
               <RoyalFruitWordmark className="juices-intro-wordmark" />
               <h2>מיץ טבעי, מיץ בקבוק ושילובים לפי מה שיש היום בשדה.</h2>
@@ -49,7 +49,7 @@ export function Juices() {
             }}
             singleCategoryTitle="מיצים ושתייה טבעית זמינים היום"
             priceMenuEmbedClassName="price-menu-embed--premium-cards"
-            showProductImages={false}
+            showProductImages
           />
         </div>
       </section>

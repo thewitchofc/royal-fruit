@@ -54,21 +54,6 @@ export function SheetPriceListAsMenu({
   const [reloadNonce, setReloadNonce] = useState(0);
   const state = useSheetProducts(csvUrl, reloadNonce);
 
-  if (!csvUrl) {
-    if (!import.meta.env.DEV) {
-      return null;
-    }
-    return (
-      <div className="sheet-products-config-hint">
-        <p className="muted small">
-          (מצב פיתוח) מחירון דינמי: הגדירו <code>VITE_PRICE_SHEET_VIA_PROXY=1</code> ו־
-          <code>GOOGLE_SHEETS_PRODUCTS_CSV_URL</code> (מומלץ) או <code>VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL</code> ב־
-          <code>.env</code>, והריצו <code>npm run dev</code>.
-        </p>
-      </div>
-    );
-  }
-
   if (state.status === "loading") {
     return (
       <div className="sheet-products-loading" role="status" aria-live="polite">

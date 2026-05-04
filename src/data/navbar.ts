@@ -44,7 +44,6 @@ export const NAVBAR_DROPDOWNS: NavbarDropdown[] = [
     label: "מארזים",
     items: [
       { label: "מארזי פירות", to: ROUTES.boxes.fruits },
-      { label: "מארזי מתנה", to: ROUTES.boxes.gifts },
     ],
   },
   {

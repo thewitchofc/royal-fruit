@@ -123,7 +123,7 @@ export function HomeFood() {
 
       <section id="home-food-price-list" className="section sheet-products-page-section price-menu-body juices-section">
         <div className="container juices-premium-shell">
-          <div className="juices-intro-card kitchen-intro-card" aria-label="מטבח טרי ב־Royal Fruit">
+          <div className="juices-intro-card kitchen-intro-card catalog-intro-card--centered" aria-label="מטבח טרי ב־Royal Fruit">
             <div>
               <RoyalFruitWordmark className="juices-intro-wordmark" />
               <h2>מטבח טרי — ממולאים לפי משקל</h2>

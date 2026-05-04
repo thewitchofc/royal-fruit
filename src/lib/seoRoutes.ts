@@ -14,7 +14,6 @@ export const SEO_STATIC_PATHS: string[] = [
   ROUTES.ready.meals,
   ROUTES.ready.sweets,
   ROUTES.boxes.fruits,
-  ROUTES.boxes.gifts,
   ROUTES.faq,
   ROUTES.contact,
   "/privacy",

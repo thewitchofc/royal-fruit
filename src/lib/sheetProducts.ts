@@ -4,7 +4,7 @@ import { getProduceShortDescription } from "../data/priceList";
 /**
  * טעינה ופרסור של מוצרים מקובץ CSV שמפורסם מ-Google Sheets.
  * דפים ייעודיים: ב־type או ב־category ערכים כמו «מיצים», «חלווה», «אוכל ביתי» (כינויים ב־*_CATEGORY_ALIASES).
- * עמודות: name, price, category, available, אופציונלי: type (מדור), unit (יחידה/משקל/מארז)
+ * עמודות: name, price, category, available, אופציונלי: type (מדור), unit (יחידה/משקל/מארז), packageTier (רמת מארז פירות: basic / premium / gold)
  * שורות מוכנות לגיליון: `data/google-sheets-price-append.csv` — עמודות כמו בגיליון: name,price,category,type,unit,deal,Checkbox.
  * כותרת Checkbox בגיליון ממופה ל-available (תיבות סימון ב-Google Sheets → TRUE/FALSE ב-CSV)
  * type = פירות/ירקות (או fruit/veg), איזה דף מציג; category = כותרת קבוצה במחירון (קלופים…).
@@ -20,6 +20,11 @@ export type SheetProduct = {
   /** משקל/מארז/יחידה או מדרגות מחיר, מוצג ליד המחיר */
   unit: string;
   available: boolean;
+  /**
+   * רמת מארז פירות מהגיליון (basic / premium / gold).
+   * ריק אם העמודה חסרה או אין שיוך למארז.
+   */
+  packageTier: "" | "basic" | "premium" | "gold";
 };
 
 /** פירוק שורה לפי CSV סטנדרטי (מרכאות כפולות ופסיקים בתוך שדה) */
@@ -104,8 +109,11 @@ function canonicalHeaderKey(raw: string): string {
     יחידות: "unit",
     משקל: "unit",
     מארז: "unit",
+    "רמת מארז": "packageTier",
+    "חבילת פירות": "packageTier",
   };
   if (lower === "unit" || lower === "package" || lower === "pack" || lower === "weight") return "unit";
+  if (lower === "packagetier" || lower === "package_tier" || lower === "tier") return "packageTier";
   if (he[t] != null) return he[t]!;
   if (lower === "checkbox") return "available";
   return lower;
@@ -121,10 +129,23 @@ function headerIndexMap(headerRow: string): Map<string, number> {
   return m;
 }
 
+/** תא ריק בגיליון נחשב זמין — רק ערכים מפורשים כ-FALSE מסמנים לא זמין */
 function parseAvailable(cell: string | undefined): boolean {
-  if (cell == null) return false;
+  if (cell == null || cell.trim() === "") return true;
   const v = cell.trim().toUpperCase();
-  return v === "TRUE" || v === "1" || v === "YES" || v === "כן";
+  if (v === "FALSE" || v === "0" || v === "NO" || v === "לא") return false;
+  return true;
+}
+
+/** ערך עמודת packageTier בגיליון → ערך פנימי אחיד */
+export function normalizePackageTierFromCell(cell: string | undefined): SheetProduct["packageTier"] {
+  if (cell == null) return "";
+  const raw = cell.trim().toLowerCase();
+  if (!raw) return "";
+  if (raw === "basic" || raw === "בסיס" || raw === "בסיסי") return "basic";
+  if (raw === "premium" || raw === "פרימיום") return "premium";
+  if (raw === "gold" || raw === "גולד") return "gold";
+  return "";
 }
 
 /** תיקון כתיב שגוי נפוץ מהגיליון (קוסברה → כוסברה) */
@@ -161,6 +182,7 @@ export function parseProductsCsv(text: string): SheetProduct[] {
   const ai = map.get("available");
   const ti = map.get("type");
   const ui = map.get("unit");
+  const pti = map.get("packageTier");
 
   if (ni == null || pi == null || ci == null || ai == null) {
     const found = [...new Set([...map.keys()])].sort().join(", ");
@@ -181,6 +203,7 @@ export function parseProductsCsv(text: string): SheetProduct[] {
       type: ti != null ? (cells[ti] ?? "").trim() : "",
       unit: ui != null ? (cells[ui] ?? "").trim() : "",
       available: parseAvailable(cells[ai]),
+      packageTier: pti != null ? normalizePackageTierFromCell(cells[pti]) : "",
     });
   }
   return products;
@@ -215,15 +238,21 @@ export function resolveSheetCsvFetchUrl(configured: string): string {
 
 async function fetchCsvText(url: string): Promise<string> {
   const res = await fetch(url, { cache: "no-store", credentials: "omit", mode: "cors" });
+  const text = await res.text();
   if (!res.ok) {
+    const plain =
+      text.length > 0 && !text.trimStart().startsWith("<") && !text.toLowerCase().includes("<html")
+        ? text.trim().slice(0, 400)
+        : "";
     throw new Error(
-      `טעינת הגיליון נכשלה (קוד ${res.status}). אם זה מסביבה מקומית, הריצו npm run dev / npm run preview עם פרוקסי ב-Vite. בפריסה, ודאו קובץ _redirects ב-Netlify או פרוקסי מקביל.`,
+      plain
+        ? `טעינת הגיליון נכשלה (קוד ${res.status}): ${plain}`
+        : `טעינת הגיליון נכשלה (קוד ${res.status}). אם זה מסביבה מקומית — ודאו .env עם GOOGLE_SHEETS_PRODUCTS_CSV_URL ו-VITE_PRICE_SHEET_VIA_PROXY=1. בפריסה — משתני סביבה ב-Netlify/Render ונתיב /price-sheet.csv.`,
     );
   }
-  const text = await res.text();
-  if (text.trimStart().startsWith("<!") || text.includes("<html")) {
+  if (text.trimStart().startsWith("<!") || text.toLowerCase().includes("<html")) {
     throw new Error(
-      "התקבלה תשובת HTML במקום CSV, כנראה כתובת לא מפורסמת, פרוקסי לא מוגדר, או SPA החזירה דף בית. בדקו קישור פרסום CSV ופריסת שרת.",
+      "התקבלה תשובת HTML במקום CSV. פתרונות: (1) בגיליון — קישור לייצוא CSV (Publish to web / export?format=csv&gid=…) ולא כתובת /edit. (2) ב-local — קובץ .env עם VITE_PRICE_SHEET_VIA_PROXY=1 ו-GOOGLE_SHEETS_PRODUCTS_CSV_URL=… (3) בפריסה — אותו משתנה שרת + וודאו שהנתיב /price-sheet.csv לא מוחזר כדף האתר.",
     );
   }
   return text;
@@ -261,7 +290,7 @@ export function categoryMatchesAliases(productCategory: string, aliases: readonl
   return aliases.some((a) => normalizeCategoryKey(a) === key);
 }
 
-export const FRUIT_CATEGORY_ALIASES = ["פירות", "fruit", "fruits", "פרי"] as const;
+export const FRUIT_CATEGORY_ALIASES = ["פירות", "fruit", "fruits", "פרי", "תותים"] as const;
 export const VEG_CATEGORY_ALIASES = ["ירקות", "vegetable", "vegetables", "veg", "ירק"] as const;
 export const JUICE_CATEGORY_ALIASES = ["מיצים", "juices", "juice"] as const;
 /** עמודת type או category בגיליון — דף חלווה */
@@ -279,7 +308,7 @@ export const HOMEFOOD_CATEGORY_ALIASES = [
 ] as const;
 
 /** כותרות קטגוריה בגיליון שנספחות לבלוק «מיצים» (מבנה קיים) */
-const JUICE_SHEET_CATEGORY_BUCKET = ["מיצים", "רגיל", "ליחידה", "תותים"] as const;
+const JUICE_SHEET_CATEGORY_BUCKET = ["מיצים", "רגיל", "ליחידה"] as const;
 
 function isJuiceSheetCategoryTitle(title: string): boolean {
   return (JUICE_SHEET_CATEGORY_BUCKET as readonly string[]).includes(title.trim());
@@ -287,7 +316,8 @@ function isJuiceSheetCategoryTitle(title: string): boolean {
 
 /** שורה ששייכת לדף המיצים: מיץ בשם, קטגוריית מיצים בגיליון, או סוג «מיצים» */
 export function isJuiceProductBySheetMetadata(p: SheetProduct): boolean {
-  if (isJuiceProductNameFromSheet(p.name)) return true;
+  if (isFruitOnlyProductNameFromSheet(p.name)) return false;
+  if (isJuiceCatalogProductNameFromSheet(p.name)) return true;
   if (isJuiceSheetCategoryTitle(p.category)) return true;
   const t = p.type?.trim() ?? "";
   if (t && categoryMatchesAliases(t, JUICE_CATEGORY_ALIASES)) return true;
@@ -315,7 +345,7 @@ function isDedicatedCatalogPageProduct(p: SheetProduct): boolean {
 
 export type SheetPageFilter = "fruits" | "vegetables" | "juices" | "halva" | "homeFood" | "all";
 
-function productMatchesSheetPage(p: SheetProduct, page: SheetPageFilter): boolean {
+export function productMatchesSheetPage(p: SheetProduct, page: SheetPageFilter): boolean {
   if (page === "all") return true;
   if (page === "juices") {
     return isJuiceProductBySheetMetadata(p);
@@ -325,6 +355,9 @@ function productMatchesSheetPage(p: SheetProduct, page: SheetPageFilter): boolea
   }
   if (page === "homeFood") {
     return isHomeFoodProductBySheetMetadata(p);
+  }
+  if (page === "fruits" && isFruitOnlyProductNameFromSheet(p.name)) {
+    return true;
   }
   if (isDedicatedCatalogPageProduct(p)) {
     return false;
@@ -353,6 +386,22 @@ function slugForSheetCategory(title: string, idx: number): string {
 function isJuiceProductNameFromSheet(name: string): boolean {
   const n = name.trim();
   return n.includes("מיץ") && !n.includes("חומץ");
+}
+
+/** חומץ תפוחים הוא מוצר בקבוק במדור המיצים, למרות שאינו מיץ לשתייה. */
+function isAppleCiderVinegarProductNameFromSheet(name: string): boolean {
+  const n = name.trim();
+  return n.includes("חומץ") && n.includes("תפוח");
+}
+
+function isJuiceCatalogProductNameFromSheet(name: string): boolean {
+  return isJuiceProductNameFromSheet(name) || isAppleCiderVinegarProductNameFromSheet(name);
+}
+
+/** מוצרים שנשארים בדף הפירות גם אם בגיליון סומנו בטעות כמיצים/סחוטים */
+function isFruitOnlyProductNameFromSheet(name: string): boolean {
+  const n = name.trim();
+  return n.startsWith("סברס") || n.includes("תות");
 }
 
 /** סדר תצוגת מדורים בדף חלווה לפי עמודת category בגיליון */
@@ -406,10 +455,10 @@ export function groupSheetProductsToPriceCategories(
   if (opts.page === "juices") {
     const pulledJuices: SheetProduct[] = [];
     for (const [title, rows] of [...groups.entries()]) {
-      if (title === "מיצים" || title === "רגיל" || title === "ליחידה" || title === "תותים") continue;
+      if (title === "מיצים" || title === "רגיל" || title === "ליחידה") continue;
       const stay: SheetProduct[] = [];
       for (const p of rows) {
-        if (isJuiceProductNameFromSheet(p.name)) pulledJuices.push(p);
+        if (isJuiceCatalogProductNameFromSheet(p.name)) pulledJuices.push(p);
         else stay.push(p);
       }
       if (stay.length === 0) groups.delete(title);
@@ -423,16 +472,13 @@ export function groupSheetProductsToPriceCategories(
 
   let sheetJuiceBucket: SheetProduct[] = [];
   let sheetRegularBucket: SheetProduct[] = [];
-  let sheetStrawberryBucket: SheetProduct[] = [];
 
   if (opts.page === "juices") {
     sheetJuiceBucket = groups.get("מיצים") ?? [];
     sheetRegularBucket = [...(groups.get("רגיל") ?? []), ...(groups.get("ליחידה") ?? [])];
-    sheetStrawberryBucket = groups.get("תותים") ?? [];
     groups.delete("מיצים");
     groups.delete("רגיל");
     groups.delete("ליחידה");
-    groups.delete("תותים");
   }
 
   let entries = [...groups.entries()].filter(([, rows]) => rows.length > 0);
@@ -490,16 +536,10 @@ export function groupSheetProductsToPriceCategories(
     };
   });
 
-  if (
-    opts.page === "juices" &&
-    (sheetJuiceBucket.length > 0 || sheetRegularBucket.length > 0 || sheetStrawberryBucket.length > 0)
-  ) {
+  if (opts.page === "juices" && (sheetJuiceBucket.length > 0 || sheetRegularBucket.length > 0)) {
     const subsections = [];
     if (sheetRegularBucket.length > 0) {
       subsections.push({ title: "רגיל", rows: sheetRow(sheetRegularBucket, "🍇") });
-    }
-    if (sheetStrawberryBucket.length > 0) {
-      subsections.push({ title: "תותים", rows: sheetRow(sheetStrawberryBucket, "🍓") });
     }
     const merged: PriceCategory = {
       id: `${opts.idPrefix}-juice-menu`,
@@ -600,14 +640,18 @@ function stripExactDuplicatePriceRows(categories: PriceCategory[]): PriceCategor
 
 /**
  * כתובת לטעינת CSV במחירון.
- * מומלץ: VITE_PRICE_SHEET_VIA_PROXY=1 + GOOGLE_SHEETS_PRODUCTS_CSV_URL בשרת/.env (בלי חשיפת URL ב-bundle).
- * מצב ישן: רק VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL, נשאר לתאימות.
+ * כברירת מחדל: `/price-sheet.csv` (Netlify / Render / Vite מושכים מ-GOOGLE_SHEETS_PRODUCTS_CSV_URL).
+ * בלי המשתנה VITE_PRICE_SHEET_VIA_PROXY בבילד, עדיין משתמשים בנתיב הזה — לא מחזירים undefined.
+ * מצב ישן: VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL (חשוף בבקשות) או VITE_GOOGLE_SHEETS_DIRECT.
  */
-export function getGoogleSheetsProductsCsvUrl(): string | undefined {
+export function getGoogleSheetsProductsCsvUrl(): string {
   const viaProxy = import.meta.env.VITE_PRICE_SHEET_VIA_PROXY === "1";
   if (viaProxy) {
     return PRICE_SHEET_PUBLIC_PATH;
   }
   const legacy = import.meta.env.VITE_GOOGLE_SHEETS_PRODUCTS_CSV_URL?.trim();
-  return legacy ? resolveSheetCsvFetchUrl(legacy) : undefined;
+  if (legacy) {
+    return resolveSheetCsvFetchUrl(legacy);
+  }
+  return PRICE_SHEET_PUBLIC_PATH;
 }

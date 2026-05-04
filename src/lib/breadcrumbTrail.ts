@@ -17,7 +17,6 @@ const ROUTE_CRUMB: Record<string, BreadcrumbSegment> = {
   [ROUTES.ready.meals]: { name: "מטבח טרי", path: ROUTES.ready.meals },
   [ROUTES.ready.sweets]: { name: "חלווה וממרחים", path: ROUTES.ready.sweets },
   [ROUTES.boxes.fruits]: { name: "מארזי פירות", path: ROUTES.boxes.fruits },
-  [ROUTES.boxes.gifts]: { name: "מארזי מתנה", path: ROUTES.boxes.gifts },
   [ROUTES.faq]: { name: "שאלות נפוצות", path: ROUTES.faq },
   [ROUTES.blog]: { name: "מאמרים", path: ROUTES.blog },
   [ROUTES.cart]: { name: "סל קניות", path: ROUTES.cart },

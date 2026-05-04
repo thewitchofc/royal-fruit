@@ -13,28 +13,16 @@ export function Halva() {
 
   return (
     <div className="page">
-      <section className="page-hero juices-hero">
+      <section className="page-hero fruits-hero">
         <div className="container narrow">
-          <p className="eyebrow">חלווה וממרחים</p>
-          <h1 className="page-title juices-page-title">חלווה בטעם</h1>
-          <p className="page-lead muted">
-            חלווה בטעם — יחידה <strong>350&nbsp;גרם</strong> ב־35&nbsp;₪; ממרחי טחינה וקרם ב־30&nbsp;₪. למטה מחירון לפי הגיליון: כל קטגוריה וכל מוצר בכרטיס עם תמונה, מחיר והוספה לסל.
-          </p>
+          <h1 className="page-title juices-page-title">חלווה וממרחים</h1>
         </div>
       </section>
 
-      <section id="halva-price-list" className="section sheet-products-page-section price-menu-body juices-section">
-        <div className="container juices-premium-shell halva-premium-shell">
+      <section id="halva-price-list" className="section sheet-products-page-section price-menu-body fruits-section">
+        <div className="container fruits-premium-shell halva-premium-shell">
           <header className="halva-catalog-header" aria-label="Royal Fruit — חלווה וממרחים">
             <RoyalFruitWordmark className="halva-catalog-wordmark" />
-            <p className="halva-catalog-prices muted">
-              חלווה בטעם — <strong>350&nbsp;גרם</strong> · <strong>35&nbsp;₪</strong>
-              <span className="halva-catalog-prices-sep" aria-hidden>
-                {" "}
-                ·{" "}
-              </span>
-              טחינה וקרמים <strong>30&nbsp;₪</strong>
-            </p>
             <div className="juices-intro-points halva-catalog-pills">
               <span>מלאי יומי</span>
               <span>הזמנה בוואטסאפ</span>
@@ -52,7 +40,7 @@ export function Halva() {
             showEmojis={false}
             page="halva"
             listMeta={{ title: "חלווה וממרחים — מחירון" }}
-            priceMenuEmbedClassName="price-menu-embed--halva-sweets"
+            priceMenuEmbedClassName="price-menu-embed--premium-cards"
             priceMenuSearchLabel="חיפוש במחירון"
             priceMenuSearchPlaceholder="למשל: אגוזי לוז, פיסטק, טחינה, קרם…"
           />

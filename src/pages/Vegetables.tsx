@@ -24,7 +24,7 @@ export function Vegetables() {
 
       <section id="vegetables-price-list" className="section sheet-products-page-section price-menu-body vegetables-section">
         <div className="container vegetables-premium-shell">
-          <div className="vegetables-intro-card" aria-label="סטנדרט הירקות של רויאל פרוט">
+          <div className="vegetables-intro-card catalog-intro-card--centered" aria-label="סטנדרט הירקות של רויאל פרוט">
             <div>
               <RoyalFruitWordmark className="vegetables-intro-wordmark" />
               <h2>ירקות שנבחרים לפי יציבות, צבע ומרקם, לא רק לפי רשימת מלאי.</h2>

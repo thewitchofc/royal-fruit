@@ -16,7 +16,13 @@ export const handler = async () => {
   }
 
   try {
-    const res = await fetch(url, { headers: { Accept: "text/csv,*/*" } });
+    const res = await fetch(url, {
+      redirect: "follow",
+      headers: {
+        Accept: "text/csv,*/*",
+        "User-Agent": "Mozilla/5.0 (compatible; RoyalFruitNetlify/1.0)",
+      },
+    });
     const text = await res.text();
     if (!res.ok) {
       return {

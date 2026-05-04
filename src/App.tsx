@@ -23,7 +23,6 @@ const Gallery = lazy(() => import("./pages/Gallery").then((m) => ({ default: m.G
 const Returns = lazy(() => import("./pages/Returns").then((m) => ({ default: m.Returns })));
 const Terms = lazy(() => import("./pages/Terms").then((m) => ({ default: m.Terms })));
 const NotFound = lazy(() => import("./pages/NotFound").then((m) => ({ default: m.NotFound })));
-const BoxesGifts = lazy(() => import("./pages/BoxesGifts").then((m) => ({ default: m.BoxesGifts })));
 
 function LegacyArticleSlugRedirect() {
   const { slug } = useParams();
@@ -49,7 +48,7 @@ export default function App() {
             <Route path={ROUTES.ready.sweets} element={<Halva />} />
 
             <Route path={ROUTES.boxes.fruits} element={<Fruits />} />
-            <Route path={ROUTES.boxes.gifts} element={<BoxesGifts />} />
+            <Route path="/boxes/gifts" element={<Navigate to={ROUTES.boxes.fruits} replace />} />
 
             <Route path={ROUTES.about} element={<About />} />
             <Route path={ROUTES.gallery} element={<Gallery />} />
