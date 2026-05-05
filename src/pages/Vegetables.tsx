@@ -34,7 +34,7 @@ export function Vegetables() {
               <span>שורשים יציבים</span>
               <span>אספקה מתואמת</span>
             </div>
-            <Link to="/cart" className="btn btn-primary vegetables-intro-cta">
+            <Link to="/cart" className="btn btn-cart-fill vegetables-intro-cta">
               מעבר לסל
             </Link>
           </div>

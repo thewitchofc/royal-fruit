@@ -145,7 +145,6 @@
 }
 
 .rf-navbar__dropdown:hover .rf-navbar__trigger-chevron,
-.rf-navbar__dropdown:focus-within .rf-navbar__trigger-chevron,
 .rf-navbar__dropdown.is-open .rf-navbar__trigger-chevron {
   transform: rotate(-180deg);
   opacity: 0.95;
@@ -163,7 +162,7 @@
   max-width: 100%;
 }
 
-.rf-navbar__dropdown:is(:hover, :focus-within, .is-open) {
+.rf-navbar__dropdown:is(:hover, .is-open) {
   /* מעל שכני שורה כדי שהחפיפה של הפאנל לא תישב מתחת לטריגר אחר */
   z-index: 80;
 }
@@ -191,7 +190,7 @@
   box-shadow:
     0 0 0 1px rgba(255, 255, 255, 0.65) inset,
     0 14px 36px rgba(8, 27, 7, 0.14),
-    0 4px 14px rgba(33, 101, 12, 0.07);
+    0 4px 14px rgba(58, 52, 44, 0.07);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
@@ -203,7 +202,6 @@
 }
 
 .rf-navbar__dropdown:hover .rf-navbar__panel,
-.rf-navbar__dropdown:focus-within .rf-navbar__panel,
 .rf-navbar__dropdown.is-open .rf-navbar__panel {
   opacity: 1;
   visibility: visible;
@@ -235,7 +233,7 @@
 }
 
 .rf-navbar__panel-link:hover {
-  background: rgba(33, 101, 12, 0.09);
+  background: rgba(58, 52, 44, 0.09);
   color: var(--green);
 }
 
@@ -245,7 +243,7 @@
   font-weight: 800;
 }
 
-/* ——— CTA דסקטופ ——— (יישור ל־`.header-wa-link` ב־index.css) */
+/* ——— CTA דסקטופ ——— (גלולה זהובה — כמו `.btn-cart-fill`) */
 .rf-navbar__cta {
   display: none;
   align-items: center;
@@ -259,27 +257,40 @@
   font-size: 0.88rem;
   font-weight: 900;
   letter-spacing: 0.01em;
-  color: #fff;
-  background:
-    linear-gradient(135deg, rgba(37, 211, 102, 0.96), rgba(19, 132, 59, 0.96));
-  border: 1px solid rgba(222, 181, 93, 0.42);
+  color: #16320f;
+  background: linear-gradient(145deg, #fff9ea 0%, #ecd793 42%, #deb55d 58%, #f5e4b8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.78);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.16) inset,
-    0 10px 24px rgba(20, 164, 74, 0.28);
-  transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease;
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+    0 6px 18px rgba(222, 181, 93, 0.3),
+    0 2px 8px rgba(8, 18, 7, 0.1);
+  transition: transform 0.16s ease, box-shadow 0.16s ease, filter 0.16s ease;
 }
 
 .rf-navbar__cta:hover {
   transform: translateY(-1px);
-  border-color: rgba(222, 181, 93, 0.7);
+  filter: brightness(1.045);
   box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.2) inset,
-    0 14px 30px rgba(20, 164, 74, 0.34);
+    0 1px 0 rgba(255, 255, 255, 0.62) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.32) inset,
+    0 8px 22px rgba(222, 181, 93, 0.36),
+    0 3px 10px rgba(8, 18, 7, 0.12);
+}
+
+.rf-navbar__cta.is-active {
+  box-shadow:
+    0 0 0 2px rgba(22, 50, 15, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+    0 6px 18px rgba(222, 181, 93, 0.3),
+    0 2px 8px rgba(8, 18, 7, 0.1);
 }
 
 .rf-navbar__cta-icon {
   width: 1.05em;
   height: 1.05em;
+  color: inherit;
 }
 
 /* ——— מובייל: backdrop ——— */
@@ -350,10 +361,56 @@
 }
 
 .rf-navbar__sheet-head {
-  text-align: center;
-  padding-bottom: 0.5rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.65rem;
+  padding: 0 2.75rem 0.5rem;
   margin-bottom: 0.15rem;
   border-bottom: 1px solid rgba(222, 181, 93, 0.22);
+}
+
+.rf-navbar__sheet-head-text {
+  text-align: center;
+}
+
+.rf-navbar__sheet-back {
+  position: absolute;
+  inset-inline-start: 0;
+  top: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.92);
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.16s ease;
+}
+
+.rf-navbar__sheet-back:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.rf-navbar__sheet-back:active {
+  transform: scale(0.96);
+}
+
+.rf-navbar__sheet-back:focus-visible {
+  outline: 2px solid rgba(222, 181, 93, 0.65);
+  outline-offset: 2px;
+}
+
+.rf-navbar__sheet-back-icon {
+  width: 1.35rem;
+  height: 1.35rem;
 }
 
 .rf-navbar__sheet-kicker {
@@ -476,8 +533,81 @@
 .rf-navbar__acc-links {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  padding: 0 0.55rem 0.65rem;
+  gap: 0.45rem;
+  padding: 0.2rem 0.5rem 0.75rem;
+}
+
+/* תת־קטגוריות באקורדיון — מראה «פרימיום»: זכוכית, זהב, עומק */
+.rf-navbar__acc-links .rf-navbar__sheet-link {
+  position: relative;
+  min-height: 2.85rem;
+  padding: 0.55rem 0.85rem;
+  border-radius: 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 252, 246, 0.94);
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.11) 0%, rgba(255, 255, 255, 0.05) 42%, rgba(0, 0, 0, 0.06) 100%);
+  border: 1px solid rgba(222, 181, 93, 0.28);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.1) inset,
+    0 8px 22px rgba(0, 0, 0, 0.18),
+    0 2px 6px rgba(7, 18, 7, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.rf-navbar__acc-links .rf-navbar__sheet-link::before {
+  content: "";
+  position: absolute;
+  inset-inline-end: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 42%;
+  border-radius: 999px;
+  background: linear-gradient(180deg, rgba(222, 181, 93, 0.25), rgba(222, 181, 93, 0.85));
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.rf-navbar__acc-links .rf-navbar__sheet-link:active {
+  transform: scale(0.987);
+}
+
+.rf-navbar__acc-links .rf-navbar__sheet-link:hover {
+  background:
+    linear-gradient(165deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 45%, rgba(0, 0, 0, 0.04) 100%);
+  border-color: rgba(222, 181, 93, 0.45);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.14) inset,
+    0 12px 28px rgba(0, 0, 0, 0.22),
+    0 3px 10px rgba(222, 181, 93, 0.12);
+  color: #fff;
+}
+
+.rf-navbar__acc-links .rf-navbar__sheet-link.is-active {
+  font-weight: 700;
+  border-color: rgba(222, 181, 93, 0.55);
+  background:
+    linear-gradient(145deg, #fff9ea 0%, #ecd793 42%, #deb55d 58%, #f5e4b8 100%);
+  color: #16320f;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.65) inset,
+    0 10px 26px rgba(222, 181, 93, 0.28),
+    0 4px 14px rgba(8, 18, 7, 0.2);
+}
+
+.rf-navbar__acc-links .rf-navbar__sheet-link.is-active::before {
+  background: linear-gradient(180deg, #8a7448, #4a3d2e);
+  opacity: 0.55;
 }
 
 .rf-navbar__sheet-footer {
@@ -493,22 +623,41 @@
   gap: 0.45rem;
   width: 100%;
   padding: 0.72rem 1rem;
-  border-radius: 14px;
+  border-radius: 999px;
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 800;
-  color: #fff;
-  background: linear-gradient(145deg, #25d366, #128c7e 55%, #0f7a5c);
-  border: 1px solid rgba(24, 33, 23, 0.12);
-  box-shadow: 0 10px 28px rgba(20, 140, 90, 0.35);
+  color: #16320f;
+  background: linear-gradient(145deg, #fff9ea 0%, #ecd793 42%, #deb55d 58%, #f5e4b8 100%);
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+    0 8px 22px rgba(222, 181, 93, 0.32),
+    0 3px 10px rgba(8, 18, 7, 0.12);
   transition:
     transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1),
-    box-shadow 0.22s ease;
+    box-shadow 0.22s ease,
+    filter 0.22s ease;
 }
 
 .rf-navbar__sheet-cta:hover {
-  transform: scale(1.03);
-  box-shadow: 0 14px 34px rgba(20, 140, 90, 0.42);
+  transform: translateY(-1px);
+  filter: brightness(1.045);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.62) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.32) inset,
+    0 10px 26px rgba(222, 181, 93, 0.38),
+    0 4px 12px rgba(8, 18, 7, 0.14);
+}
+
+.rf-navbar__sheet-cta.is-active {
+  box-shadow:
+    0 0 0 2px rgba(22, 50, 15, 0.35),
+    0 1px 0 rgba(255, 255, 255, 0.55) inset,
+    0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+    0 8px 22px rgba(222, 181, 93, 0.32),
+    0 3px 10px rgba(8, 18, 7, 0.12);
 }
 
 /* ——— רספונסיביות ——— */
@@ -554,6 +703,7 @@
   .rf-navbar__cta,
   .rf-navbar__backdrop,
   .rf-navbar__sheet,
+  .rf-navbar__sheet-back,
   .rf-navbar__sheet-link,
   .rf-navbar__sheet-cta,
   .rf-navbar__trigger-chevron,
@@ -571,11 +721,23 @@
     transform: none;
   }
 
+  .rf-navbar__sheet-back:active {
+    transform: none;
+  }
+
   .rf-navbar__sheet.is-open {
     transform: translate3d(0, 0, 0);
   }
 
   .rf-navbar__sheet:not(.is-open) {
     transform: translate3d(105%, 0, 0);
+  }
+
+  .rf-navbar__acc-links .rf-navbar__sheet-link {
+    transition: none;
+  }
+
+  .rf-navbar__acc-links .rf-navbar__sheet-link:active {
+    transform: none;
   }
 }

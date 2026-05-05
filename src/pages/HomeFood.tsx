@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
+import { CloudOff, Phone, ShoppingBag } from "lucide-react";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
-import { SheetPriceListAsMenu } from "../components/SheetPriceListAsMenu";
-import { useCart } from "../context/CartContext";
-import type { CartLineInput } from "../cart/types";
-import { formatPriceLabelForDisplay } from "../lib/priceDisplay";
+import { PriceListSections } from "../components/PriceListSections";
+import { useSheetProducts } from "../hooks/useSheetProducts";
+import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
+import { ROUTES } from "../lib/publicRoutes";
+import { getGoogleSheetsProductsCsvUrl, groupSheetProductsToPriceCategories } from "../lib/sheetProducts";
 import { usePageSeo } from "../lib/seo";
 
 type PickleTier = { weight: string; price: number };
@@ -40,148 +42,256 @@ const PICKLED_HOME_KITCHEN: readonly PickleProduct[] = [
   },
 ] as const;
 
-function kitchenTierLineId(productName: string, weight: string) {
-  return `kitchen::${productName.trim()}::${weight.trim()}`;
-}
-
-function kitchenTierCartLine(product: PickleProduct, tier: PickleTier): CartLineInput {
-  return {
-    id: kitchenTierLineId(product.name, tier.weight),
-    emoji: "🍲",
-    name: `${product.name} · ${tier.weight}`,
-    priceLabel: formatPriceLabelForDisplay(String(tier.price)),
-    unit: "לפריט",
-    categoryPath: "מטבח טרי",
-    qtyStep: 1,
+function mergeCategoriesToSingleList(
+  categories: import("../data/priceList").PriceCategory[],
+): import("../data/priceList").PriceCategory[] {
+  const isWeightOnlyName = (raw: string) => {
+    const n = raw.trim().replace(/\s+/g, " ");
+    // שמות “מוצר” שנכנסו בטעות כמשקל בלבד (למשל 250 גרם / 500 גרם / 1 קילו)
+    return /^(\d+(?:[.,]\d+)?)\s*(?:גרם|ג(?:["׳׳']?רם)?|קילו|ק(?:["׳׳']?ג)?|kg)\s*$/i.test(n);
   };
-}
 
-function formatQtyBadge(qty: number) {
-  return Number.isInteger(qty) ? String(qty) : qty.toFixed(1);
-}
+  const rows = categories
+    .flatMap((category) => [
+      ...(category.rows ?? []),
+      ...(category.subsections?.flatMap((subsection) => subsection.rows) ?? []),
+    ])
+    .filter((row) => !isWeightOnlyName(row.name))
+    .sort((a, b) => a.name.localeCompare(b.name, "he"));
 
-function KitchenPickleTierQty({ item }: { item: CartLineInput }) {
-  const { addItem, lines, setQty } = useCart();
-  const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
-  const step = item.qtyStep ?? 1;
-
-  return (
-    <div className="kitchen-pickle-qty">
-      <div className="price-menu-add-wrap kitchen-pickle-qty-wrap">
-        <button
-          type="button"
-          className="price-menu-qty-btn"
-          aria-label={`הפחת כמות ${item.name}`}
-          onClick={() => setQty(item.id, inCartQty - step)}
-          disabled={inCartQty < step / 2}
-        >
-          −
-        </button>
-        <span className="price-menu-qty-badge" aria-label={`בסל: ${formatQtyBadge(inCartQty)}`}>
-          {formatQtyBadge(inCartQty)}
-        </span>
-        <button
-          type="button"
-          className="price-menu-qty-btn"
-          aria-label={`הוסף כמות ${item.name}`}
-          onClick={() => {
-            if (inCartQty <= 0) {
-              addItem(item);
-              return;
-            }
-            setQty(item.id, inCartQty + step);
-          }}
-        >
-          +
-        </button>
-      </div>
-    </div>
-  );
+  if (!rows.length) return [];
+  return [
+    {
+      id: "sheet-ready-all",
+      title: "כל מה שזמין היום",
+      emoji: "⭐",
+      rows,
+    },
+  ];
 }
 
 /** דף בסיס: מטבח טרי + מחירון מגיליון עם type או category «אוכל ביתי» */
 export function HomeFood() {
   usePageSeo({
-    title: "Royal Fruit | מטבח טרי — ממולאים לפי משקל",
+    title: "Royal Fruit | מטבח טרי ומיצים טבעיים",
     description:
-      "מטבח טרי — ממולאים לפי משקל: עלי גפן חמוצים, כרוב חמוץ ובצל חמוץ מתוק. הזמנות יומיים מראש, בעבודת יד. הזמנה בוואטסאפ ומשלוחים באזור המרכז וגוש דן.",
+      "מטבח טרי ומיצים טבעיים: ממולאים לפי משקל, חמוצים בעבודת יד, ומיצים טבעיים לפי מלאי. מילוי סל באתר ומשלוחים באזור המרכז וגוש דן.",
   });
+
+  const csvUrl = getGoogleSheetsProductsCsvUrl();
+  const state = useSheetProducts(csvUrl);
+
+  const pickleRows = PICKLED_HOME_KITCHEN.flatMap((product) =>
+    product.tiers.map((tier) => ({
+      emoji: "🍲",
+      name: `${product.name} · ${tier.weight}`,
+      price: String(tier.price),
+      unit: "לפריט",
+      description: "עבודת יד · הזמנות יומיים מראש",
+    })),
+  );
+
+  if (state.status === "loading") {
+    return (
+      <div className="page">
+        <section className="page-hero juices-hero">
+          <div className="container narrow">
+            <p className="eyebrow">מטבח טרי</p>
+            <h1 className="page-title juices-page-title">מטבח טרי ומיצים טבעיים</h1>
+            <p className="page-lead muted">טוענים את המחירון…</p>
+          </div>
+        </section>
+        <section className="section sheet-products-page-section price-menu-body juices-section">
+          <div className="container juices-premium-shell">
+            <div className="sheet-products-loading" role="status" aria-live="polite">
+              <span className="sheet-products-loading-orb" aria-hidden />
+              <p className="sheet-products-loading-title">מסדרים את הדוכן…</p>
+              <p className="muted small">טוענים מחירים ומלאי עדכניים מהגיליון.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (state.status === "error") {
+    const publicMessage =
+      "לא הצלחנו לטעון את המחירון כרגע. נסו לרענן את העמוד בעוד רגע, או התקשרו לעדכון מחירים ומלאי.";
+    return (
+      <div className="page">
+        <section className="page-hero juices-hero">
+          <div className="container narrow">
+            <p className="eyebrow">מטבח טרי</p>
+            <h1 className="page-title juices-page-title">מטבח טרי ומיצים טבעיים</h1>
+            <p className="page-lead muted">{publicMessage}</p>
+          </div>
+        </section>
+        <section className="section sheet-products-page-section price-menu-body juices-section">
+          <div className="container juices-premium-shell">
+            <div className="sheet-products-error" role="alert">
+              <div className="sheet-products-error-head">
+                <span className="sheet-products-error-icon" aria-hidden>
+                  <CloudOff size={28} strokeWidth={1.75} />
+                </span>
+                <p className="sheet-products-error-title">בעיה בטעינת המחירון</p>
+                <p className="sheet-products-error-text">{publicMessage}</p>
+                {import.meta.env.DEV ? (
+                  <p className="muted small sheet-products-error-dev" lang="en">
+                    {state.message}
+                  </p>
+                ) : null}
+              </div>
+              <div className="sheet-products-error-actions">
+                <Link className="btn btn-cart-fill btn-whatsapp-strong sheet-products-error-wa" to={ROUTES.cart}>
+                  <ShoppingBag className="btn-whatsapp-icon" aria-hidden strokeWidth={2} />
+                  מעבר לסל
+                </Link>
+                <div className="sheet-products-error-actions-row">
+                  <a className="btn btn-ghost sheet-products-error-tel" href={`tel:${BUSINESS_PHONE_E164}`}>
+                    <Phone className="sheet-products-error-action-icon" aria-hidden size={18} strokeWidth={2} />
+                    {BUSINESS_PHONE}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  if (state.status !== "ok") return null;
+
+  const juicesCategories = groupSheetProductsToPriceCategories(state.products, {
+    idPrefix: "sheet-ready-juices",
+    defaultEmoji: "🧃",
+    page: "juices",
+  });
+  const homeFoodCategories = groupSheetProductsToPriceCategories(state.products, {
+    idPrefix: "sheet-ready-kitchen",
+    defaultEmoji: "🍲",
+    page: "homeFood",
+  });
+  const halvaCategories = groupSheetProductsToPriceCategories(state.products, {
+    idPrefix: "sheet-ready-halva",
+    defaultEmoji: "⭐",
+    page: "halva",
+  });
+
+  const isHalvaFlavorSheetCategory = (title: string) => {
+    const t = title.trim().replace(/\s+/g, " ");
+    return t === "חלווה בטעם" || (t.includes("חלווה") && t.includes("בטעם")) || t === "חלווה";
+  };
+
+  const normalizeHalvaFlavorLabel = (raw: string) => {
+    const n = raw.trim().replace(/\s+/g, " ");
+    // כתיב אחיד: פיסטוק (ולא פיסטק)
+    if (n === "פיסטק") return "פיסטוק";
+    return n;
+  };
+
+  const prefixHalvaRows = (cats: import("../data/priceList").PriceCategory[]) =>
+    cats.map((cat) => ({
+      ...cat,
+      rows: cat.rows?.map((row) => ({
+        ...row,
+        name:
+          isHalvaFlavorSheetCategory(cat.title) && !row.name.trim().startsWith("חלווה")
+            ? `חלווה ${normalizeHalvaFlavorLabel(row.name)}`
+            : row.name,
+      })),
+      subsections: cat.subsections?.map((sub) => ({
+        ...sub,
+        rows: sub.rows.map((row) => ({
+          ...row,
+          name:
+            (isHalvaFlavorSheetCategory(cat.title) || isHalvaFlavorSheetCategory(sub.title)) &&
+            !row.name.trim().startsWith("חלווה")
+              ? `חלווה ${normalizeHalvaFlavorLabel(row.name)}`
+              : row.name,
+        })),
+      })),
+    }));
+
+  // רק מוצרים “מוכנים”: מיצים + מטבח טרי + חלווה. בלי פירות/ירקות.
+  const sheetCategories = [...juicesCategories, ...homeFoodCategories, ...prefixHalvaRows(halvaCategories)];
+  const merged = mergeCategoriesToSingleList(sheetCategories);
+  if (!merged.length && !pickleRows.length) {
+    return (
+      <div className="page">
+        <section className="page-hero juices-hero">
+          <div className="container narrow">
+            <p className="eyebrow">מטבח טרי</p>
+            <h1 className="page-title juices-page-title">מטבח טרי ומיצים טבעיים</h1>
+            <p className="page-lead muted">אין כרגע פריטים זמינים להצגה במחירון.</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
+  const categories: import("../data/priceList").PriceCategory[] = merged.length
+    ? [
+        {
+          ...merged[0],
+          rows: [...pickleRows, ...(merged[0].rows ?? [])],
+        },
+      ]
+    : [
+        {
+          id: "ready-static-only",
+          title: "כל מה שזמין היום",
+          emoji: "⭐",
+          rows: pickleRows,
+        },
+      ];
 
   return (
     <div className="page">
       <section className="page-hero juices-hero">
         <div className="container narrow">
           <p className="eyebrow">מטבח טרי</p>
-          <h1 className="page-title juices-page-title">ממולאים לפי משקל</h1>
+          <h1 className="page-title juices-page-title">מטבח טרי ומיצים טבעיים</h1>
           <p className="page-lead muted">
             <strong className="kitchen-lead-strong">שימו לב: הזמנות יומיים מראש.</strong>
             <br />
-            עלי גפן חמוצים, כרוב חמוץ ובצל חמוץ מתוק — ממולאים בכל טוב בעבודת יד.
+            ממולאים לפי משקל, חמוצים בעבודת יד, וגם מיצים טבעיים לפי מלאי יומי.
           </p>
         </div>
       </section>
 
       <section id="home-food-price-list" className="section sheet-products-page-section price-menu-body juices-section">
         <div className="container juices-premium-shell">
-          <div className="juices-intro-card kitchen-intro-card catalog-intro-card--centered" aria-label="מטבח טרי ב־Royal Fruit">
+          <div
+            className="juices-intro-card kitchen-intro-card catalog-intro-card--centered"
+            aria-label="מטבח טרי ומיצים טבעיים ב־Royal Fruit"
+          >
             <div>
               <RoyalFruitWordmark className="juices-intro-wordmark" />
-              <h2>מטבח טרי — ממולאים לפי משקל</h2>
+              <h2>ממלאים סל מדף אחד</h2>
               <p className="kitchen-intro-note">
                 הזמנות יומיים מראש · בישול ביתי בעבודת יד
               </p>
             </div>
             <div className="juices-intro-points">
               <span>מלאי לפי יום</span>
-              <span>הזמנה בוואטסאפ</span>
+              <span>הוסיפו לסל מהמחירון</span>
               <span>משלוח באזור המרכז וגוש דן</span>
             </div>
-            <Link to="/cart" className="btn btn-primary juices-intro-cta">
+            <Link to="/cart" className="btn btn-cart-fill juices-intro-cta">
               מעבר לסל
             </Link>
           </div>
 
-          <div className="kitchen-pickles-grid" role="list">
-            {PICKLED_HOME_KITCHEN.map((product) => (
-              <article key={product.name} className="kitchen-pickle-card" role="listitem">
-                {product.image ? (
-                  <div className="kitchen-pickle-media">
-                    <img
-                      src={product.image}
-                      alt=""
-                      aria-hidden
-                      className="kitchen-pickle-img"
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                ) : null}
-                <h3 className="kitchen-pickle-title">{product.name}</h3>
-                <div className="kitchen-pickle-prices">
-                  {product.tiers.map((tier) => (
-                    <div key={tier.weight} className="kitchen-pickle-row">
-                      <div className="kitchen-pickle-row-info">
-                        <span className="kitchen-pickle-weight">{tier.weight}</span>
-                        <span className="kitchen-pickle-price">{formatPriceLabelForDisplay(String(tier.price))}</span>
-                      </div>
-                      <KitchenPickleTierQty item={kitchenTierCartLine(product, tier)} />
-                    </div>
-                  ))}
-                </div>
-              </article>
-            ))}
-          </div>
-
-          <SheetPriceListAsMenu
-            idPrefix="sheet-home-food"
-            defaultEmoji="🍲"
+          <PriceListSections
+            categories={categories}
             emojiStrip=""
             showEmojis={false}
-            page="homeFood"
             listMeta={null}
-            excludeCategoryTitles={PICKLED_HOME_KITCHEN.map((p) => p.name)}
-            priceMenuEmbedClassName="price-menu-embed--premium-cards"
-            showProductImages={false}
+            categoryHeadingRank={3}
+            searchFieldIdPrefix="sheet-ready"
+            embedClassName="price-menu-embed--premium-cards"
+            showProductImages
           />
         </div>
       </section>

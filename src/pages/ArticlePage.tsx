@@ -68,7 +68,7 @@ export function ArticlePage() {
             רוצים ליישם את זה בסל הבא?{" "}
             <Link to={ROUTES.shop.fruits}>פירות מובחרים</Link>
             {", "}
-            <Link to={ROUTES.shop.juices}>מיצים טבעיים</Link>
+            <Link to={ROUTES.ready.meals}>מיצים טבעיים</Link>
             {", "}
             <Link to={ROUTES.shop.vegetables}>ירקות טריים</Link>
             {", "}

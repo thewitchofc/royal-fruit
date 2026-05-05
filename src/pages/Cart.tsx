@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { Apple, Cherry, Circle, MessageCircle, RefreshCw, Star, Truck, Zap } from "lucide-react";
+import { Apple, Cherry, Circle, ShoppingBag, Star, Truck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { CartLineInput } from "../cart/types";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
@@ -11,7 +11,7 @@ import { buildOrderMessage, whatsappOrderUrl } from "../lib/whatsappOrder";
 import { ROUTES } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
 import { getGoogleSheetsProductsCsvUrl, type SheetProduct } from "../lib/sheetProducts";
-import { invalidateSheetProductsCache, useSheetProducts } from "../hooks/useSheetProducts";
+import { useSheetProducts } from "../hooks/useSheetProducts";
 
 const EMPTY_SHEET_PRODUCTS: SheetProduct[] = [];
 
@@ -234,8 +234,7 @@ export function Cart() {
 
   const { lines, totalItemCount, addItem, setQty, removeLine, clearCart, syncLinesFromSheetProducts } = useCart();
   const sheetCsvUrl = getGoogleSheetsProductsCsvUrl();
-  const [sheetReloadNonce, setSheetReloadNonce] = useState(0);
-  const sheetState = useSheetProducts(sheetCsvUrl, sheetReloadNonce);
+  const sheetState = useSheetProducts(sheetCsvUrl);
   const sheetProductsForSync = sheetState.status === "ok" ? sheetState.products : EMPTY_SHEET_PRODUCTS;
 
   useEffect(() => {
@@ -404,10 +403,10 @@ export function Cart() {
                 <Link to={ROUTES.shop.fruits} className="btn btn-primary">
                   פירות מובחרים
                 </Link>
-                <Link to={ROUTES.shop.juices} className="btn btn-primary">
+                <Link to={ROUTES.ready.meals} className="btn btn-primary">
                   מיצים טבעיים
                 </Link>
-                <Link to={ROUTES.ready.sweets} className="btn btn-primary">
+                <Link to={ROUTES.ready.meals} className="btn btn-primary">
                   חלווה וממרחים
                 </Link>
                 <Link to={ROUTES.ready.meals} className="btn btn-primary">
@@ -424,29 +423,12 @@ export function Cart() {
                 <div>
                   <h2>הסל שלכם</h2>
                   <p className="muted">בדקו כמויות, בחרו משלוח או איסוף ושלחו בוואטסאפ.</p>
-                  {sheetCsvUrl ? (
-                    <div className="cart-sheet-sync-row">
-                      <p className="muted small cart-sheet-sync-hint">
-                        {sheetState.status === "loading"
-                          ? "טוען מחירים מהגיליון…"
-                          : sheetState.status === "error"
-                            ? "לא הצלחנו לטעון את הגיליון — המחירים בסל הם כפי שנוספו. אפשר לרענן או לעדכן מהמחירון."
-                            : "מחירים וקטגוריות לפריטים מהמחירון מסתנכרנים מהגיליון כשנכנסים לסל וברענון."}
-                      </p>
-                      {sheetState.status !== "loading" ? (
-                        <button
-                          type="button"
-                          className="btn btn-ghost cart-sheet-refresh"
-                          onClick={() => {
-                            invalidateSheetProductsCache(sheetCsvUrl);
-                            setSheetReloadNonce((n) => n + 1);
-                          }}
-                        >
-                          <RefreshCw size={16} strokeWidth={2} aria-hidden />
-                          רענן מהגיליון
-                        </button>
-                      ) : null}
-                    </div>
+                  {sheetCsvUrl && (sheetState.status === "loading" || sheetState.status === "error") ? (
+                    <p className="muted small cart-sheet-sync-hint">
+                      {sheetState.status === "loading"
+                        ? "מעדכנים מחירים ומלאי…"
+                        : "לא הצלחנו לעדכן מחירים כרגע — הסל נשאר עם המחירים שנבחרו. נסו לרענן את העמוד בעוד רגע או צרו קשר."}
+                    </p>
                   ) : null}
                 </div>
                 <div className="cart-order-head-stats" aria-label="סיכום סל">
@@ -473,12 +455,12 @@ export function Cart() {
                         <div className="cart-line-title">{line.name}</div>
                         {line.sheetMissing ? (
                           <p className="cart-line-sheet-flag muted small" role="status">
-                            לא נמצא במחירון העדכני — אולי שינוי שם בגיליון. אפשר להסיר או להוסיף מחדש מהמחירון.
+                            לא נמצא במחירון העדכני — ייתכן שינוי בשם הפריט. אפשר להסיר או לבחור מחדש מהמחירון.
                           </p>
                         ) : null}
                         {line.sheetUnavailable ? (
                           <p className="cart-line-sheet-flag cart-line-sheet-flag--warn small" role="status">
-                            מסומן בגיליון כלא זמין כרגע — ודאו מול המוכר לפני השליחה.
+                            מסומן כלא זמין כרגע במחירון — כדאי לוודא מול המוכר לפני השליחה.
                           </p>
                         ) : null}
                         <div className="cart-line-price small">
@@ -791,7 +773,7 @@ export function Cart() {
                   className="btn btn-primary btn-whatsapp btn-whatsapp-strong"
                   disabled={!canSubmitOrder}
                 >
-                  <MessageCircle className="btn-whatsapp-icon" aria-hidden />
+                  <ShoppingBag className="btn-whatsapp-icon" aria-hidden strokeWidth={2} />
                   שלח הזמנה לוואטסאפ
                 </button>
 

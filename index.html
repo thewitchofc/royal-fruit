@@ -4,20 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="google-site-verification" content="b_fdR8hYJppa83gHzGCNF30yVj_2gveEgnNXBFsnKC4" />
-    <link rel="preload" as="image" href="/images/brand/brand-logo.png" type="image/png" />
+    <!-- לוגו גדול בכותרת דסקטופ בלבד — במובייל חוסך תחרות מול preload רקע AVIF (LCP) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/brand/brand-logo.png"
+      type="image/png"
+      media="(min-width: 961px)"
+      fetchpriority="high"
+    />
+    <!-- דסקטופ: רקע פירות כבד — טעינה מוקדמת לשיפור LCP/FCP (תואם ל־image-set ב־.app-shell::before) -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/backgrounds/header-fruits-bg.webp"
+      type="image/webp"
+      media="(min-width: 961px)"
+      fetchpriority="high"
+    />
+    <!-- רק AVIF — תואם ל־image-set ב-CSS; מניעת טעינה כפולה של WebP+AVIF במובייל -->
     <link
       rel="preload"
       as="image"
       href="/images/backgrounds/header-fruits-bg-mobile.avif"
       type="image/avif"
       media="(max-width: 960px)"
-    />
-    <link
-      rel="preload"
-      as="image"
-      href="/images/backgrounds/header-fruits-bg-mobile.webp"
-      type="image/webp"
-      media="(max-width: 960px)"
+      fetchpriority="high"
     />
     <meta
       name="description"

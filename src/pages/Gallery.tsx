@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { GALLERY_PARTNER_NAMES, GALLERY_STOCK_IMAGES, PLATTER_SHOWCASE_IMAGES, galleryImageAlt } from "../data/platterShowcaseImages";
 import { usePageSeo } from "../lib/seo";
@@ -21,11 +22,85 @@ const galleryImages = [
   "fruit-gallery-13.webp",
 ];
 
+const SWIPE_MIN_PX = 56;
+const SWIPE_DOMINANCE = 1.15;
+/** מעל הסף — לא נסגרים מ«קליק» על הרקע (מונע יציאה אחרי החלקה אנכית/צידית על התמונה) */
+const LIGHTBOX_TAP_MAX_MOVE_PX = 26;
+
 export function Gallery() {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const swipeStartRef = useRef<{ x: number; y: number } | null>(null);
+  const swipePointerIdRef = useRef<number | null>(null);
+  const lightboxMoveStartRef = useRef<{ x: number; y: number } | null>(null);
+  const lightboxHadPointerGestureRef = useRef(false);
   const activeImage = activeIndex === null ? null : galleryImages[activeIndex];
   const lastIndex = galleryImages.length - 1;
+
+  const goNext = useCallback(() => {
+    setActiveIndex((i) => (i === null ? 0 : i >= lastIndex ? 0 : i + 1));
+  }, [lastIndex]);
+
+  const goPrev = useCallback(() => {
+    setActiveIndex((i) => (i === null ? 0 : i <= 0 ? lastIndex : i - 1));
+  }, [lastIndex]);
+
+  const onSwipePointerDown = useCallback((e: React.PointerEvent) => {
+    if (!e.isPrimary || (e.pointerType === "mouse" && e.button !== 0)) return;
+    swipeStartRef.current = { x: e.clientX, y: e.clientY };
+    swipePointerIdRef.current = e.pointerId;
+  }, []);
+
+  const onSwipePointerUp = useCallback(
+    (e: React.PointerEvent) => {
+      if (e.pointerId !== swipePointerIdRef.current) return;
+      swipePointerIdRef.current = null;
+      const start = swipeStartRef.current;
+      swipeStartRef.current = null;
+      if (!start) return;
+      const dx = e.clientX - start.x;
+      const dy = e.clientY - start.y;
+      if (Math.abs(dx) < SWIPE_MIN_PX) return;
+      if (Math.abs(dx) < Math.abs(dy) * SWIPE_DOMINANCE) return;
+      if (dx < 0) goNext();
+      else goPrev();
+    },
+    [goNext, goPrev],
+  );
+
+  const onSwipePointerCancel = useCallback(() => {
+    swipeStartRef.current = null;
+    swipePointerIdRef.current = null;
+  }, []);
+
+  const onLightboxPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!e.isPrimary || (e.pointerType === "mouse" && e.button !== 0)) return;
+    lightboxMoveStartRef.current = { x: e.clientX, y: e.clientY };
+    lightboxHadPointerGestureRef.current = false;
+  }, []);
+
+  const onLightboxPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const start = lightboxMoveStartRef.current;
+    if (!start || !e.isPrimary) return;
+    const dx = e.clientX - start.x;
+    const dy = e.clientY - start.y;
+    if (dx * dx + dy * dy > LIGHTBOX_TAP_MAX_MOVE_PX * LIGHTBOX_TAP_MAX_MOVE_PX) {
+      lightboxHadPointerGestureRef.current = true;
+    }
+  }, []);
+
+  const onLightboxPointerEnd = useCallback(() => {
+    lightboxMoveStartRef.current = null;
+  }, []);
+
+  const onLightboxBackdropClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target !== e.currentTarget) return;
+    if (lightboxHadPointerGestureRef.current) {
+      lightboxHadPointerGestureRef.current = false;
+      return;
+    }
+    setActiveIndex(null);
+  }, []);
 
   useEffect(() => {
     if (activeIndex === null) return;
@@ -85,6 +160,9 @@ export function Gallery() {
               <span>מגשי פרימיום</span>
               <span>אריזה נקייה</span>
             </div>
+            <p className="gallery-tap-hint">
+              לחיצה על תמונה פותחת אותה במסך מלא — החליקו ימינה או שמאלה כדי לעבור בין תמונות.
+            </p>
           </div>
 
           <div className="gallery-grid">
@@ -126,60 +204,56 @@ export function Gallery() {
           </footer>
         </div>
       </section>
-      {activeImage !== null && activeIndex !== null ? (
-        <div
-          className="gallery-lightbox"
-          role="dialog"
-          aria-modal="true"
-          aria-label={`תמונה מוגדלת ${activeIndex + 1} מתוך ${galleryImages.length}`}
-          onClick={() => setActiveIndex(null)}
-        >
-          <button
-            ref={closeButtonRef}
-            type="button"
-            className="gallery-lightbox-close"
-            onClick={() => setActiveIndex(null)}
-            aria-label="סגור תמונה מוגדלת"
-          >
-            ×
-          </button>
-          <button
-            type="button"
-            className="gallery-lightbox-nav gallery-lightbox-nav-prev"
-            onClick={(e) => {
-              e.stopPropagation();
-              setActiveIndex((i) => (i === null ? 0 : i <= 0 ? lastIndex : i - 1));
-            }}
-            aria-label="תמונה קודמת"
-          >
-            ‹
-          </button>
-          <button
-            type="button"
-            className="gallery-lightbox-nav gallery-lightbox-nav-next"
-            onClick={(e) => {
-              e.stopPropagation();
-              setActiveIndex((i) => (i === null ? 0 : i >= lastIndex ? 0 : i + 1));
-            }}
-            aria-label="תמונה הבאה"
-          >
-            ›
-          </button>
-          <p className="gallery-lightbox-counter" aria-live="polite">
-            {activeIndex + 1} / {galleryImages.length}
-          </p>
-          <img
-            className="gallery-lightbox-img"
-            src={`/images/gallery/${activeImage}`}
-            alt={galleryImageAlt(activeImage, activeIndex)}
-            loading="lazy"
-            decoding="async"
-            width={800}
-            height={1000}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-      ) : null}
+      {/* פורטל ל־body: אחרת ב־Safari/iOS ‎position:fixed‎ נשבר כשיש אב עם ‎transform‎ (‎.page-transition-shell‎) */}
+      {activeImage !== null && activeIndex !== null
+        ? createPortal(
+            <div
+              className="gallery-lightbox"
+              role="dialog"
+              aria-modal="true"
+              aria-label={`תמונה ${activeIndex + 1} מתוך ${galleryImages.length}. החלקה ימינה או שמאלה למעבר בין תמונות; Escape לסגירה.`}
+              onPointerDown={onLightboxPointerDown}
+              onPointerMove={onLightboxPointerMove}
+              onPointerUp={onLightboxPointerEnd}
+              onPointerCancel={onLightboxPointerEnd}
+              onClick={onLightboxBackdropClick}
+            >
+              <button
+                ref={closeButtonRef}
+                type="button"
+                className="gallery-lightbox-close"
+                onClick={() => setActiveIndex(null)}
+                aria-label="סגור תמונה מוגדלת"
+              >
+                ×
+              </button>
+              <p className="gallery-lightbox-counter" aria-live="polite">
+                {activeIndex + 1} / {galleryImages.length}
+              </p>
+              <div
+                className="gallery-lightbox-stage"
+                onClick={(e) => e.stopPropagation()}
+                onPointerDown={onSwipePointerDown}
+                onPointerUp={onSwipePointerUp}
+                onPointerCancel={onSwipePointerCancel}
+                role="presentation"
+              >
+                <img
+                  className="gallery-lightbox-img"
+                  src={`/images/gallery/${activeImage}`}
+                  alt={galleryImageAlt(activeImage, activeIndex)}
+                  loading="eager"
+                  decoding="async"
+                  width={800}
+                  height={1000}
+                  draggable={false}
+                  onClick={(e) => e.stopPropagation()}
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
     </div>
   );
 }

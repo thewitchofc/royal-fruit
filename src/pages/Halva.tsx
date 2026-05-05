@@ -8,7 +8,7 @@ export function Halva() {
   usePageSeo({
     title: "Royal Fruit | חלווה וממרחים — חלווה בטעם",
     description:
-      "חלווה וממרחים: חלווה בטעם — יחידה 350 גרם (35 ₪): אגוזי לוז, פיסטק, פקאן, טעם של פעם. ממרחי טחינה וקרם (30 ₪) — טחינה אתיופית, טחינה מלאה עם וניל טהור, טחינה עם אגוזי לוז וקקאו, קרם פיסטוק, קרם אגוזי לוז. הזמנה בוואטסאפ.",
+      "חלווה וממרחים: חלווה בטעם — יחידה 350 גרם (35 ₪): אגוזי לוז, פיסטק, פקאן, טעם של פעם. ממרחי טחינה וקרם (30 ₪) — טחינה אתיופית, טחינה מלאה עם וניל טהור, טחינה עם אגוזי לוז וקקאו, קרם פיסטוק, קרם אגוזי לוז. מילוי סל באתר.",
   });
 
   return (
@@ -25,10 +25,10 @@ export function Halva() {
             <RoyalFruitWordmark className="halva-catalog-wordmark" />
             <div className="juices-intro-points halva-catalog-pills">
               <span>מלאי יומי</span>
-              <span>הזמנה בוואטסאפ</span>
+              <span>הוסיפו לסל מהמחירון</span>
               <span>משלוח באזור המרכז וגוש דן</span>
             </div>
-            <Link to="/cart" className="btn btn-primary halva-catalog-cta">
+            <Link to="/cart" className="btn btn-cart-fill halva-catalog-cta">
               מעבר לסל
             </Link>
           </header>

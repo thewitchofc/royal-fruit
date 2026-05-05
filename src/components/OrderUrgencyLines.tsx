@@ -1,6 +1,6 @@
 import { Zap } from "lucide-react";
 
-/** שורות דחיפות קצרות ליד כפתור וואטסאפ */
+/** שורות דחיפות קצרות ליד כפתור מילוי סל */
 export function OrderUrgencyLines({
   className,
   showFinger = true,

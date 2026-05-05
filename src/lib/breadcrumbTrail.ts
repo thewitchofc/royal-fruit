@@ -12,11 +12,11 @@ const ROUTE_CRUMB: Record<string, BreadcrumbSegment> = {
   [ROUTES.gallery]: { name: "גלריה", path: ROUTES.gallery },
   [ROUTES.reviews]: { name: "המלצות לקוחות", path: ROUTES.reviews },
   [ROUTES.shop.fruits]: { name: "פירות מובחרים", path: ROUTES.shop.fruits },
-  [ROUTES.shop.juices]: { name: "מיצים טבעיים", path: ROUTES.shop.juices },
+  [ROUTES.shop.juices]: { name: "מיצים טבעיים", path: ROUTES.ready.meals },
   [ROUTES.shop.vegetables]: { name: "ירקות טריים", path: ROUTES.shop.vegetables },
-  [ROUTES.ready.meals]: { name: "מטבח טרי", path: ROUTES.ready.meals },
-  [ROUTES.ready.sweets]: { name: "חלווה וממרחים", path: ROUTES.ready.sweets },
-  [ROUTES.boxes.fruits]: { name: "מארזי פירות", path: ROUTES.boxes.fruits },
+  [ROUTES.ready.meals]: { name: "כל מה שמוכן היום", path: ROUTES.ready.meals },
+  [ROUTES.ready.sweets]: { name: "חלווה וממרחים", path: ROUTES.ready.meals },
+  [ROUTES.boxes.fruits]: { name: "מגשי פירות", path: ROUTES.boxes.fruits },
   [ROUTES.faq]: { name: "שאלות נפוצות", path: ROUTES.faq },
   [ROUTES.blog]: { name: "מאמרים", path: ROUTES.blog },
   [ROUTES.cart]: { name: "סל קניות", path: ROUTES.cart },
@@ -29,9 +29,9 @@ const ROUTE_CRUMB: Record<string, BreadcrumbSegment> = {
   "/testimonials": { name: "המלצות לקוחות", path: ROUTES.reviews },
   "/fruits": { name: "פירות מובחרים", path: ROUTES.shop.fruits },
   "/vegetables": { name: "ירקות טריים", path: ROUTES.shop.vegetables },
-  "/juices": { name: "מיצים טבעיים", path: ROUTES.shop.juices },
+  "/juices": { name: "מיצים טבעיים", path: ROUTES.ready.meals },
   "/home-food": { name: "מטבח טרי", path: ROUTES.ready.meals },
-  "/halva": { name: "חלווה וממרחים", path: ROUTES.ready.sweets },
+  "/halva": { name: "חלווה וממרחים", path: ROUTES.ready.meals },
 };
 
 function normalizePath(pathname: string): string {

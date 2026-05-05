@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { CloudOff, MessageCircle, Phone } from "lucide-react";
+import { Link } from "react-router-dom";
+import { CloudOff, Phone, ShoppingBag } from "lucide-react";
 import { PriceListSections } from "./PriceListSections";
 import { useSheetProducts } from "../hooks/useSheetProducts";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
-import { whatsappChatUrl } from "../lib/whatsappOrder";
+import { ROUTES } from "../lib/publicRoutes";
 import { findDuplicateDisplayNamesInCategories, type PriceCategory, type PriceListBannerMeta } from "../data/priceList";
 import {
   getGoogleSheetsProductsCsvUrl,
@@ -67,9 +68,6 @@ export function SheetPriceListAsMenu({
   if (state.status === "error") {
     const publicMessage =
       "לא הצלחנו לטעון את המחירון כרגע. נסו לרענן את העמוד בעוד רגע, או התקשרו לעדכון מחירים ומלאי.";
-    const waUrl = whatsappChatUrl(
-      "היי, האתר לא הצליח לטעון את המחירון — אפשר עזרה עם מחירים ומלאי?",
-    );
     return (
       <div className="sheet-products-error" role="alert">
         <div className="sheet-products-error-head">
@@ -85,15 +83,13 @@ export function SheetPriceListAsMenu({
           ) : null}
         </div>
         <div className="sheet-products-error-actions">
-          <a
-            className="btn btn-primary btn-whatsapp btn-whatsapp-strong sheet-products-error-wa"
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
+          <Link
+            className="btn btn-cart-fill btn-whatsapp-strong sheet-products-error-wa"
+            to={ROUTES.cart}
           >
-            <MessageCircle className="btn-whatsapp-icon" aria-hidden strokeWidth={2} />
-            וואטסאפ
-          </a>
+            <ShoppingBag className="btn-whatsapp-icon" aria-hidden strokeWidth={2} />
+            מעבר לסל
+          </Link>
           <div className="sheet-products-error-actions-row">
             <button
               type="button"

@@ -30,11 +30,10 @@ export function Juices() {
               <h2>מיץ טבעי, מיץ בקבוק ושילובים לפי מה שיש היום בשדה.</h2>
             </div>
             <div className="juices-intro-points">
-              <span>ללא ערבוב עם דף הפירות</span>
               <span>מלאי יומי</span>
-              <span>הזמנה בוואטסאפ</span>
+              <span>הוסיפו לסל מהמחירון</span>
             </div>
-            <Link to="/cart" className="btn btn-primary juices-intro-cta">
+            <Link to="/cart" className="btn btn-cart-fill juices-intro-cta">
               מעבר לסל
             </Link>
           </div>

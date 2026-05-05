@@ -32,8 +32,6 @@ export function blogArticlePath(slug: string): string {
 export const PRICE_LIST_PREFETCH_PATHS = new Set<string>([
   ROUTES.shop.fruits,
   ROUTES.shop.vegetables,
-  ROUTES.shop.juices,
   ROUTES.ready.meals,
-  ROUTES.ready.sweets,
   ROUTES.boxes.fruits,
 ]);

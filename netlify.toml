@@ -32,3 +32,14 @@
   for = "/images/catalog/*"
   [headers.values]
     Cache-Control = "public, max-age=300, stale-while-revalidate=86400"
+
+# רקע מלא + לוגו — נתיבים יציבים; חוסך חזרות במובייל (מגביר מכסת מטמון CDN)
+[[headers]]
+  for = "/images/backgrounds/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"
+
+[[headers]]
+  for = "/images/brand/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400, stale-while-revalidate=604800"

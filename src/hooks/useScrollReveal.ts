@@ -15,6 +15,9 @@ const REVEAL_SELECTOR = [
   ".contact-aside",
 ].join(",");
 
+/** מעל הקיפול — בלי opacity:0 שממתין ל־IO (משפר LCP/CLS ומפחית עבודה בציור ראשון בדסקטופ) */
+const ABOVE_THE_FOLD_SELECTOR = ".hero, .page-hero";
+
 export function useScrollReveal(routeKey: string) {
   useEffect(() => {
     const root = document.getElementById("main-content");
@@ -47,6 +50,12 @@ export function useScrollReveal(routeKey: string) {
     );
 
     const register = () => {
+      root.querySelectorAll(ABOVE_THE_FOLD_SELECTOR).forEach((el) => {
+        if (seen.has(el)) return;
+        seen.add(el);
+        revealImmediately(el);
+      });
+
       root.querySelectorAll(REVEAL_SELECTOR).forEach((el) => {
         if (seen.has(el)) return;
         seen.add(el);
@@ -56,15 +65,24 @@ export function useScrollReveal(routeKey: string) {
     };
 
     let frame = window.requestAnimationFrame(register);
-    const mutations = new MutationObserver(() => {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(register);
-    });
+    /** ריכוז עדכוני DOM — פחות ריצות register בזמן React hydration (משפר TBT) */
+    let mutationDebounce: number | undefined;
+    const scheduleRegister = () => {
+      if (mutationDebounce !== undefined) window.clearTimeout(mutationDebounce);
+      mutationDebounce = window.setTimeout(() => {
+        mutationDebounce = undefined;
+        window.cancelAnimationFrame(frame);
+        frame = window.requestAnimationFrame(register);
+      }, 140);
+    };
+
+    const mutations = new MutationObserver(scheduleRegister);
 
     mutations.observe(root, { childList: true, subtree: true });
 
     return () => {
       window.cancelAnimationFrame(frame);
+      if (mutationDebounce !== undefined) window.clearTimeout(mutationDebounce);
       mutations.disconnect();
       observer.disconnect();
     };

@@ -1,11 +1,10 @@
-import { MessageCircle, ChevronDown } from "lucide-react";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, ShoppingBag, ChevronDown } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { NAVBAR_CONTACT, NAVBAR_DROPDOWNS, NAVBAR_HOME } from "../data/navbar";
 import { PRICE_LIST_PREFETCH_PATHS, ROUTES } from "../lib/publicRoutes";
 import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
 import { warmSheetProductsCache } from "../hooks/useSheetProducts";
-import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
 import "./Navbar.css";
 
 type NavbarProps = {
@@ -31,17 +30,38 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
   const [openDropdownId, setOpenDropdownId] = useState<string | null>(null);
   const [expandedMobileGroup, setExpandedMobileGroup] = useState<string | null>(null);
   const navRootRef = useRef<HTMLElement>(null);
+  const closeDropdownTimerRef = useRef<number | null>(null);
 
   const prefetchIfPricePage = useCallback((to: string) => {
     if (PRICE_LIST_PREFETCH_PATHS.has(to)) {
       void import("../pages/Fruits");
-      void import("../pages/Juices");
       void import("../pages/Halva");
       void import("../pages/HomeFood");
       void import("../pages/Vegetables");
       warmSheetProductsCache(getGoogleSheetsProductsCsvUrl());
     }
   }, []);
+
+  const cancelCloseDropdown = useCallback(() => {
+    if (closeDropdownTimerRef.current == null) return;
+    window.clearTimeout(closeDropdownTimerRef.current);
+    closeDropdownTimerRef.current = null;
+  }, []);
+
+  const scheduleCloseDropdown = useCallback(
+    (id: string) => {
+      cancelCloseDropdown();
+      /**
+       * הפאנל הלבן absolutely-positioned מחוץ ל-box של הטריגר ויש gap קטן ב־CSS,
+       * אז מעבר עכבר טריגר→פאנל יכול “לברוח” לרגע ולסגור. דיליי קצר מונע את זה.
+       */
+      closeDropdownTimerRef.current = window.setTimeout(() => {
+        setOpenDropdownId((cur) => (cur === id ? null : cur));
+        closeDropdownTimerRef.current = null;
+      }, 140);
+    },
+    [cancelCloseDropdown],
+  );
 
   useEffect(() => {
     setOpenDropdownId(null);
@@ -69,8 +89,6 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
     };
   }, [mobileOpen]);
 
-  const waOrderUrl = useMemo(() => whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL), []);
-
   const toggleMobileAccordion = (id: string) => {
     setExpandedMobileGroup((cur) => (cur === id ? null : id));
   };
@@ -96,8 +114,20 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
               <div
                 key={group.id}
                 className={`rf-navbar__dropdown${isOpen ? " is-open" : ""}`}
-                onMouseEnter={() => setOpenDropdownId(group.id)}
-                onMouseLeave={() => setOpenDropdownId((id) => (id === group.id ? null : id))}
+                onMouseEnter={() => {
+                  cancelCloseDropdown();
+                  setOpenDropdownId(group.id);
+                }}
+                onMouseLeave={() => scheduleCloseDropdown(group.id)}
+                onFocusCapture={() => {
+                  cancelCloseDropdown();
+                  setOpenDropdownId(group.id);
+                }}
+                onBlurCapture={(e) => {
+                  const next = e.relatedTarget;
+                  if (next instanceof Node && e.currentTarget.contains(next)) return;
+                  scheduleCloseDropdown(group.id);
+                }}
               >
                 <button
                   type="button"
@@ -116,6 +146,8 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
                   id={`rf-nav-panel-${group.id}`}
                   role="menu"
                   aria-labelledby={`rf-nav-trigger-${group.id}`}
+                  onMouseEnter={cancelCloseDropdown}
+                  onMouseLeave={() => scheduleCloseDropdown(group.id)}
                 >
                   {group.items.map((item) => (
                     <NavLink
@@ -147,16 +179,15 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
           </NavLink>
         </div>
 
-        <a
-          className="rf-navbar__cta"
-          href={waOrderUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="פתיחת וואטסאפ להזמנה, נפתח בלשונית חדשה"
+        <NavLink
+          to={ROUTES.cart}
+          className={({ isActive }) => `rf-navbar__cta${isActive ? " is-active" : ""}`}
+          onClick={onNavigate}
+          aria-label="מעבר לסל למילוי הזמנה"
         >
-          <MessageCircle className="rf-navbar__cta-icon" aria-hidden />
-          להזמנה
-        </a>
+          <ShoppingBag className="rf-navbar__cta-icon" aria-hidden strokeWidth={2} />
+          מילוי סל
+        </NavLink>
       </nav>
 
       <button
@@ -177,8 +208,18 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
       >
         <div className="rf-navbar__sheet-inner">
           <div className="rf-navbar__sheet-head">
-            <p className="rf-navbar__sheet-kicker">Royal Fruit</p>
-            <p className="rf-navbar__sheet-title">תפריט</p>
+            <button
+              type="button"
+              className="rf-navbar__sheet-back"
+              onClick={onNavigate}
+              aria-label="סגירת תפריט וחזרה"
+            >
+              <ArrowLeft className="rf-navbar__sheet-back-icon" aria-hidden strokeWidth={2.4} />
+            </button>
+            <div className="rf-navbar__sheet-head-text">
+              <p className="rf-navbar__sheet-kicker">Royal Fruit</p>
+              <p className="rf-navbar__sheet-title">תפריט</p>
+            </div>
           </div>
 
           <NavLink
@@ -250,17 +291,15 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
           </NavLink>
 
           <div className="rf-navbar__sheet-footer">
-            <a
-              className="rf-navbar__sheet-cta"
-              href={waOrderUrl}
-              target="_blank"
-              rel="noopener noreferrer"
+            <NavLink
+              className={({ isActive }) => `rf-navbar__sheet-cta${isActive ? " is-active" : ""}`}
+              to={ROUTES.cart}
               onClick={onNavigate}
-              aria-label="פתיחת וואטסאפ להזמנה, נפתח בלשונית חדשה"
+              aria-label="מעבר לסל למילוי הזמנה"
             >
-              <MessageCircle className="rf-navbar__cta-icon" aria-hidden />
-              להזמנה
-            </a>
+              <ShoppingBag className="rf-navbar__cta-icon" aria-hidden strokeWidth={2} />
+              מילוי סל
+            </NavLink>
           </div>
         </div>
       </div>

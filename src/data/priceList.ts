@@ -245,6 +245,24 @@ export function getProduceImage(name: string, description?: string): string | un
   const exact = byExactName[n];
   if (exact) return exact;
 
+  // חלווה: בדף המאוחד אנחנו מוסיפים prefix "חלווה " לטעמים (למשל "חלווה אגוזי לוז")
+  if (n.startsWith("חלווה ")) {
+    const rest = n.replace(/^חלווה\s+/, "").trim();
+    const img =
+      byExactName[rest] ??
+      byExactName[`חלווה ${rest}`] ??
+      (rest === "אגוזי לוז" ? byExactName["אגוזי לוז"] : undefined) ??
+      (rest === "פיסטק" || rest === "פיסטוק" ? byExactName["פיסטק"] : undefined) ??
+      (rest === "פקאן" ? byExactName["פקאן"] : undefined) ??
+      (rest === "טעם של פעם" ? byExactName["טעם של פעם"] : undefined);
+    if (img) return img;
+  }
+
+  // מטבח טרי: שורות “שם · משקל” (בדף המאוחד מוצגות כרשימה אחת)
+  if (n.startsWith("עלי גפן חמוצים")) return byExactName["עלי גפן חמוצים"];
+  if (n.startsWith("כרוב חמוץ")) return byExactName["כרוב חמוץ"];
+  if (n.startsWith("בצל חמוץ מתוק")) return byExactName["בצל חמוץ מתוק"];
+
   // fallback for dynamic sheet rows so every product gets image
   if (n.includes("חומץ") && n.includes("תפוח")) return "/images/catalog/apple-cider-vinegar.png";
   if (n.includes("מיץ תפוחים") && n.includes("גזר")) return "/images/catalog/juice-apple-carrot.png";

@@ -36,6 +36,15 @@ function isFruitCatalogRow(p: SheetProduct): boolean {
   return productMatchesSheetPage(p, "fruits");
 }
 
+function isExcludedFromFruitTrays(p: SheetProduct): boolean {
+  const n = p.name.trim().replace(/\s+/g, " ");
+  // הסרה מוחלטת ממגשי פירות (כל וריאציה של “קוקוס לשתייה/לשתיה”)
+  if (/^קוקוס\s+לשת(י|יי)ה\b/.test(n)) return true;
+  if (n.includes("קוקוס") && n.includes("לשת") && n.includes("קש")) return true;
+  if (n === "פקאן בוואקום") return true;
+  return false;
+}
+
 /** האם בגיליון מופיעה לפחות פעם אחת עמודת רמת מארז (לא ריקה) */
 export function sheetHasAnyFruitPackageTier(products: SheetProduct[]): boolean {
   return products.some((p) => isFruitCatalogRow(p) && p.packageTier !== "");
@@ -48,10 +57,13 @@ export function sheetHasAnyFruitPackageTier(products: SheetProduct[]): boolean {
  */
 export function resolveProductsForFruitPackages(products: SheetProduct[]): SheetProduct[] {
   if (sheetHasAnyFruitPackageTier(products)) {
-    return products;
+    // גם כשיש tier בגיליון, מסננים פריטים שלא נכנסים ל״מגשי פירות״
+    return products.filter((p) => !isExcludedFromFruitTrays(p));
   }
 
-  const fruitRows = dedupeFruitPackageProducts(products.filter((p) => isFruitCatalogRow(p)));
+  const fruitRows = dedupeFruitPackageProducts(
+    products.filter((p) => isFruitCatalogRow(p) && !isExcludedFromFruitTrays(p)),
+  );
   const sorted = [...fruitRows].sort(sortByPriceAsc);
   const n = sorted.length;
   if (n === 0) return products;
@@ -70,6 +82,7 @@ export function resolveProductsForFruitPackages(products: SheetProduct[]): Sheet
 
   return products.map((p) => {
     if (!isFruitCatalogRow(p)) return p;
+    if (isExcludedFromFruitTrays(p)) return p;
     if (p.packageTier) return p;
     const t = keyToTier.get(sheetProductKeyNormalized(p.name));
     return t ? { ...p, packageTier: t } : p;
@@ -80,6 +93,7 @@ export function resolveProductsForFruitPackages(products: SheetProduct[]): Sheet
 export function isFruitRowEligibleForPackageUi(p: SheetProduct): boolean {
   if (!p.available) return false;
   if (!productMatchesSheetPage(p, "fruits")) return false;
+  if (isExcludedFromFruitTrays(p)) return false;
   return Boolean(p.packageTier);
 }
 
@@ -223,5 +237,7 @@ export function fillSelectionToMax(selected: string[], max: number, poolSorted: 
 }
 
 export function isPremiumTierProduct(p: SheetProduct): boolean {
-  return p.packageTier === "premium";
+  const n = p.name.trim().replace(/\s+/g, " ");
+  // תג “מיוחד” מוצג רק לפריטים ספציפיים (גם אם ה-tier הוא premium)
+  return n === "גולדן ברי" || n === "אוכמניות פרו סויקה" || n === "פטל שחור";
 }

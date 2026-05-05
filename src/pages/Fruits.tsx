@@ -10,9 +10,6 @@ import {
   poolGoldSorted,
   poolPremiumSorted,
   buildFruitPackageTierByKey,
-  repairBasicSelection,
-  repairGoldSelection,
-  repairPremiumSelection,
   resolveProductsForFruitPackages,
   sheetHasAnyFruitPackageTier,
 } from "../lib/fruitPackageSheet";
@@ -21,7 +18,15 @@ import { ROUTES } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
 import { useSheetProducts } from "../hooks/useSheetProducts";
 
-const GOLD_FRUIT_PACKAGE_ADDONS = ["שוקולד", "טחינה", "דבש"] as const;
+type QtyMap = Record<string, number>;
+
+const GOLD_FRUIT_PACKAGE_ADDONS = [
+  "סילאן",
+  "טחינה",
+  "דבש",
+  "סירופ בטעם שוקולד (פרווה)",
+  "סירופ בטעם מייפל",
+] as const;
 
 const MAX_BASIC_PACKAGE_FRUITS = 5;
 const MAX_PREMIUM_PACKAGE_FRUITS = 8;
@@ -29,16 +34,18 @@ const MAX_GOLD_PACKAGE_FRUITS = 12;
 const BASIC_PACKAGE_PRICE = 199;
 const PREMIUM_PACKAGE_PRICE = 329;
 const GOLD_PACKAGE_PRICE = 549;
+const GOLD_FREE_ADDONS = 4;
+const GOLD_ADDON_EXTRA_PRICE = 3;
 
 const SHEET_POLL_MS = 45_000;
 
 export function Fruits() {
   const { addItem } = useCart();
   const { pathname } = useLocation();
-  const [selectedPackageFruits, setSelectedPackageFruits] = useState<string[]>([]);
-  const [selectedPremiumPackageFruits, setSelectedPremiumPackageFruits] = useState<string[]>([]);
-  const [selectedGoldPackageFruits, setSelectedGoldPackageFruits] = useState<string[]>([]);
-  const [selectedGoldAddons, setSelectedGoldAddons] = useState<string[]>([]);
+  const [selectedPackageFruits, setSelectedPackageFruits] = useState<QtyMap>({});
+  const [selectedPremiumPackageFruits, setSelectedPremiumPackageFruits] = useState<QtyMap>({});
+  const [selectedGoldPackageFruits, setSelectedGoldPackageFruits] = useState<QtyMap>({});
+  const [selectedGoldAddons, setSelectedGoldAddons] = useState<QtyMap>({});
   const [sheetReloadNonce, setSheetReloadNonce] = useState(0);
 
   const isFruitBoxesPage = pathname === ROUTES.boxes.fruits;
@@ -75,13 +82,44 @@ export function Fruits() {
     [sheetState.status, fruitPackageProducts],
   );
 
+  const totalSelected = (m: QtyMap) =>
+    Object.values(m).reduce((sum, v) => sum + (Number.isFinite(v) ? v : 0), 0);
+
+  const clampSelectionsToPool = (m: QtyMap, pool: { name: string }[], max: number) => {
+    const allowed = new Set(pool.map((p) => p.name.trim()));
+    const next: Record<string, number> = {};
+    for (const [k, v] of Object.entries(m)) {
+      const name = k.trim();
+      if (!allowed.has(name)) continue;
+      const qty = Math.max(0, Math.floor(v));
+      if (qty <= 0) continue;
+      next[name] = qty;
+    }
+    // אם חרגנו מהמכסה בעקבות שינויים בגיליון — חותכים מהסוף לפי סדר pool
+    let sum = totalSelected(next);
+    if (sum <= max) return next;
+    const order = pool.map((p) => p.name.trim()).reverse();
+    for (const name of order) {
+      if (sum <= max) break;
+      const cur = next[name] ?? 0;
+      if (cur <= 0) continue;
+      const drop = Math.min(cur, sum - max);
+      const remain = cur - drop;
+      if (remain <= 0) delete next[name];
+      else next[name] = remain;
+      sum -= drop;
+    }
+    return next;
+  };
+
+  const expandSelection = (m: QtyMap) =>
+    Object.entries(m).flatMap(([name, qty]) => Array.from({ length: Math.max(0, Math.floor(qty)) }, () => name));
+
   useEffect(() => {
     if (sheetState.status !== "ok") return;
-    setSelectedPackageFruits((prev) => repairBasicSelection(prev, poolBasic, MAX_BASIC_PACKAGE_FRUITS));
-    setSelectedPremiumPackageFruits((prev) =>
-      repairPremiumSelection(prev, poolPremium, MAX_PREMIUM_PACKAGE_FRUITS, tierByKey),
-    );
-    setSelectedGoldPackageFruits((prev) => repairGoldSelection(prev, poolGold, MAX_GOLD_PACKAGE_FRUITS));
+    setSelectedPackageFruits((prev) => clampSelectionsToPool(prev, poolBasic, MAX_BASIC_PACKAGE_FRUITS));
+    setSelectedPremiumPackageFruits((prev) => clampSelectionsToPool(prev, poolPremium, MAX_PREMIUM_PACKAGE_FRUITS));
+    setSelectedGoldPackageFruits((prev) => clampSelectionsToPool(prev, poolGold, MAX_GOLD_PACKAGE_FRUITS));
   }, [sheetState.status, sheetState.products, poolBasic, poolPremium, poolGold, tierByKey]);
 
   usePageSeo({
@@ -89,37 +127,37 @@ export function Fruits() {
     description: "מחירון פירות פרימיום עם מלאי עונתי, בשלות לפי מועד שימוש ומשלוחים מתואמים בחולון, בת ים, ראשון לציון, תל אביב וגוש דן.",
   });
 
-  const togglePackageFruit = (name: string) => {
-    setSelectedPackageFruits((prev) => {
-      if (prev.includes(name)) return prev.filter((item) => item !== name);
-      if (prev.length >= MAX_BASIC_PACKAGE_FRUITS) return prev;
-      return [...prev, name];
+  const bumpQty = (
+    setState: React.Dispatch<React.SetStateAction<QtyMap>>,
+    max: number,
+    name: string,
+    delta: 1 | -1,
+  ) => {
+    setState((prev) => {
+      const next = { ...prev };
+      const cur = next[name] ?? 0;
+      const sum = totalSelected(next);
+      if (delta > 0 && sum >= max) return prev;
+      const value = Math.max(0, cur + delta);
+      if (value <= 0) delete next[name];
+      else next[name] = value;
+      return next;
     });
   };
 
-  const togglePremiumPackageFruit = (name: string) => {
-    setSelectedPremiumPackageFruits((prev) => {
-      if (prev.includes(name)) return prev.filter((item) => item !== name);
-      if (prev.length >= MAX_PREMIUM_PACKAGE_FRUITS) return prev;
-      return [...prev, name];
-    });
-  };
-
-  const toggleGoldPackageFruit = (name: string) => {
-    setSelectedGoldPackageFruits((prev) => {
-      if (prev.includes(name)) return prev.filter((item) => item !== name);
-      if (prev.length >= MAX_GOLD_PACKAGE_FRUITS) return prev;
-      return [...prev, name];
-    });
-  };
-
-  const toggleGoldAddon = (name: string) => {
-    setSelectedGoldAddons((prev) => (prev.includes(name) ? prev.filter((item) => item !== name) : [...prev, name]));
+  const formatAddonList = (m: QtyMap) => {
+    const entries = Object.entries(m)
+      .map(([name, qty]) => [name, Math.max(0, Math.floor(qty))] as const)
+      .filter(([, qty]) => qty > 0);
+    if (!entries.length) return "";
+    return entries
+      .map(([name, qty]) => (qty === 1 ? name : `${name} ×${qty}`))
+      .join(", ");
   };
 
   const addBasicPackageToCart = () => {
-    if (!selectedPackageFruits.length || sheetState.status !== "ok") return;
-    const filled = fillSelectionToMax(selectedPackageFruits, MAX_BASIC_PACKAGE_FRUITS, poolBasic);
+    if (totalSelected(selectedPackageFruits) <= 0 || sheetState.status !== "ok") return;
+    const filled = fillSelectionToMax(expandSelection(selectedPackageFruits), MAX_BASIC_PACKAGE_FRUITS, poolBasic);
     if (!filled.length) return;
     addItem({
       id: `fruit-package-basic::${filled.join("|")}`,
@@ -133,8 +171,8 @@ export function Fruits() {
   };
 
   const addPremiumPackageToCart = () => {
-    if (!selectedPremiumPackageFruits.length || sheetState.status !== "ok") return;
-    const filled = fillSelectionToMax(selectedPremiumPackageFruits, MAX_PREMIUM_PACKAGE_FRUITS, poolPremium);
+    if (totalSelected(selectedPremiumPackageFruits) <= 0 || sheetState.status !== "ok") return;
+    const filled = fillSelectionToMax(expandSelection(selectedPremiumPackageFruits), MAX_PREMIUM_PACKAGE_FRUITS, poolPremium);
     if (!filled.length) return;
     addItem({
       id: `fruit-package-premium::${filled.join("|")}`,
@@ -148,15 +186,19 @@ export function Fruits() {
   };
 
   const addGoldPackageToCart = () => {
-    if (!selectedGoldPackageFruits.length || sheetState.status !== "ok") return;
-    const filled = fillSelectionToMax(selectedGoldPackageFruits, MAX_GOLD_PACKAGE_FRUITS, poolGold);
+    if (totalSelected(selectedGoldPackageFruits) <= 0 || sheetState.status !== "ok") return;
+    const filled = fillSelectionToMax(expandSelection(selectedGoldPackageFruits), MAX_GOLD_PACKAGE_FRUITS, poolGold);
     if (!filled.length) return;
-    const addonsText = selectedGoldAddons.length ? ` | תוספות: ${selectedGoldAddons.join(", ")}` : "";
+    const addonUnits = totalSelected(selectedGoldAddons);
+    const paidAddonCount = Math.max(0, addonUnits - GOLD_FREE_ADDONS);
+    const paidAddonTotal = paidAddonCount * GOLD_ADDON_EXTRA_PRICE;
+    const addonsList = formatAddonList(selectedGoldAddons);
+    const addonsText = addonsList ? ` | תוספות: ${addonsList}` : "";
     addItem({
-      id: `fruit-package-gold::${filled.join("|")}::${selectedGoldAddons.join("|")}`,
+      id: `fruit-package-gold::${filled.join("|")}::${addonsList}`,
       emoji: "🏆",
       name: `חבילת גולד - ${filled.join(", ")}${addonsText}`,
-      priceLabel: `${GOLD_PACKAGE_PRICE} ₪`,
+      priceLabel: `${GOLD_PACKAGE_PRICE + paidAddonTotal} ₪`,
       unit: "עד 12 סוגי פירות לפי המלאי והרמות מהגיליון",
       categoryPath: "מארזי פירות",
       qtyStep: 1,
@@ -197,7 +239,7 @@ export function Fruits() {
               <span>מיון ידני</span>
               <span>מלאי עונתי</span>
             </div>
-            <Link to="/cart" className="btn btn-primary fruits-intro-cta">
+            <Link to="/cart" className="btn btn-cart-fill fruits-intro-cta">
               מעבר לסל
             </Link>
           </div>
@@ -218,7 +260,7 @@ export function Fruits() {
               <span>כמות קטנה-בינונית</span>
               <span>{BASIC_PACKAGE_PRICE} ₪</span>
               <span>
-                {selectedPackageFruits.length}/{MAX_BASIC_PACKAGE_FRUITS} נבחרו
+                {totalSelected(selectedPackageFruits)}/{MAX_BASIC_PACKAGE_FRUITS} נבחרו
               </span>
             </div>
 
@@ -226,20 +268,38 @@ export function Fruits() {
               {sheetState.status === "ok" &&
                 poolBasic.map((option) => {
                   const name = option.name.trim();
-                  const checked = selectedPackageFruits.includes(name);
-                  const disabled = !checked && selectedPackageFruits.length >= MAX_BASIC_PACKAGE_FRUITS;
+                  const qty = selectedPackageFruits[name] ?? 0;
+                  const sum = totalSelected(selectedPackageFruits);
+                  const disablePlus = sum >= MAX_BASIC_PACKAGE_FRUITS;
                   return (
                     <label
                       key={name}
-                      className={`fruit-package-option${checked ? " is-selected" : ""}${disabled ? " is-disabled" : ""}`}
+                      className={`fruit-package-option${qty > 0 ? " is-selected" : ""}${qty <= 0 && disablePlus ? " is-disabled" : ""}`}
                     >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={disabled}
-                        onChange={() => togglePackageFruit(name)}
-                      />
                       <span className="fruit-package-option-name">{name}</span>
+                      <span className="price-menu-add-wrap" aria-label={`כמות ${name} בחבילה`}>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הפחת ${name}`}
+                          onClick={() => bumpQty(setSelectedPackageFruits, MAX_BASIC_PACKAGE_FRUITS, name, -1)}
+                          disabled={qty <= 0}
+                        >
+                          −
+                        </button>
+                        <span className="price-menu-qty-badge" aria-label={`נבחרו: ${qty}`}>
+                          {qty}
+                        </span>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הוסף ${name}`}
+                          onClick={() => bumpQty(setSelectedPackageFruits, MAX_BASIC_PACKAGE_FRUITS, name, 1)}
+                          disabled={disablePlus}
+                        >
+                          +
+                        </button>
+                      </span>
                     </label>
                   );
                 })}
@@ -257,7 +317,7 @@ export function Fruits() {
                 type="button"
                 className="btn btn-primary"
                 onClick={addBasicPackageToCart}
-                disabled={selectedPackageFruits.length === 0 || sheetState.status !== "ok"}
+                disabled={totalSelected(selectedPackageFruits) === 0 || sheetState.status !== "ok"}
               >
                 הוספת חבילה לסל
               </button>
@@ -278,7 +338,7 @@ export function Fruits() {
               <span>{MAX_PREMIUM_PACKAGE_FRUITS} סוגי פירות</span>
               <span>{PREMIUM_PACKAGE_PRICE} ₪</span>
               <span>
-                {selectedPremiumPackageFruits.length}/{MAX_PREMIUM_PACKAGE_FRUITS} נבחרו
+                {totalSelected(selectedPremiumPackageFruits)}/{MAX_PREMIUM_PACKAGE_FRUITS} נבחרו
               </span>
             </div>
 
@@ -286,23 +346,41 @@ export function Fruits() {
               {sheetState.status === "ok" &&
                 poolPremium.map((option) => {
                   const name = option.name.trim();
-                  const checked = selectedPremiumPackageFruits.includes(name);
-                  const disabled = !checked && selectedPremiumPackageFruits.length >= MAX_PREMIUM_PACKAGE_FRUITS;
+                  const qty = selectedPremiumPackageFruits[name] ?? 0;
+                  const sum = totalSelected(selectedPremiumPackageFruits);
+                  const disablePlus = sum >= MAX_PREMIUM_PACKAGE_FRUITS;
                   const showSpecial = isPremiumTierProduct(option);
                   return (
                     <label
                       key={name}
-                      className={`fruit-package-option${checked ? " is-selected" : ""}${disabled ? " is-disabled" : ""}`}
+                      className={`fruit-package-option${qty > 0 ? " is-selected" : ""}${qty <= 0 && disablePlus ? " is-disabled" : ""}`}
                     >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={disabled}
-                        onChange={() => togglePremiumPackageFruit(name)}
-                      />
                       <span className="fruit-package-option-name">
                         {name}
                         {showSpecial ? <span className="fruit-package-option-tag">מיוחד</span> : null}
+                      </span>
+                      <span className="price-menu-add-wrap" aria-label={`כמות ${name} בחבילה`}>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הפחת ${name}`}
+                          onClick={() => bumpQty(setSelectedPremiumPackageFruits, MAX_PREMIUM_PACKAGE_FRUITS, name, -1)}
+                          disabled={qty <= 0}
+                        >
+                          −
+                        </button>
+                        <span className="price-menu-qty-badge" aria-label={`נבחרו: ${qty}`}>
+                          {qty}
+                        </span>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הוסף ${name}`}
+                          onClick={() => bumpQty(setSelectedPremiumPackageFruits, MAX_PREMIUM_PACKAGE_FRUITS, name, 1)}
+                          disabled={disablePlus}
+                        >
+                          +
+                        </button>
                       </span>
                     </label>
                   );
@@ -321,7 +399,7 @@ export function Fruits() {
                 type="button"
                 className="btn btn-primary"
                 onClick={addPremiumPackageToCart}
-                disabled={selectedPremiumPackageFruits.length === 0 || sheetState.status !== "ok"}
+                disabled={totalSelected(selectedPremiumPackageFruits) === 0 || sheetState.status !== "ok"}
               >
                 הוספת חבילת פרימיום לסל
               </button>
@@ -336,35 +414,63 @@ export function Fruits() {
             </div>
 
             <div className="fruit-package-meta" aria-label="מה יש בפנים">
+              {(() => {
+                const addonUnits = totalSelected(selectedGoldAddons);
+                const paidAddonCount = Math.max(0, addonUnits - GOLD_FREE_ADDONS);
+                const paidAddonTotal = paidAddonCount * GOLD_ADDON_EXTRA_PRICE;
+                const priceText = paidAddonTotal > 0 ? `${GOLD_PACKAGE_PRICE} ₪ + ${paidAddonTotal} ₪` : `${GOLD_PACKAGE_PRICE} ₪`;
+                return (
+                  <>
               <span>{MAX_GOLD_PACKAGE_FRUITS} סוגי פירות</span>
               <span>כל הרמות מהגיליון</span>
-              <span>{GOLD_PACKAGE_PRICE} ₪</span>
+              <span>{priceText}</span>
               <span>
-                {selectedGoldPackageFruits.length}/{MAX_GOLD_PACKAGE_FRUITS} נבחרו
+                {totalSelected(selectedGoldPackageFruits)}/{MAX_GOLD_PACKAGE_FRUITS} נבחרו
               </span>
+                  </>
+                );
+              })()}
             </div>
 
             <div className="fruit-package-options" role="list" aria-label="בחירת פירות לחבילת גולד">
               {sheetState.status === "ok" &&
                 poolGold.map((option) => {
                   const name = option.name.trim();
-                  const checked = selectedGoldPackageFruits.includes(name);
-                  const disabled = !checked && selectedGoldPackageFruits.length >= MAX_GOLD_PACKAGE_FRUITS;
+                  const qty = selectedGoldPackageFruits[name] ?? 0;
+                  const sum = totalSelected(selectedGoldPackageFruits);
+                  const disablePlus = sum >= MAX_GOLD_PACKAGE_FRUITS;
                   const showSpecial = isPremiumTierProduct(option);
                   return (
                     <label
                       key={name}
-                      className={`fruit-package-option${checked ? " is-selected" : ""}${disabled ? " is-disabled" : ""}`}
+                      className={`fruit-package-option${qty > 0 ? " is-selected" : ""}${qty <= 0 && disablePlus ? " is-disabled" : ""}`}
                     >
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={disabled}
-                        onChange={() => toggleGoldPackageFruit(name)}
-                      />
                       <span className="fruit-package-option-name">
                         {name}
                         {showSpecial ? <span className="fruit-package-option-tag">מיוחד</span> : null}
+                      </span>
+                      <span className="price-menu-add-wrap" aria-label={`כמות ${name} בחבילה`}>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הפחת ${name}`}
+                          onClick={() => bumpQty(setSelectedGoldPackageFruits, MAX_GOLD_PACKAGE_FRUITS, name, -1)}
+                          disabled={qty <= 0}
+                        >
+                          −
+                        </button>
+                        <span className="price-menu-qty-badge" aria-label={`נבחרו: ${qty}`}>
+                          {qty}
+                        </span>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הוסף ${name}`}
+                          onClick={() => bumpQty(setSelectedGoldPackageFruits, MAX_GOLD_PACKAGE_FRUITS, name, 1)}
+                          disabled={disablePlus}
+                        >
+                          +
+                        </button>
                       </span>
                     </label>
                   );
@@ -380,14 +486,38 @@ export function Fruits() {
 
             <div className="fruit-package-addon-group" aria-label="תוספות לחבילת גולד">
               <h3>תוספות</h3>
+              <p className="muted small" style={{ margin: "0.35rem 0 0.65rem" }}>
+                עד {GOLD_FREE_ADDONS} תוספות בחינם · מעבר לכך {GOLD_ADDON_EXTRA_PRICE}₪ לכל רוטב נוסף
+              </p>
               <div className="fruit-package-addons">
                 {GOLD_FRUIT_PACKAGE_ADDONS.map((addon) => {
-                  const checked = selectedGoldAddons.includes(addon);
+                  const qty = selectedGoldAddons[addon] ?? 0;
                   return (
-                    <label key={addon} className={`fruit-package-addon${checked ? " is-selected" : ""}`}>
-                      <input type="checkbox" checked={checked} onChange={() => toggleGoldAddon(addon)} />
+                    <div key={addon} className={`fruit-package-addon${qty > 0 ? " is-selected" : ""}`}>
                       <span>{addon}</span>
-                    </label>
+                      <span className="price-menu-add-wrap" aria-label={`כמות ${addon} בתוספות`}>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הפחת ${addon}`}
+                          onClick={() => bumpQty(setSelectedGoldAddons, Number.POSITIVE_INFINITY, addon, -1)}
+                          disabled={qty <= 0}
+                        >
+                          −
+                        </button>
+                        <span className="price-menu-qty-badge" aria-label={`נבחרו: ${qty}`}>
+                          {qty}
+                        </span>
+                        <button
+                          type="button"
+                          className="price-menu-qty-btn"
+                          aria-label={`הוסף ${addon}`}
+                          onClick={() => bumpQty(setSelectedGoldAddons, Number.POSITIVE_INFINITY, addon, 1)}
+                        >
+                          +
+                        </button>
+                      </span>
+                    </div>
                   );
                 })}
               </div>
@@ -398,7 +528,7 @@ export function Fruits() {
                 type="button"
                 className="btn btn-primary"
                 onClick={addGoldPackageToCart}
-                disabled={selectedGoldPackageFruits.length === 0 || sheetState.status !== "ok"}
+                disabled={totalSelected(selectedGoldPackageFruits) === 0 || sheetState.status !== "ok"}
               >
                 הוספת חבילת גולד לסל
               </button>
@@ -456,7 +586,7 @@ export function Fruits() {
           <h2>פירות פרימיום עד הבית בחולון, בת ים, ראשון לציון ותל אביב.</h2>
           <p>
             Royal Fruit מתאימה סל פירות לפי עונה, בשלות ומועד שימוש: סל שבועי לבית, פירות לאירוח,
-            פירות חתוכים או בחירה מדויקת לעסק. ההזמנה נסגרת בוואטסאפ, כדי לוודא מלאי,
+            פירות חתוכים או בחירה מדויקת לעסק. אחרי מילוי הסל ההזמנה נסגרת בתיאום, כדי לוודא מלאי,
             בשלות ומועד משלוח לפני האריזה.
           </p>
         </div>

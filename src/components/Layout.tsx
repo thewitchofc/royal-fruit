@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import { MessageCircle, ShoppingCart } from "lucide-react";
+import { ShoppingBag, ShoppingCart } from "lucide-react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { useCart } from "../context/CartContext";
 import { whatsappChatUrl, WHATSAPP_WEBSITE_PREFILL } from "../lib/whatsappOrder";
@@ -15,6 +15,7 @@ import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { ROUTES } from "../lib/publicRoutes";
 import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
 import { warmSheetProductsCache } from "../hooks/useSheetProducts";
+import { useMatchMedia } from "../hooks/useMatchMedia";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 /** לוגו: רק PNG — בפריסות מסוימות קובץ `logo.webp` לא מוצג והדפדפן עלול להציג תמונה שבורה אם משתמשים ב־<picture type=webp>. preload ב-index ב־`brand-logo.png`. */
@@ -61,23 +62,11 @@ function HeaderCartLink({ onClick }: { onClick?: () => void }) {
 
 export function Layout({ children }: { children: ReactNode }) {
   const [open, setOpen] = useState(false);
-  const [isNarrowViewport, setIsNarrowViewport] = useState(false);
+  const isNarrowViewport = useMatchMedia("(max-width: 960px)");
   const headerRef = useRef<HTMLElement>(null);
   const { pathname } = useLocation();
   const { totalItemCount } = useCart();
   useScrollReveal(pathname);
-
-  useLayoutEffect(() => {
-    const mq = window.matchMedia("(max-width: 960px)");
-    const apply = () => setIsNarrowViewport(mq.matches);
-    apply();
-    if (typeof mq.addEventListener === "function") {
-      mq.addEventListener("change", apply);
-      return () => mq.removeEventListener("change", apply);
-    }
-    mq.addListener(apply);
-    return () => mq.removeListener(apply);
-  }, []);
 
   useLayoutEffect(() => {
     const el = headerRef.current;
@@ -197,32 +186,71 @@ export function Layout({ children }: { children: ReactNode }) {
               width={360}
               height={110}
               decoding="async"
+              loading="eager"
             />
           </NavLink>
         </div>
         <nav className="mobile-quick-nav" aria-label="קישורים מהירים במובייל">
-          <NavLink to={ROUTES.shop.fruits} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.shop.fruits}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             פירות מובחרים
           </NavLink>
-          <NavLink to={ROUTES.shop.juices} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.ready.meals}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             מיצים טבעיים
           </NavLink>
-          <NavLink to={ROUTES.ready.sweets} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.ready.meals}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             חלווה וממרחים
           </NavLink>
-          <NavLink to={ROUTES.ready.meals} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
-            מטבח טרי
+          <NavLink
+            to={ROUTES.ready.meals}
+            className={({ isActive }) =>
+              `mobile-quick-nav-link mobile-quick-nav-link--kitchen${isActive ? " active" : ""}`
+            }
+            aria-label="מטבח טרי — חדש"
+            onClick={() => setOpen(false)}
+          >
+            <span className="mobile-quick-nav-link-text">מטבח טרי</span>
+            <span className="mobile-quick-nav-new" aria-hidden>
+              חדש
+            </span>
           </NavLink>
-          <NavLink to={ROUTES.shop.vegetables} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.shop.vegetables}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             ירקות טריים
           </NavLink>
-          <NavLink to={ROUTES.gallery} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.gallery}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             גלריה
           </NavLink>
-          <NavLink to={ROUTES.cart} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.cart}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             סל קניות
           </NavLink>
-          <NavLink to={ROUTES.contact} className="mobile-quick-nav-link" onClick={() => setOpen(false)}>
+          <NavLink
+            to={ROUTES.contact}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
             צור קשר
           </NavLink>
         </nav>
@@ -241,16 +269,14 @@ export function Layout({ children }: { children: ReactNode }) {
               <a href={`tel:${BUSINESS_PHONE_E164}`} className="footer-contact-link">
                 {BUSINESS_PHONE}
               </a>
-              <a
-                href={whatsappChatUrl(WHATSAPP_WEBSITE_PREFILL)}
-                className="btn btn-primary btn-whatsapp footer-wa-cta"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="שליחת הודעה בוואטסאפ להזמנה, נפתח בלשונית חדשה"
+              <Link
+                to={ROUTES.cart}
+                className="btn btn-cart-fill footer-wa-cta"
+                aria-label="מעבר לסל למילוי הזמנה"
               >
-                <MessageCircle className="btn-whatsapp-icon" aria-hidden />
-                וואטסאפ
-              </a>
+                <ShoppingBag className="btn-whatsapp-icon" aria-hidden strokeWidth={2} />
+                מילוי סל
+              </Link>
               <a
                 href={DEV_CREDIT_URL}
                 className="footer-credit-link"

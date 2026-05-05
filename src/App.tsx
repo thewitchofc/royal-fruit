@@ -2,15 +2,13 @@ import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Layout } from "./components/Layout";
 import { PageLoadFallback } from "./components/PageLoadFallback";
+import { Home } from "./pages/Home";
 import { ROUTES } from "./lib/publicRoutes";
 
-/** דף הבית כ־lazy — כדי ש־Suspense יציג מסך טעינה גם בריענון ל־/ (אחרי טעינת המנה הראשית) */
-const Home = lazy(() => import("./pages/Home").then((m) => ({ default: m.Home })));
+/** דף הבית נטען במנה הראשית — משפר LCP במובייל (בלי המתנה ל־chunk נפרד). שאר הדפים נשארים lazy */
 const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
 const Fruits = lazy(() => import("./pages/Fruits").then((m) => ({ default: m.Fruits })));
 const Vegetables = lazy(() => import("./pages/Vegetables").then((m) => ({ default: m.Vegetables })));
-const Juices = lazy(() => import("./pages/Juices").then((m) => ({ default: m.Juices })));
-const Halva = lazy(() => import("./pages/Halva").then((m) => ({ default: m.Halva })));
 const HomeFood = lazy(() => import("./pages/HomeFood").then((m) => ({ default: m.HomeFood })));
 const Cart = lazy(() => import("./pages/Cart").then((m) => ({ default: m.Cart })));
 const Contact = lazy(() => import("./pages/Contact").then((m) => ({ default: m.Contact })));
@@ -43,10 +41,12 @@ export default function App() {
 
             <Route path={ROUTES.shop.fruits} element={<Fruits />} />
             <Route path={ROUTES.shop.vegetables} element={<Vegetables />} />
-            <Route path={ROUTES.shop.juices} element={<Juices />} />
+            {/* מיצים התאחדו לתוך «מטבח טרי» */}
+            <Route path={ROUTES.shop.juices} element={<Navigate to={ROUTES.ready.meals} replace />} />
 
             <Route path={ROUTES.ready.meals} element={<HomeFood />} />
-            <Route path={ROUTES.ready.sweets} element={<Halva />} />
+            {/* חלווה התאחדה לתוך «מטבח טרי» */}
+            <Route path={ROUTES.ready.sweets} element={<Navigate to={ROUTES.ready.meals} replace />} />
 
             <Route path={ROUTES.boxes.fruits} element={<Fruits />} />
             <Route path="/boxes/gifts" element={<Navigate to={ROUTES.boxes.fruits} replace />} />
@@ -73,9 +73,9 @@ export default function App() {
 
             <Route path="/fruits" element={<Navigate to={ROUTES.shop.fruits} replace />} />
             <Route path="/vegetables" element={<Navigate to={ROUTES.shop.vegetables} replace />} />
-            <Route path="/juices" element={<Navigate to={ROUTES.shop.juices} replace />} />
+            <Route path="/juices" element={<Navigate to={ROUTES.ready.meals} replace />} />
             <Route path="/home-food" element={<Navigate to={ROUTES.ready.meals} replace />} />
-            <Route path="/halva" element={<Navigate to={ROUTES.ready.sweets} replace />} />
+            <Route path="/halva" element={<Navigate to={ROUTES.ready.meals} replace />} />
             <Route path="/testimonials" element={<Navigate to={ROUTES.reviews} replace />} />
 
             <Route path="/articles" element={<Navigate to={ROUTES.blog} replace />} />

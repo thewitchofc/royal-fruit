@@ -28,20 +28,18 @@ export const NAVBAR_DROPDOWNS: NavbarDropdown[] = [
     items: [
       { label: "פירות מובחרים", to: ROUTES.shop.fruits },
       { label: "ירקות טריים", to: ROUTES.shop.vegetables },
-      { label: "מיצים טבעיים", to: ROUTES.shop.juices },
     ],
   },
   {
     id: "ready",
     label: "מטבח טרי",
     items: [
-      { label: "מטבח טרי", to: ROUTES.ready.meals },
-      { label: "חלווה וממרחים", to: ROUTES.ready.sweets },
+      { label: "כל מה שמוכן היום", to: ROUTES.ready.meals },
     ],
   },
   {
     id: "gifts",
-    label: "מארזים",
+    label: "מגשי פירות",
     items: [
       { label: "מארזי פירות", to: ROUTES.boxes.fruits },
     ],
