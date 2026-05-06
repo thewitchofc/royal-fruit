@@ -211,12 +211,12 @@ export function getProduceImage(name: string, description?: string): string | un
     "עלי גפן טריים (500 גרם)": "/images/gallery/fresh-produce-box.webp",
     "מלפפון ארמטו ענק": "/images/gallery/fresh-produce-box.webp",
     "עגבניות שרי בלה מאיה": "/images/gallery/fresh-produce-box.webp",
-    "מלפפון חמוץ בעבודת יד": "/images/gallery/cucumbers-trays.webp",
+    "מלפפון חמוץ בעבודת יד": "/images/catalog/pickled-cucumber.png",
     סברס: "/images/gallery/mixed-fruit-box.webp",
     "סברס (לק״ג)": "/images/gallery/mixed-fruit-box.webp",
     "גולדן ברי": "/images/gallery/mixed-fruit-box.webp",
-    "פקאן בוואקום": "/images/gallery/dates-walnut-pack.webp",
-    "פקאן עם קליפה": "/images/gallery/dates-walnut-pack.webp",
+    "פקאן בוואקום": "/images/catalog/pecan-vacuum.png",
+    "פקאן עם קליפה": "/images/catalog/pecan-in-shell.png",
     "מיץ תפוחים": "/images/catalog/juice-apple.png",
     "מיץ תפוחים וגזר": "/images/catalog/juice-apple-carrot.png",
     "מיץ תפוחים וסלק": "/images/catalog/juice-apple-beet.png",
@@ -242,6 +242,8 @@ export function getProduceImage(name: string, description?: string): string | un
     "כרוב חמוץ": "/images/catalog/kitchen-sauerkraut.png",
     "בצל חמוץ מתוק": "/images/catalog/kitchen-sweet-onion.png",
   };
+  // פריטים שמוצגים בלי תמונה (כרטיס “ריק”)
+  // (הוסר: בעבר הוצג בלי תמונה, עכשיו יש תמונה ייעודית)
   const exact = byExactName[n];
   if (exact) return exact;
 
@@ -262,6 +264,7 @@ export function getProduceImage(name: string, description?: string): string | un
   if (n.startsWith("עלי גפן חמוצים")) return byExactName["עלי גפן חמוצים"];
   if (n.startsWith("כרוב חמוץ")) return byExactName["כרוב חמוץ"];
   if (n.startsWith("בצל חמוץ מתוק")) return byExactName["בצל חמוץ מתוק"];
+  if (n.startsWith("מלפפון חמוץ")) return "/images/catalog/pickled-cucumber.png";
 
   // fallback for dynamic sheet rows so every product gets image
   if (n.includes("חומץ") && n.includes("תפוח")) return "/images/catalog/apple-cider-vinegar.png";

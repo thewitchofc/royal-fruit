@@ -43,6 +43,7 @@ export function Halva() {
             priceMenuEmbedClassName="price-menu-embed--premium-cards"
             priceMenuSearchLabel="חיפוש במחירון"
             priceMenuSearchPlaceholder="למשל: אגוזי לוז, פיסטק, טחינה, קרם…"
+            showImagesDisclaimer
           />
         </div>
       </section>

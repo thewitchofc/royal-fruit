@@ -87,7 +87,7 @@ export function HomeFood() {
       name: `${product.name} · ${tier.weight}`,
       price: String(tier.price),
       unit: "לפריט",
-      description: "עבודת יד · הזמנות יומיים מראש",
+      description: "עבודת יד · הזמנות יומיים מראש (למוצרי ממולאים בלבד)",
     })),
   );
 
@@ -253,7 +253,9 @@ export function HomeFood() {
           <p className="eyebrow">מטבח טרי</p>
           <h1 className="page-title juices-page-title">מטבח טרי ומיצים טבעיים</h1>
           <p className="page-lead muted">
-            <strong className="kitchen-lead-strong">שימו לב: הזמנות יומיים מראש.</strong>
+            <strong className="kitchen-lead-strong">
+              שימו לב: ממולאים הזמנות יומיים מראש (עלי גפן, בצל וכרוב)
+            </strong>
             <br />
             ממולאים לפי משקל, חמוצים בעבודת יד, וגם מיצים טבעיים לפי מלאי יומי.
           </p>
@@ -270,7 +272,7 @@ export function HomeFood() {
               <RoyalFruitWordmark className="juices-intro-wordmark" />
               <h2>ממלאים סל מדף אחד</h2>
               <p className="kitchen-intro-note">
-                הזמנות יומיים מראש · בישול ביתי בעבודת יד
+                הזמנות יומיים מראש רק לממולאים · בישול ביתי בעבודת יד
               </p>
             </div>
             <div className="juices-intro-points">
@@ -292,6 +294,7 @@ export function HomeFood() {
             searchFieldIdPrefix="sheet-ready"
             embedClassName="price-menu-embed--premium-cards"
             showProductImages
+            showImagesDisclaimer
           />
         </div>
       </section>

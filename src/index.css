@@ -484,7 +484,10 @@ main,
   right: 0;
   z-index: 9999;
   width: 100%;
-  padding-block: 0.34rem 0.38rem;
+  padding-block: 0;
+  min-height: var(--top-nav-h);
+  display: flex;
+  align-items: center;
 }
 
 .header-nav-inner {
@@ -496,6 +499,7 @@ main,
   align-items: center;
   gap: 0.45rem;
   padding-inline: 0.25rem;
+  width: 100%;
 }
 
 .header-wa-link {
@@ -4643,7 +4647,7 @@ main,
 
   .mobile-main-logo-img {
     width: min(280px, 84vw);
-    aspect-ratio: 360 / 110;
+    aspect-ratio: 420 / 286;
     height: auto;
     max-height: min(22vh, 6.5rem);
     object-fit: contain;
@@ -5303,6 +5307,14 @@ main,
   margin: 1rem 0 0.2rem;
   text-align: center;
   font-weight: 600;
+}
+
+.price-menu-images-disclaimer {
+  margin: 1.15rem 0 -0.75rem;
+  text-align: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  opacity: 0.75;
 }
 
 .price-menu-tel {

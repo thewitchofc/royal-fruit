@@ -13,13 +13,12 @@ import { RoyalFruitWordmark } from "./RoyalFruitWordmark";
 import { Navbar } from "./Navbar";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { ROUTES } from "../lib/publicRoutes";
-import { getGoogleSheetsProductsCsvUrl } from "../lib/sheetProducts";
-import { warmSheetProductsCache } from "../hooks/useSheetProducts";
 import { useMatchMedia } from "../hooks/useMatchMedia";
 import { useScrollReveal } from "../hooks/useScrollReveal";
 
 /** לוגו: רק PNG — בפריסות מסוימות קובץ `logo.webp` לא מוצג והדפדפן עלול להציג תמונה שבורה אם משתמשים ב־<picture type=webp>. preload ב-index ב־`brand-logo.png`. */
 const LOGO_PNG_URL = "/images/brand/brand-logo.png";
+const LOGO_PNG_MOBILE_URL = "/images/brand/brand-logo-mobile.png";
 const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
 const DEV_CREDIT_URL = "https://thewitch.co.il";
 
@@ -93,19 +92,7 @@ export function Layout({ children }: { children: ReactNode }) {
     setOpen(false);
   }, [pathname]);
 
-  useEffect(() => {
-    const warmData = () => warmSheetProductsCache(getGoogleSheetsProductsCsvUrl());
-    const win = window as Window & {
-      requestIdleCallback?: (cb: () => void, opts?: { timeout: number }) => number;
-    };
-
-    if (typeof win.requestIdleCallback === "function") {
-      win.requestIdleCallback(warmData, { timeout: 1500 });
-      return;
-    }
-    const t = window.setTimeout(warmData, 500);
-    return () => window.clearTimeout(t);
-  }, []);
+  // חימום מחירון (CSV) נעשה לפי אינטראקציה (hover ב־Navbar) ולא אוטומטית בטעינת כל עמוד.
 
   const header = (
     <header ref={headerRef} className="site-header">
@@ -180,11 +167,11 @@ export function Layout({ children }: { children: ReactNode }) {
         <div className="mobile-main-logo-wrap">
           <NavLink to="/" className="mobile-main-logo-link" end aria-label="Royal Fruit, מעבר לדף הבית">
             <img
-              src={LOGO_PNG_URL}
+              src={LOGO_PNG_MOBILE_URL}
               alt=""
               className="mobile-main-logo-img"
-              width={360}
-              height={110}
+              width={420}
+              height={286}
               decoding="async"
               loading="eager"
             />
@@ -197,20 +184,6 @@ export function Layout({ children }: { children: ReactNode }) {
             onClick={() => setOpen(false)}
           >
             פירות מובחרים
-          </NavLink>
-          <NavLink
-            to={ROUTES.ready.meals}
-            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
-            onClick={() => setOpen(false)}
-          >
-            מיצים טבעיים
-          </NavLink>
-          <NavLink
-            to={ROUTES.ready.meals}
-            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
-            onClick={() => setOpen(false)}
-          >
-            חלווה וממרחים
           </NavLink>
           <NavLink
             to={ROUTES.ready.meals}

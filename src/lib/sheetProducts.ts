@@ -333,6 +333,8 @@ export function isHalvaProductBySheetMetadata(p: SheetProduct): boolean {
 
 export function isHomeFoodProductBySheetMetadata(p: SheetProduct): boolean {
   const t = p.type?.trim() ?? "";
+  // חריג: מלפפון חמוץ בעבודת יד שייך למטבח טרי גם אם סווג כירקות בגיליון
+  if (p.name.trim().includes("מלפפון חמוץ")) return true;
   if (t && categoryMatchesAliases(t, HOMEFOOD_CATEGORY_ALIASES)) return true;
   return categoryMatchesAliases(p.category, HOMEFOOD_CATEGORY_ALIASES);
 }

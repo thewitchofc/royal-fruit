@@ -211,6 +211,8 @@ type Props = {
   productCardLayout?: boolean;
   /** תמונות מוצר — false בפירות/ירקות/מיצים/מטבח; true בחלווה */
   showProductImages?: boolean;
+  /** טקסט “התמונות להמחשה בלבד” — לשליטה ברמת עמוד (כדי שיופיע פעם אחת) */
+  showImagesDisclaimer?: boolean;
   /** false = בלי שורת חיפוש (לדפים עם מעט פריטים שכבר מוצגים למעלה) */
   showSearch?: boolean;
 };
@@ -232,6 +234,7 @@ export function PriceListSections({
   searchFieldPlaceholder = DEFAULT_SEARCH_PLACEHOLDER,
   productCardLayout: productCardLayoutProp,
   showProductImages = true,
+  showImagesDisclaimer = false,
   showSearch = true,
 }: Props) {
   const productCardLayout =
@@ -396,6 +399,8 @@ export function PriceListSections({
       {filteredCategories.length === 0 ? (
         <p className="price-menu-no-results muted">לא נמצאו תוצאות לחיפוש הזה. נסו מילה אחרת.</p>
       ) : null}
+
+      {showImagesDisclaimer ? <p className="price-menu-images-disclaimer muted">התמונות להמחשה בלבד.</p> : null}
 
       <p className="price-menu-footnote muted">
         לשאלות והזמנות:{" "}
