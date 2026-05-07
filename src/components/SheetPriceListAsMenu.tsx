@@ -31,6 +31,8 @@ type SheetPriceListAsMenuProps = {
   showProductImages?: boolean;
   /** טקסט “התמונות להמחשה בלבד” — לשליטה ברמת עמוד (כדי שיופיע פעם אחת) */
   showImagesDisclaimer?: boolean;
+  /** אם מוגדר — רק שמות שמתאימים לקידומות יקבלו תמונה (למשל דף פירות עם תמונות ייעודיות בלבד) */
+  productImageOnlyPrefixes?: readonly string[];
   /** כותרות קטגוריה מהגיליון שלא להציג (למשל כשכבר יש כרטיסים סטטיים לאותם מוצרים) */
   excludeCategoryTitles?: readonly string[];
   /** false = בלי חיפוש במחירון */
@@ -51,6 +53,7 @@ export function SheetPriceListAsMenu({
   priceMenuSearchPlaceholder,
   showProductImages = true,
   showImagesDisclaimer = false,
+  productImageOnlyPrefixes,
   excludeCategoryTitles,
   showPriceMenuSearch = true,
 }: SheetPriceListAsMenuProps) {
@@ -170,6 +173,7 @@ export function SheetPriceListAsMenu({
       searchFieldPlaceholder={priceMenuSearchPlaceholder}
       showProductImages={showProductImages}
       showImagesDisclaimer={showImagesDisclaimer}
+      productImageOnlyPrefixes={productImageOnlyPrefixes}
       showSearch={showPriceMenuSearch}
     />
   );

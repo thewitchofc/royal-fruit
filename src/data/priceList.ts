@@ -166,7 +166,7 @@ export function getProduceImage(name: string, description?: string): string | un
     "ענב שחור סייבל": "/images/gallery/diva-green-grapes.webp",
     "ענב אדום סוויט סלבריישן": "/images/gallery/diva-green-grapes.webp",
     "ענב קריספי": "/images/gallery/diva-green-grapes.webp",
-    "אננס חתוך": "/images/gallery/pineapple-sliced-trays.webp",
+    "אננס חתוך": "/images/catalog/pineapple-sliced-tray.png",
     "קיווי קלוף": "/images/gallery/kikoka-gold-kiwi.webp",
     "קיווי ירוק": "/images/gallery/kikoka-gold-kiwi.webp",
     "בקבוק חומץ תפוחים": "/images/catalog/apple-cider-vinegar.png",
@@ -182,10 +182,10 @@ export function getProduceImage(name: string, description?: string): string | un
     "תפוז דם": "/images/gallery/mixed-fruit-box.webp",
     פומלה: "/images/gallery/mixed-fruit-box.webp",
     אבטיח: "/images/gallery/mixed-fruit-box.webp",
-    "אבטיח חתוך": "/images/gallery/mixed-fruit-box.webp",
+    "אבטיח חתוך": "/images/catalog/watermelon-sliced.png",
     "מלון כתום": "/images/gallery/mixed-fruit-box.webp",
-    "מלון חתוך": "/images/gallery/mixed-fruit-box.webp",
-    "קוקוס חתוך": "/images/gallery/mixed-fruit-box.webp",
+    "מלון חתוך": "/images/catalog/melon-sliced.png",
+    "קוקוס חתוך": "/images/catalog/coconut-sliced.png",
     "כדורי קוקוס": "/images/gallery/mixed-fruit-box.webp",
     "קוקוס לשתייה עם קש": "/images/gallery/mixed-fruit-box.webp",
     "ג׳ינג׳ר טרי": "/images/gallery/fresh-produce-box.webp",
@@ -265,6 +265,10 @@ export function getProduceImage(name: string, description?: string): string | un
   if (n.startsWith("כרוב חמוץ")) return byExactName["כרוב חמוץ"];
   if (n.startsWith("בצל חמוץ מתוק")) return byExactName["בצל חמוץ מתוק"];
   if (n.startsWith("מלפפון חמוץ")) return "/images/catalog/pickled-cucumber.png";
+  if (n.startsWith("אבטיח חתוך")) return "/images/catalog/watermelon-sliced.png";
+  if (n.startsWith("אננס חתוך")) return "/images/catalog/pineapple-sliced-tray.png";
+  if (n.startsWith("מלון חתוך")) return byExactName["מלון חתוך"];
+  if (n.startsWith("קוקוס חתוך")) return byExactName["קוקוס חתוך"];
 
   // fallback for dynamic sheet rows so every product gets image
   if (n.includes("חומץ") && n.includes("תפוח")) return "/images/catalog/apple-cider-vinegar.png";

@@ -86,12 +86,24 @@ function filterSubsections(subsections: PriceSubsection[] | undefined, query: st
     .filter((sub) => sub.rows.length > 0);
 }
 
+/** כשמוגדר — תמונות מוצר רק לשמות שמתאימים לאחת מהקידומות (שם מלא או שורת שיטס עם סיומת). */
+function productNameMatchesImagePrefixes(name: string, prefixes: readonly string[] | undefined) {
+  if (!prefixes?.length) return true;
+  const n = name.trim();
+  return prefixes.some((p) => {
+    const prefix = p.trim();
+    if (!prefix) return false;
+    return n === prefix || n.startsWith(`${prefix} `) || n.startsWith(`${prefix}·`) || n.startsWith(`${prefix}.`);
+  });
+}
+
 function PriceRowView({
   item,
   description,
   showEmojis,
   productCardLayout,
   showProductImages = true,
+  productImageOnlyPrefixes,
 }: {
   item: CartLineInput;
   description: string;
@@ -99,11 +111,14 @@ function PriceRowView({
   productCardLayout?: boolean;
   /** תמונות מוצר מהקטלוג — רק בדף חלווה; בשאר המחירונים false */
   showProductImages?: boolean;
+  productImageOnlyPrefixes?: readonly string[];
 }) {
   const { addItem, lines, setQty } = useCart();
   const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
   const step = item.qtyStep ?? 1;
-  const thumb = showProductImages ? getProduceImage(item.name, description) : undefined;
+  const mayShowImage =
+    showProductImages && productNameMatchesImagePrefixes(item.name, productImageOnlyPrefixes);
+  const thumb = mayShowImage ? getProduceImage(item.name, description) : undefined;
   const showLeft = Boolean(thumb) || showEmojis;
 
   const qtyBlock = (
@@ -213,6 +228,8 @@ type Props = {
   showProductImages?: boolean;
   /** טקסט “התמונות להמחשה בלבד” — לשליטה ברמת עמוד (כדי שיופיע פעם אחת) */
   showImagesDisclaimer?: boolean;
+  /** אם מוגדר — רק שמות שמתחילים בערכים האלה (או זהים) יקבלו תמונה מ־getProduceImage */
+  productImageOnlyPrefixes?: readonly string[];
   /** false = בלי שורת חיפוש (לדפים עם מעט פריטים שכבר מוצגים למעלה) */
   showSearch?: boolean;
 };
@@ -235,6 +252,7 @@ export function PriceListSections({
   productCardLayout: productCardLayoutProp,
   showProductImages = true,
   showImagesDisclaimer = false,
+  productImageOnlyPrefixes,
   showSearch = true,
 }: Props) {
   const productCardLayout =
@@ -346,6 +364,7 @@ export function PriceListSections({
                       showEmojis={showEmojis}
                       productCardLayout={productCardLayout}
                       showProductImages={showProductImages}
+                      productImageOnlyPrefixes={productImageOnlyPrefixes}
                     />
                   );
                 })}
@@ -386,6 +405,7 @@ export function PriceListSections({
                           showEmojis={showEmojis}
                           productCardLayout={productCardLayout}
                           showProductImages={showProductImages}
+                          productImageOnlyPrefixes={productImageOnlyPrefixes}
                         />
                       );
                     })}

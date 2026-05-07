@@ -549,7 +549,9 @@ export function Fruits() {
               }}
               singleCategoryTitle="הפירות הזמינים היום"
               priceMenuEmbedClassName="price-menu-embed--premium-cards"
-              showProductImages={false}
+              showProductImages
+              showImagesDisclaimer
+              productImageOnlyPrefixes={["אבטיח חתוך", "אננס חתוך", "מלון חתוך", "קוקוס חתוך"]}
             />
           ) : null}
         </div>
