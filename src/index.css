@@ -3129,11 +3129,15 @@ main,
   width: 100%;
   height: 100%;
   overflow: hidden;
+  /* קרוסלה תמיד LTR — ב-RTL flex+translate גורמים לחצי תמונה ויישור שבור */
+  direction: ltr;
 }
 
 .price-menu-embed--halva-sweets .price-menu-card-carousel-track,
 .price-menu-embed--premium-cards .price-menu-card-carousel-track {
   display: flex;
+  /* נעילה לרוחב ה-viewport — בלי זה flex:100% מתייחס ל-track מורחב ושקופית = חצי מסך */
+  width: 100%;
   height: 100%;
   will-change: transform;
   transition: transform 0.35s ease;
@@ -3143,10 +3147,13 @@ main,
 .price-menu-embed--premium-cards .price-menu-card-carousel-slide {
   flex: 0 0 100%;
   width: 100%;
+  min-width: 100%;
+  max-width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .price-menu-embed--halva-sweets .price-menu-card-carousel-dots,

@@ -52,33 +52,74 @@ export function getProduceShortDescription(name: string): string {
   const byExact: Record<string, string> = {
     פומלה: "הדר עדין ומתוק־מריר; מתאים לנשנוש, לסלטים ולפריסה על מגש.",
     "אננס חתוך": "מתוק וחמצמץ, מוכן לאכילה מיד; מרקם צפוף ועסיסי.",
+    "אננס חתוך מארז": "אננס חתוך במארז מוכן לאכילה; מתוק, חמצמץ ועסיסי.",
+    "אננס קאפי": "אננס Kapi פרימיום מקוסטה ריקה; מתוק, עסיסי וארומטי עם סרט סגול מובחר.",
+    "אננס קאפי יחידה": "אננס Kapi פרימיום מקוסטה ריקה; מתוק, עסיסי וארומטי — יחידה עם סרט סגול.",
     "קוקוס חתוך": "בשר קוקוס טרי ופריך; מתיקות עדינה, מתאים גם לקינוחים.",
     "אבטיח חתוך": "עסיסי ומרענן, מוכן להגשה; מתיקות רכה ומרקם מים.",
     "מלון חתוך": "מתוק ובשרני עם ארומה בולטת; מתאים למגשי אירוח ולקינוח קליל.",
+    "פומלה קלופה": "פומלה קלופה מוכנה לאכילה; מתוקה־עדינה, עסיסית ומרעננת — מושלמת לנשנוש ולמגש.",
+    "פומלה קלופה מארז": "פומלה קלופה במארז מוכן לאכילה; מתוקה־עדינה, עסיסית ומרעננת.",
     "קיווי קלוף": "חמצמץ־מתקתק ומוכן לשימוש; חמיצות חדה ומרעננת.",
     סברס: "מתוק עדין וקריר; מרקם גרגירי עדין, ייחודי בצלחת ובסלט פירות.",
     "אוכמניות כרמל": "מתיקות מאוזנת ומרקם יציב; עסיסיות נעימה ונוחה לנשנוש.",
+    "אוכמניות כרמל בינוני": "אוכמניות כרמל בינוניות מרמת הגולן; עסיסיות, מתוקות וטריות — 125 גרם במארז.",
+    "אוכמניות כרמל בינוני מארז": "אוכמניות כרמל בינוניות במארז; עסיסיות, מתוקות וטריות.",
+    "אוכמניות כרמל גדול": "אוכמניות כרמל גדולות; עסיסיות, מתוקות ומובחרות — 125 גרם במארז.",
+    "אוכמניות כרמל גדול מארז": "אוכמניות כרמל גדולות במארז; עסיסיות, מתוקות ומובחרות.",
+    "אוכמניות ישראלי": "אוכמניות מחקלאות מקומית; גדולות, עסיסיות וטריות — 250 גרם במארז.",
+    "אוכמניות ישראלי מארז": "אוכמניות מחקלאות מקומית במארז; גדולות, עסיסיות וטריות.",
     "אוכמניות גליל ים": "אוכמניה מוצקה ומתוקה, מצוינת לנשנוש וקינוחים.",
-    "אוכמניות פרו סקויה": "טעם מאוזן, מתאים לאפייה ולשימוש חם בבישול.",
+    "אוכמניות פרו סקויה": "אוכמניות סקויה גדולות ומובחרות; מתוקות, עסיסיות ואחידות במארז.",
     "פטל אדום ישראלי": "ארומטי ועדין מאוד; שברירי, כדאי לקירור ולטיפול עדין.",
     "פטל שחור": "טעם עמוק, מתקתק־חמצמץ; בולט בקינוחים ובמגשי פרימיום.",
+    "פטל שחור רובי מארז": "פטל שחור רובי במארז; עסיסי, מתוק־חמצמץ ומושלם לנשנוש וקינוח.",
+    "פטל שחור בכר": "פטל שחור אסנה משק בכר; עסיסי, מתוק־חמצמץ ומושלם לנשנוש וקינוח.",
+    "פטל שחור בכר מארז": "פטל שחור אסנה משק בכר במארז; עסיסי, מתוק־חמצמץ ומושלם לנשנוש וקינוח.",
+    "פטל אדום בהר מארז": "פטל אדום «פטל בהר» במארז; מתוק, עסיסי וטרי לנשנוש וקינוח.",
+    "דובדבן אדום": "דובדבן אדום עסיסי ומתוק; בוהק, טרי ומושלם לעונה — דובדבני אבו עלם.",
+    "דובדבן הזהב אדום": "דובדבן הזהב אדום מתוק; מובחר, עסיסי וטרי — 250 גרם במארז.",
+    מישמש: "משמש ארומה קוט מתוק ועסיסי; כתום־אדום, רך וארומטי — פירות בן־דור איכות עלית.",
+    משמש: "משמש ארומה קוט מתוק ועסיסי; כתום־אדום, רך וארומטי — פירות בן־דור איכות עלית.",
+    דומדמניות: "דומדמניות אדומות טריות; חמצמצות־מתוקות, עסיסיות ומושלמות לקינוח ולמגש.",
+    "דומדמניות מארז": "דומדמניות אדומות במארז 125 גרם; טריות, עסיסיות ומובחרות.",
+    "תות פקיסטני": "תות עץ פקיסטני ארוך ומתוק; עסיסי, מיוחד ומושלם לעונה — 125 גרם במארז.",
+    "תות עץ": "תות עץ פקיסטני ארוך ומתוק; עסיסי, מיוחד ומושלם לעונה.",
+    "דובדבן לבן": "דובדבן לבן־צהוב עם סומק אדום; מתוק, עסיסי ומיוחד לעונה.",
     "גולדן ברי": "חמצמץ־טרופי עם מתיקות קלה; טעם חד ואקזוטי.",
     "תות לבבות מיוחד": "מתוק ובשל להגשה; שלם ומרשים בצלחת ובאירוח.",
     "תות חצאים": "פתרון מהיר לקינוח או מגש, בלי חיתוך נוסף; מומלץ לצריכה קרובה.",
     "ענב ירוק קריספי": "פריך ומתוק, מושלם לנשנוש; קראנץ' בולט ונקי.",
     "ענב ירוק סוויט גלוב": "ירוק מתוק ופריך, קל לאכילה ישירות מהמארז.",
+    "ענב ירוק ישראלי": "ענב ירוק ישראלי «ביג פרל»; גדול, עסיסי ומתוק — ארבעונות איכותי.",
+    "ענב אדום ישראלי": "ענב אדום ישראלי «פייר קיס»; ללא חרצנים, מתוק ועסיסי — ארבעונות איכותי.",
     "ענב אדום כרימסון": "ענב אדום מאוזן ומתוק, מרקם עדין ונעים.",
     "ענב שחור סייבל": "ארומה עמוקה ומתיקות בולטת; טעם מודגש ועשיר.",
     "ענב אדום סוויט סלבריישן": "אדום מתוק להגשה ואירוח, מרקם עדין.",
     "ענב קריספי": "ענבים פריכים במיוחד עם ביס חד ונקי.",
     "קוקוס לשתייה עם קש": "מי קוקוס לשתייה בלבד, טריים לשימוש מיידי, קלילים ומרעננים.",
     "כדורי קוקוס": "נשנוש קוקוס טבעי מוכן לאכילה, מרקם עשיר וסיבי.",
-    "קרמבולה פרימיום": "חמצמץ־מתקתק עם חיתוך כוכב ייחודי; מצוין לקישוט צלחות.",
+    "כדורי קוקוס יחידה": "נשנוש קוקוס טבעי מוכן לאכילה, מרקם עשיר וסיבי.",
+    קרמבולה: "חמצמץ־מתקתק עם חיתוך כוכב ייחודי; מצוין לקישוט צלחות ולמגשי אירוח.",
+    "קרמבולה פרימיום": "חמצמץ־מתקתק עם חיתוך כוכב ייחודי; מצוין לקישוט צלחות ולמגשי אירוח.",
     "תפוז דם": "הדר ארומטי עם מתיקות־חמיצות עמוקה וצבע בשר בולט.",
     "תפוז פירמיום": "תפוז מתוק ומאוזן לשתייה/אכילה יומית.",
-    "קיווי ירוק": "חמצמץ־מתוק עם סיבים עדינים; מרענן וקליל.",
+    "קיווי ירוק": "חמצמץ־מתוק עם סיבים עדינים; קליפה חומה ופרווה, בשר ירוק עז — מרענן וקליל.",
+    "קיווי צהוב": "מתוק ועסיסי, בלי שיער; בשר צהוב־זהב רך ומרענן — SunGold מובחר.",
     "מלון כתום": "מתוק וארומטי, בשרני וריח בולט.",
+    מלון: "מתוק וארומטי, בשרני וריח בולט; טרי ועסיסי לעונה.",
     אבטיח: "מרענן ועסיסי מאוד; מתיקות קלילה ומרקם מים.",
+    מנגו: "מתוק, עסיסי וארומטי; בשר רך ועשיר — מושלם לנשנוש ולקינוח.",
+    נקטרינה: "מתוקה, עסיסה וחלקה; קליפה דקה וטעם אפרסקי עדין — מושלמת לעונה.",
+    פאפאיה: "מתוקה, עסיסה וטרופית; בשר רך וריח עדין — מושלמת לעונה.",
+    "פאפאיה זוג מארז": "פאפאיה טרייה במארז זוג; מתוקה, עסיסה וטרופית.",
+    "שזיף מיטלי": "שזיף מתוק־חמצמץ, עסיסי ורך; קליפה סגולה־אדומה ובשר בוהק — מושלם לעונה.",
+    גויאבה: "מתוקה־חמצמצה, ארומטית ועסיסה; קליפה ירוקה ובשר לבן רך — טרופית ומרעננת.",
+    קלמנטינה: "מתוקה, עסיסה וקלה לקליפה; הדר קטן ונוח לנשנוש — טרי ומרענן.",
+    "אפרסק לבן": "מתוק ועסיסי, קליפה בהירה ובשר לבן־קרם רך; עדין ומושלם לעונה.",
+    תאנים: "תאנים טריות מישראל; מתוקות, רכות ועסיסיות — מושלמות לעונה.",
+    תאנה: "תאנים טריות מישראל; מתוקות, רכות ועסיסיות — מושלמות לעונה.",
+    "תאנה מארז": "תאנים טריות במארז מישראל; מתוקות, רכות ועסיסיות.",
     "פקאן בוואקום": "אגוז טרי ויציב לאורך זמן הודות לאריזת ואקום.",
     "פקאן עם קליפה": "שומר טריות טבעית בתוך הקליפה, מתאים לאחסון ארוך יחסית.",
     "בקבוק חומץ תפוחים": appleCiderVinegarShort,
@@ -141,6 +182,16 @@ export function getProduceShortDescription(name: string): string {
     "פטל מצופה בשוקולד חלב ושוקולד לבן":
       "פטל בציפוי כפול — שוקולד לבן ושוקולד חלב; מתוק וקרמי לקינוח ונשנוש.",
     "פטל מצופה בשוקולד מריר": "פטל קפוא מצופה בשוקולד מריר; עמוק ומתוק לקינוח ונשנוש.",
+    "פטל שחור מצופה בשוקולד חלב ושוקולד לבן":
+      "פטל שחור קפוא בציפוי כפול — שוקולד לבן ושוקולד חלב; מתוק ועשיר לקינוח.",
+    "פטל מצופה בשוקולד לבן ועוגיות":
+      "פטל קפוא בשוקולד לבן ועוגיות; מתוק וקרמי לקינוח ונשנוש.",
+    "פטל מצופה בשוקולד לבן": "פטל קפוא בשוקולד לבן ועוגיות; מתוק וקרמי לקינוח ונשנוש.",
+    "תות מצופה בשוקולד לבן ושוקולד חלב":
+      "תות שדה מצופה בציפוי כפול — שוקולד לבן ושוקולד חלב; מתוק לקינוח ונשנוש.",
+    "תות מצופה בשוקולד חלב ושוקולד לבן":
+      "תות שדה מצופה בציפוי כפול — שוקולד לבן ושוקולד חלב; מתוק לקינוח ונשנוש.",
+    "תות מצופה שוקולד מריר": "תות שדה מצופה בשוקולד מריר קפוא; עמוק ומתוק לקינוח ונשנוש.",
     "אגוזי לוז": "חלווה שומשום עם אגוזי לוז; יחידה 350 גרם. טעם אגוזי קלאסי ומרקם פריך.",
     פיסטק: "חלווה שומשום עם פיסטוק; יחידה 350 גרם. טעם אגוזי־ירוק ומרקם עשיר.",
     פקאן: "חלווה שומשום עם פקאן; יחידה 350 גרם. קראנץ' אגוזי ומתיקות עמוקה.",
@@ -179,25 +230,108 @@ export const MAX_PRODUCT_IMAGES = 4;
 
 /** ממפה שם מוצר → תמונה/ות (גלריה WebP; קטלוג PNG) */
 const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
-    קרמבולה: "/images/gallery/starfruit-trays.webp",
-    "קרמבולה פרימיום": "/images/gallery/starfruit-trays.webp",
+    קרמבולה: ["/images/catalog/carambola-whole.png", "/images/catalog/carambola-sliced.png"],
+    "קרמבולה פרימיום": ["/images/catalog/carambola-whole.png", "/images/catalog/carambola-sliced.png"],
     "תמרים ממולאים אגוזי מלך": "/images/gallery/dates-walnut-pack.webp",
     "תות לבבות מיוחד": "/images/gallery/white-strawberries.webp",
     "תות חצאים": "/images/gallery/white-strawberries.webp",
     "אוכמניות כרמל": "/images/gallery/blueberries-pack.webp",
+    "אוכמניות כרמל בינוני": [
+      "/images/catalog/blueberry-carmel-medium-pack.png",
+      "/images/catalog/blueberry-carmel-medium-open.png",
+    ],
+    "אוכמניות כרמל בינוני מארז": [
+      "/images/catalog/blueberry-carmel-medium-pack.png",
+      "/images/catalog/blueberry-carmel-medium-open.png",
+    ],
+    "אוכמניות כרמל גדול": [
+      "/images/catalog/blueberry-carmel-large-pack.png",
+      "/images/catalog/blueberry-carmel-large-open.png",
+    ],
+    "אוכמניות כרמל גדול מארז": [
+      "/images/catalog/blueberry-carmel-large-pack.png",
+      "/images/catalog/blueberry-carmel-large-open.png",
+    ],
+    "אוכמניות ישראלי": [
+      "/images/catalog/blueberry-israeli-pack.png",
+      "/images/catalog/blueberry-israeli-open.png",
+    ],
+    "אוכמניות ישראלי מארז": [
+      "/images/catalog/blueberry-israeli-pack.png",
+      "/images/catalog/blueberry-israeli-open.png",
+    ],
     "אוכמניות גליל ים": "/images/gallery/blueberries-pack.webp",
-    "אוכמניות פרו סקויה": "/images/gallery/blueberries-pack.webp",
+    "אוכמניות פרו סקויה": [
+      "/images/catalog/blueberry-peru-sekoya-pack.png",
+      "/images/catalog/blueberry-peru-sekoya-open.png",
+    ],
     "פטל אדום ישראלי": "/images/gallery/mixed-fruit-box.webp",
     "פטל שחור": "/images/gallery/mixed-fruit-box.webp",
+    "פטל שחור רובי מארז": [
+      "/images/catalog/blackberry-ruby-pack.png",
+      "/images/catalog/blackberry-ruby-open-1.png",
+      "/images/catalog/blackberry-ruby-open-2.png",
+    ],
+    "פטל שחור בכר": [
+      "/images/catalog/blackberry-bechar-pack.png",
+      "/images/catalog/blackberry-bechar-open.png",
+    ],
+    "פטל שחור בכר מארז": [
+      "/images/catalog/blackberry-bechar-pack.png",
+      "/images/catalog/blackberry-bechar-open.png",
+    ],
+    "פטל אדום בהר מארז": [
+      "/images/catalog/raspberry-bahar-pack.png",
+      "/images/catalog/raspberry-bahar-open-1.png",
+      "/images/catalog/raspberry-bahar-open-2.png",
+    ],
+    "דובדבן אדום": ["/images/catalog/red-cherry-pack.png", "/images/catalog/red-cherry-open.png"],
+    "דובדבן הזהב אדום": [
+      "/images/catalog/golden-cherry-red-pack.png",
+      "/images/catalog/golden-cherry-red-open.png",
+    ],
+    מישמש: ["/images/catalog/apricot-pack.png", "/images/catalog/apricot-open.png"],
+    משמש: ["/images/catalog/apricot-pack.png", "/images/catalog/apricot-open.png"],
+    דומדמניות: ["/images/catalog/red-currant-pack.png", "/images/catalog/red-currant-open.png"],
+    "דומדמניות מארז": ["/images/catalog/red-currant-pack.png", "/images/catalog/red-currant-open.png"],
+    "תות פקיסטני": [
+      "/images/catalog/pakistani-mulberry-pack.png",
+      "/images/catalog/pakistani-mulberry-open.png",
+    ],
+    "תות עץ": ["/images/catalog/pakistani-mulberry-pack.png", "/images/catalog/pakistani-mulberry-open.png"],
+    "דובדבן לבן": [
+      "/images/catalog/white-cherry-pack.png",
+      "/images/catalog/white-cherry-open.png",
+    ],
+    "פומלה קלופה": ["/images/catalog/peeled-pomelo-pack.png", "/images/catalog/peeled-pomelo-open.png"],
+    "פומלה קלופה מארז": ["/images/catalog/peeled-pomelo-pack.png", "/images/catalog/peeled-pomelo-open.png"],
+    "ענב ירוק ישראלי": "/images/catalog/green-grapes-israeli-pack.png",
+    "ענב אדום ישראלי": "/images/catalog/red-grapes-israeli-pack.png",
     "ענב ירוק קריספי": "/images/gallery/diva-green-grapes.webp",
     "ענב ירוק סוויט גלוב": "/images/gallery/diva-green-grapes.webp",
     "ענב אדום כרימסון": "/images/gallery/diva-green-grapes.webp",
     "ענב שחור סייבל": "/images/gallery/diva-green-grapes.webp",
     "ענב אדום סוויט סלבריישן": "/images/gallery/diva-green-grapes.webp",
     "ענב קריספי": "/images/gallery/diva-green-grapes.webp",
-    "אננס חתוך": "/images/catalog/pineapple-sliced-tray.png",
+    "אננס חתוך": [
+      "/images/catalog/pineapple-sliced-pack.png",
+      "/images/catalog/pineapple-sliced-open.png",
+    ],
+    "אננס חתוך מארז": [
+      "/images/catalog/pineapple-sliced-pack.png",
+      "/images/catalog/pineapple-sliced-open.png",
+    ],
+    "אננס קאפי": [
+      "/images/catalog/pineapple-kapi-labeled.png",
+      "/images/catalog/pineapple-kapi-slice.png",
+    ],
+    "אננס קאפי יחידה": [
+      "/images/catalog/pineapple-kapi-labeled.png",
+      "/images/catalog/pineapple-kapi-slice.png",
+    ],
     "קיווי קלוף": "/images/gallery/kikoka-gold-kiwi.webp",
-    "קיווי ירוק": "/images/gallery/kikoka-gold-kiwi.webp",
+    "קיווי ירוק": "/images/catalog/green-kiwi-tray.png",
+    "קיווי צהוב": ["/images/catalog/yellow-kiwi-whole.png", "/images/catalog/yellow-kiwi-cut.png"],
     "בקבוק חומץ תפוחים": "/images/catalog/apple-cider-vinegar.png",
     "מיקס כרובית טריו": "/images/gallery/colorful-cauliflower.webp",
     "כרובית לבנה": "/images/gallery/colorful-cauliflower.webp",
@@ -210,12 +344,31 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "תפוז פירמיום": "/images/gallery/mixed-fruit-box.webp",
     "תפוז דם": "/images/gallery/mixed-fruit-box.webp",
     פומלה: "/images/gallery/mixed-fruit-box.webp",
-    אבטיח: "/images/gallery/mixed-fruit-box.webp",
+    אבטיח: ["/images/catalog/watermelon-whole.png", "/images/catalog/watermelon-half.png"],
+    מנגו: ["/images/catalog/mango-whole.png", "/images/catalog/mango-halves.png"],
+    נקטרינה: "/images/catalog/nectarine-tray.png",
+    פאפאיה: ["/images/catalog/papaya-pack.png", "/images/catalog/papaya-open.png"],
+    "פאפאיה זוג מארז": ["/images/catalog/papaya-pack.png", "/images/catalog/papaya-open.png"],
+    "שזיף מיטלי": "/images/catalog/plum-methley-tray.png",
+    גויאבה: ["/images/catalog/guava-whole.png", "/images/catalog/guava-cut.png"],
+    קלמנטינה: ["/images/catalog/clementine-whole.png", "/images/catalog/clementine-peeled.png"],
+    "אפרסק לבן": "/images/catalog/white-peach-tray.png",
+    תאנים: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
+    תאנה: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
+    "תאנה מארז": ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
     "אבטיח חתוך": "/images/catalog/watermelon-sliced.png",
-    "מלון כתום": "/images/gallery/mixed-fruit-box.webp",
+    מלון: "/images/catalog/melon-whole.png",
+    "מלון כתום": "/images/catalog/melon-whole.png",
     "מלון חתוך": "/images/catalog/melon-sliced.png",
     "קוקוס חתוך": "/images/catalog/coconut-sliced.png",
-    "כדורי קוקוס": "/images/gallery/mixed-fruit-box.webp",
+    "כדורי קוקוס": [
+      "/images/catalog/coconut-ball-whole.png",
+      "/images/catalog/coconut-ball-halves-tray.png",
+    ],
+    "כדורי קוקוס יחידה": [
+      "/images/catalog/coconut-ball-whole.png",
+      "/images/catalog/coconut-ball-halves-tray.png",
+    ],
     "קוקוס לשתייה עם קש": "/images/gallery/mixed-fruit-box.webp",
     "ג׳ינג׳ר טרי": "/images/gallery/fresh-produce-box.webp",
     "שום טרי": "/images/gallery/fresh-produce-box.webp",
@@ -289,6 +442,13 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "פטל מצופה בפיסטוק": "/images/catalog/raspberry-pistachio-coated.png",
     "פטל מצופה בשוקולד חלב ושוקולד לבן": "/images/catalog/raspberry-double-chocolate.png",
     "פטל מצופה בשוקולד מריר": "/images/catalog/raspberry-dark-chocolate.png",
+    "פטל שחור מצופה בשוקולד חלב ושוקולד לבן":
+      "/images/catalog/black-raspberry-double-chocolate.png",
+    "פטל מצופה בשוקולד לבן ועוגיות": "/images/catalog/raspberry-white-chocolate-cookies.png",
+    "פטל מצופה בשוקולד לבן": "/images/catalog/raspberry-white-chocolate-cookies.png",
+    "תות מצופה בשוקולד לבן ושוקולד חלב": "/images/catalog/strawberry-double-chocolate.png",
+    "תות מצופה בשוקולד חלב ושוקולד לבן": "/images/catalog/strawberry-double-chocolate.png",
+    "תות מצופה שוקולד מריר": "/images/catalog/strawberry-dark-chocolate.png",
 };
 
 /** מנרמל לרשימת עד 4 נתיבים ייחודיים */
@@ -341,9 +501,24 @@ function resolveProduceImageEntry(
   if (n.startsWith("בצל חמוץ מתוק")) return BY_EXACT_PRODUCT_IMAGES["בצל חמוץ מתוק"];
   if (n.startsWith("מלפפון חמוץ")) return "/images/catalog/pickled-cucumber.png";
   if (n.startsWith("אבטיח חתוך")) return "/images/catalog/watermelon-sliced.png";
-  if (n.startsWith("אננס חתוך")) return "/images/catalog/pineapple-sliced-tray.png";
+  if (n.startsWith("אננס חתוך")) return BY_EXACT_PRODUCT_IMAGES["אננס חתוך"];
+  if (n.startsWith("אננס קאפי")) return BY_EXACT_PRODUCT_IMAGES["אננס קאפי"];
   if (n.startsWith("מלון חתוך")) return BY_EXACT_PRODUCT_IMAGES["מלון חתוך"];
   if (n.startsWith("קוקוס חתוך")) return BY_EXACT_PRODUCT_IMAGES["קוקוס חתוך"];
+  if (n.startsWith("כדורי קוקוס")) return BY_EXACT_PRODUCT_IMAGES["כדורי קוקוס"];
+  if (n.startsWith("פומלה קלופה")) return BY_EXACT_PRODUCT_IMAGES["פומלה קלופה"];
+  if (n.startsWith("פאפאיה")) return BY_EXACT_PRODUCT_IMAGES["פאפאיה"];
+  if (n.startsWith("תאנ")) return BY_EXACT_PRODUCT_IMAGES["תאנים"];
+  if (n.startsWith("דובדבן הזהב")) return BY_EXACT_PRODUCT_IMAGES["דובדבן הזהב אדום"];
+  if (n.startsWith("מישמש") || n.startsWith("משמש")) return BY_EXACT_PRODUCT_IMAGES["מישמש"];
+  if (n.startsWith("דומדמניות")) return BY_EXACT_PRODUCT_IMAGES["דומדמניות"];
+  if (n.startsWith("תות פקיסטני") || n.startsWith("תות עץ")) return BY_EXACT_PRODUCT_IMAGES["תות פקיסטני"];
+  if (n.startsWith("פטל שחור בכר")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור בכר"];
+  if (n.startsWith("אוכמניות כרמל גדול")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות כרמל גדול"];
+  if (n.startsWith("אוכמניות כרמל בינוני")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות כרמל בינוני"];
+  if (n.startsWith("אוכמניות ישראלי")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות ישראלי"];
+  if (n.startsWith("אוכמניות פרו סקויה") || n.startsWith("אוכמניות פרו סויקה"))
+    return BY_EXACT_PRODUCT_IMAGES["אוכמניות פרו סקויה"];
 
   if (n.includes("חומץ") && n.includes("תפוח")) return "/images/catalog/apple-cider-vinegar.png";
   if (n.includes("מיץ תפוחים") && n.includes("גזר")) return "/images/catalog/juice-apple-carrot.png";

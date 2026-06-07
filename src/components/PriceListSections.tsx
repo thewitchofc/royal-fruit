@@ -102,15 +102,46 @@ const PRODUCT_CARD_IMG_SIZE = 400;
 const CAROUSEL_AUTO_MS = 4000;
 const CAROUSEL_SWIPE_PX = 40;
 
-/** כרטיס מוצר — קרוסלת תמונות (עד 4), בלי ספריות חיצוניות */
+function ProductCardImage({
+  src,
+  fetchPriority,
+}: {
+  src: string;
+  fetchPriority?: "high" | "low" | "auto";
+}) {
+  return (
+    <img
+      src={src}
+      alt=""
+      className="price-menu-card-img"
+      width={PRODUCT_CARD_IMG_SIZE}
+      height={PRODUCT_CARD_IMG_SIZE}
+      sizes="(max-width: 960px) 42vw, 168px"
+      decoding="async"
+      loading="eager"
+      fetchPriority={fetchPriority}
+      draggable={false}
+    />
+  );
+}
+
+/** כרטיס מוצר — קרוסלה לפי מספר התמונות במוצר; תמונה בודדת בלי קרוסלה */
 function ProductCardCarousel({ images, productName }: { images: readonly string[]; productName: string }) {
   const slides = images;
   const [index, setIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(slides.length > 1);
+  const [slideStepPx, setSlideStepPx] = useState(0);
+  const viewportRef = useRef<HTMLDivElement>(null);
   const touchStartX = useRef(0);
   const touchDeltaX = useRef(0);
   const didSwipe = useRef(false);
+  const imagesKey = images.join("|");
   const multi = slides.length > 1;
+
+  useEffect(() => {
+    setIndex(0);
+    setAutoPlay(slides.length > 1);
+  }, [imagesKey, slides.length]);
 
   const goTo = useCallback(
     (next: number) => {
@@ -125,11 +156,18 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
   const goPrev = useCallback(() => goTo(index - 1), [goTo, index]);
   const stopAuto = useCallback(() => setAutoPlay(false), []);
 
-  const slidesKey = slides.join("|");
   useEffect(() => {
-    setIndex(0);
-    setAutoPlay(slides.length > 1);
-  }, [slidesKey, slides.length]);
+    const node = viewportRef.current;
+    if (!node || !multi) {
+      setSlideStepPx(0);
+      return;
+    }
+    const measure = () => setSlideStepPx(node.clientWidth);
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(node);
+    return () => ro.disconnect();
+  }, [multi, slides.length, imagesKey]);
 
   useEffect(() => {
     if (!multi || !autoPlay) return;
@@ -142,22 +180,12 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
     return () => window.clearInterval(id);
   }, [multi, autoPlay, slides.length]);
 
-  if (slides.length === 0) return null;
+  if (images.length === 0) return null;
 
   if (!multi) {
-    const src = slides[0]!;
-    return (
-      <img
-        src={src}
-        alt=""
-        className="price-menu-card-img"
-        width={PRODUCT_CARD_IMG_SIZE}
-        height={PRODUCT_CARD_IMG_SIZE}
-        sizes="(max-width: 960px) 42vw, 168px"
-        decoding="async"
-        draggable={false}
-      />
-    );
+    const src = slides[0];
+    if (!src) return null;
+    return <ProductCardImage src={src} fetchPriority="high" />;
   }
 
   return (
@@ -196,10 +224,15 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
       aria-roledescription="carousel"
       aria-label={`תמונות ${productName}`}
     >
-      <div className="price-menu-card-carousel-viewport">
+      <div ref={viewportRef} className="price-menu-card-carousel-viewport">
         <div
           className="price-menu-card-carousel-track"
-          style={{ transform: `translate3d(-${index * 100}%, 0, 0)` }}
+          style={{
+            transform:
+              slideStepPx > 0
+                ? `translate3d(-${index * slideStepPx}px, 0, 0)`
+                : `translate3d(-${index * 100}%, 0, 0)`,
+          }}
         >
           {slides.map((src, i) => (
             <div
@@ -207,17 +240,7 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
               className="price-menu-card-carousel-slide"
               aria-hidden={i !== index}
             >
-              <img
-                src={src}
-                alt=""
-                className="price-menu-card-img"
-                width={PRODUCT_CARD_IMG_SIZE}
-                height={PRODUCT_CARD_IMG_SIZE}
-                sizes="(max-width: 960px) 42vw, 168px"
-                decoding="async"
-                loading={i === 0 ? "eager" : "lazy"}
-                draggable={false}
-              />
+              <ProductCardImage src={src} fetchPriority={i === 0 ? "high" : "auto"} />
             </div>
           ))}
         </div>
