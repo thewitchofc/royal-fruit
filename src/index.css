@@ -3261,6 +3261,83 @@ main,
   box-shadow: none;
 }
 
+.price-menu-weight-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 0.25rem;
+  width: 100%;
+  margin: 0.1rem 0 0;
+}
+
+.price-menu-weight-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.05rem;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 5.25rem;
+  padding: 0.28rem 0.2rem;
+  border-radius: 8px;
+  border: 1px solid rgba(24, 33, 23, 0.14);
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+}
+
+.price-menu-weight-option:hover {
+  border-color: rgba(34, 94, 42, 0.35);
+  background: #f8fbf7;
+}
+
+.price-menu-weight-option.is-active {
+  border-color: rgba(34, 94, 42, 0.55);
+  background: rgba(34, 94, 42, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(34, 94, 42, 0.12);
+}
+
+.price-menu-weight-option-weight {
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.price-menu-weight-option-price {
+  font-size: 0.66rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: rgba(22, 50, 15, 0.9);
+}
+
+.price-menu-embed--premium-cards .price-menu-row--weight-product.price-menu-row--product-card,
+.price-menu-embed--halva-sweets .price-menu-row--weight-product.price-menu-row--product-card {
+  min-height: unset;
+  height: auto;
+}
+
+.price-menu-embed--premium-cards .price-menu-row--weight-product .price-menu-card-footer,
+.price-menu-embed--halva-sweets .price-menu-row--weight-product .price-menu-card-footer {
+  min-height: unset;
+  gap: 0.3rem;
+  padding-top: 0.5rem;
+}
+
+.price-menu-embed--premium-cards .price-menu-row--weight-product .price-menu-card-name,
+.price-menu-embed--halva-sweets .price-menu-row--weight-product .price-menu-card-name {
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.price-menu-embed--premium-cards .price-menu-row--weight-product .price-menu-card-price-line,
+.price-menu-embed--halva-sweets .price-menu-row--weight-product .price-menu-card-price-line {
+  font-size: 0.8rem;
+}
+
 /* כרטיסי חלווה — תמונה גדולה יותר, בלי מתח פנוי מלאכותי בכרטיס */
 .price-menu-embed--halva-sweets .price-menu-list {
   gap: clamp(0.75rem, 2vw, 1.1rem);

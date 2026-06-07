@@ -52,7 +52,8 @@ function matchesSearch(value: string, query: string) {
 
 function rowMatchesSearch(row: PriceRow, query: string) {
   if (!query) return true;
-  return matchesSearch(row.name, query);
+  if (matchesSearch(row.name, query)) return true;
+  return (row.weightOptions ?? []).some((o) => matchesSearch(o.weight, query));
 }
 
 function filterRows(rows: PriceRow[] | undefined, query: string) {
@@ -230,6 +231,139 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
   );
 }
 
+function PriceWeightRowView({
+  row,
+  catId,
+  categoryPath,
+  showEmojis,
+  productCardLayout,
+  showProductImages = true,
+  productImageOnlyPrefixes,
+}: {
+  row: PriceRow;
+  catId: string;
+  categoryPath: string;
+  showEmojis: boolean;
+  productCardLayout?: boolean;
+  showProductImages?: boolean;
+  productImageOnlyPrefixes?: readonly string[];
+}) {
+  const options = row.weightOptions ?? [];
+  const [selectedIdx, setSelectedIdx] = useState(0);
+  const safeIdx = options.length > 0 ? Math.min(selectedIdx, options.length - 1) : 0;
+  const selected = options[safeIdx];
+  const { addItem, lines, setQty } = useCart();
+  const description = row.description ?? getProduceShortDescription(row.name);
+  const mayShowImage =
+    showProductImages && productNameMatchesImagePrefixes(row.name, productImageOnlyPrefixes);
+  const images = mayShowImage ? getProduceImages(row.name, description, categoryPath) : [];
+  const displayName = selected ? `${row.name} · ${selected.weight}` : row.name;
+  const item: CartLineInput = {
+    id: makeRowId(catId, "_", displayName),
+    emoji: row.emoji,
+    name: displayName,
+    priceLabel: selected ? formatPriceLabelForDisplay(selected.price) : "לפי המחירון",
+    unit: formatUnitWordsWithLamed("לפריט"),
+    categoryPath,
+    qtyStep: 1,
+  };
+  const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
+  const step = item.qtyStep ?? 1;
+
+  const qtyBlock = (
+    <div className={productCardLayout ? "price-menu-card-actions" : "price-menu-add-wrap"}>
+      <button
+        type="button"
+        className="price-menu-qty-btn"
+        aria-label={`הפחת כמות ${displayName}`}
+        onClick={() => setQty(item.id, inCartQty - step)}
+        disabled={!selected || inCartQty < step / 2}
+      >
+        −
+      </button>
+      <span className="price-menu-qty-badge" aria-label={`בסל: ${formatQty(inCartQty)}`}>
+        {formatQty(inCartQty)}
+      </span>
+      <button
+        type="button"
+        className="price-menu-qty-btn"
+        aria-label={`הוסף כמות ${displayName}`}
+        onClick={() => {
+          if (!selected) return;
+          if (inCartQty <= 0) {
+            addItem(item);
+            return;
+          }
+          setQty(item.id, inCartQty + step);
+        }}
+        disabled={!selected}
+      >
+        +
+      </button>
+    </div>
+  );
+
+  if (!productCardLayout) {
+    return (
+      <li className="price-menu-row price-menu-row--weight-options">
+        <span className="price-menu-name-wrap">
+          <span className="price-menu-name">{row.name}</span>
+        </span>
+        <div className="price-menu-weight-options" role="group" aria-label={`בחירת משקל ל${row.name}`}>
+          {options.map((opt, i) => (
+            <button
+              key={opt.weight}
+              type="button"
+              className={`price-menu-weight-option${i === safeIdx ? " is-active" : ""}`}
+              aria-pressed={i === safeIdx}
+              onClick={() => setSelectedIdx(i)}
+            >
+              <span>{opt.weight}</span>
+              <span>{formatPriceLabelForDisplay(opt.price)}</span>
+            </button>
+          ))}
+        </div>
+        {qtyBlock}
+      </li>
+    );
+  }
+
+  return (
+    <li className="price-menu-row price-menu-row--product-card price-menu-row--weight-product">
+      <div className="price-menu-card-media">
+        {images.length > 0 ? (
+          <ProductCardCarousel images={images} productName={row.name} />
+        ) : (
+          <div className="price-menu-card-img-placeholder" aria-hidden />
+        )}
+      </div>
+      <div className="price-menu-card-footer">
+        <span className="price-menu-card-name">{row.name}</span>
+        <div className="price-menu-weight-options" role="group" aria-label={`בחירת משקל ל${row.name}`}>
+          {options.map((opt, i) => (
+            <button
+              key={opt.weight}
+              type="button"
+              className={`price-menu-weight-option${i === safeIdx ? " is-active" : ""}`}
+              aria-pressed={i === safeIdx}
+              onClick={() => setSelectedIdx(i)}
+            >
+              <span className="price-menu-weight-option-weight">{opt.weight}</span>
+              <span className="price-menu-weight-option-price">{formatPriceLabelForDisplay(opt.price)}</span>
+            </button>
+          ))}
+        </div>
+        {selected ? (
+          <span className="price-menu-card-price-line">
+            {formatPremiumCardPriceLine(formatPriceLabelForDisplay(selected.price), item.unit)}
+          </span>
+        ) : null}
+        {qtyBlock}
+      </div>
+    </li>
+  );
+}
+
 function PriceRowView({
   item,
   description,
@@ -251,7 +385,7 @@ function PriceRowView({
   const step = item.qtyStep ?? 1;
   const mayShowImage =
     showProductImages && productNameMatchesImagePrefixes(item.name, productImageOnlyPrefixes);
-  const images = mayShowImage ? getProduceImages(item.name, description) : [];
+  const images = mayShowImage ? getProduceImages(item.name, description, item.categoryPath) : [];
   const thumb = images[0];
   const showLeft = images.length > 0 || showEmojis;
 
@@ -456,11 +590,15 @@ export function PriceListSections({
       ) : null}
 
       <div className="price-menu-categories-grid">
-        {filteredCategories.map((cat) => (
+        {filteredCategories.map((cat) => {
+          const singleWeightProduct =
+            cat.rows?.length === 1 && (cat.rows[0]?.weightOptions?.length ?? 0) > 1;
+          return (
           <article
             key={cat.id}
-            className={`price-menu-category${isSpecialsCategoryTitle(cat.title) ? " price-menu-category--specials" : ""}`}
+            className={`price-menu-category${isSpecialsCategoryTitle(cat.title) ? " price-menu-category--specials" : ""}${singleWeightProduct ? " price-menu-category--weight-product" : ""}`}
           >
+            {!singleWeightProduct ? (
             <header className="price-menu-category-head">
               {showEmojis ? (
                 <span className="price-menu-cat-emoji" aria-hidden>
@@ -469,11 +607,26 @@ export function PriceListSections({
               ) : null}
               <CategoryHeadingTag className="price-menu-cat-title">{cat.title}</CategoryHeadingTag>
             </header>
+            ) : null}
             {cat.intro ? <p className="price-menu-intro muted">{cat.intro}</p> : null}
 
             {cat.rows?.length ? (
               <ul className="price-menu-list">
                 {cat.rows.map((row) => {
+                  if (row.weightOptions?.length) {
+                    return (
+                      <PriceWeightRowView
+                        key={`${cat.id}-${row.name}`}
+                        row={row}
+                        catId={cat.id}
+                        categoryPath={cat.title}
+                        showEmojis={showEmojis}
+                        productCardLayout={productCardLayout}
+                        showProductImages={showProductImages}
+                        productImageOnlyPrefixes={productImageOnlyPrefixes}
+                      />
+                    );
+                  }
                   const priceDisplay = row.price ?? "לפי המחירון";
                   const kgLabel = rowPricingTextForKg(row, priceDisplay);
                   const halvaEmbed = embedClassName?.includes("price-menu-embed--halva-sweets") ?? false;
@@ -548,7 +701,8 @@ export function PriceListSections({
               );
             })}
           </article>
-        ))}
+          );
+        })}
       </div>
       {filteredCategories.length === 0 ? (
         <p className="price-menu-no-results muted">לא נמצאו תוצאות לחיפוש הזה. נסו מילה אחרת.</p>

@@ -1,4 +1,4 @@
-import type { PriceCategory, PriceRow } from "../data/priceList";
+import type { PriceCategory, PriceRow, PriceWeightOption } from "../data/priceList";
 import { getProduceShortDescription } from "../data/priceList";
 
 /**
@@ -307,6 +307,42 @@ export function getDistinctSheetTypes(products: SheetProduct[]): string[] {
   return out;
 }
 
+/** שם שורה בגיליון שמייצג רק משקל (250 גרם, 1 קילו…) */
+export function isWeightOnlySheetProductName(name: string): boolean {
+  const n = name.trim().replace(/\s+/g, " ");
+  return /^(\d+(?:[.,]\d+)?)\s*(?:גרם|ג(?:["׳׳']?רם)?|קילו|ק(?:["׳׳']?ג)?|kg)\s*$/iu.test(n);
+}
+
+function weightOptionSortKey(weight: string): number {
+  const n = weight.trim().replace(/\s+/g, " ");
+  const m = /^(\d+(?:[.,]\d+)?)\s*(גרם|ג(?:["׳׳']?רם)?|קילו|ק(?:["׳׳']?ג)?|kg)\s*$/iu.exec(n);
+  if (!m) return 1e9;
+  const amount = parseFloat(m[1]!.replace(",", "."));
+  const unit = m[2]!.toLowerCase();
+  const grams = /קילו|ק(?:["׳׳']?ג)?|kg/.test(unit) ? amount * 1000 : amount;
+  return Number.isFinite(grams) ? grams : 1e9;
+}
+
+/** כשכל השורות בקטגוריה הן משקלים — מוצר אחד עם בחירת משקל (שם המוצר = כותרת הקטגוריה) */
+function collapseWeightTierRows(rows: PriceRow[], productTitle: string): PriceRow[] {
+  if (rows.length < 2 || !rows.every((r) => isWeightOnlySheetProductName(r.name))) {
+    return rows;
+  }
+  const weightOptions: PriceWeightOption[] = rows
+    .map((r) => ({ weight: r.name.trim(), price: (r.price ?? "").trim() }))
+    .filter((o) => o.weight && o.price)
+    .sort((a, b) => weightOptionSortKey(a.weight) - weightOptionSortKey(b.weight));
+  if (weightOptions.length < 2) return rows;
+  return [
+    {
+      emoji: rows[0]!.emoji,
+      name: productTitle,
+      description: getProduceShortDescription(productTitle),
+      weightOptions,
+    },
+  ];
+}
+
 function slugForSheetCategory(title: string, idx: number): string {
   const base = title
     .trim()
@@ -347,17 +383,66 @@ export function groupSheetProductsToPriceCategories(
       id: `${opts.idPrefix}-${slugForSheetCategory(title, idx)}`,
       title,
       emoji: opts.defaultEmoji,
-      rows: orderedRows.map((p) => ({
-        emoji: opts.defaultEmoji,
-        name: p.name,
-        price: p.price.trim() || undefined,
-        unit: p.unit.trim() || undefined,
-        description: getProduceShortDescription(p.name),
-      })),
+      rows: collapseWeightTierRows(
+        orderedRows.map((p) => ({
+          emoji: opts.defaultEmoji,
+          name: p.name,
+          price: p.price.trim() || undefined,
+          unit: p.unit.trim() || undefined,
+          description: getProduceShortDescription(p.name),
+        })),
+        title,
+      ),
     };
   });
 
-  return stripExactDuplicatePriceRows(categories);
+  return stripExactDuplicatePriceRows(mergeOrphanWeightProductsIntoGroupCategory(categories));
+}
+
+/** קטגוריה שהכותרת שלה היא שם קבוצה (לא שם מוצר בודד) */
+function isGroupingPriceCategory(cat: PriceCategory): boolean {
+  const rows = cat.rows ?? [];
+  if (!rows.length) return false;
+  const title = cat.title.trim();
+  return rows.every((r) => !r.weightOptions?.length && r.name.trim() !== title);
+}
+
+/** מוצר עם מדרגות משקל שמופיע בקטגוריה נפרדת בשם המוצר */
+function isOrphanWeightPriceCategory(cat: PriceCategory): boolean {
+  const row = cat.rows?.[0];
+  if (!row || cat.rows!.length !== 1) return false;
+  return (row.weightOptions?.length ?? 0) > 1 && row.name.trim() === cat.title.trim();
+}
+
+/** מדרגות משקל נכנסות לקבוצת מוצרים קיימת (למשל «חמוצים») — כרטיס בגודל אחיד */
+function mergeOrphanWeightProductsIntoGroupCategory(categories: PriceCategory[]): PriceCategory[] {
+  const orphans = categories.filter(isOrphanWeightPriceCategory);
+  if (!orphans.length) return categories;
+
+  const mergeTargets = categories
+    .filter(isGroupingPriceCategory)
+    .filter((c) => !/מיץ|מיוחד/i.test(c.title))
+    .sort((a, b) => (b.rows?.length ?? 0) - (a.rows?.length ?? 0));
+  const fallbackTargets = categories
+    .filter(isGroupingPriceCategory)
+    .sort((a, b) => (b.rows?.length ?? 0) - (a.rows?.length ?? 0));
+  const target = mergeTargets[0] ?? fallbackTargets[0];
+  if (!target) return categories;
+
+  const orphanRows = orphans.flatMap((c) => c.rows ?? []);
+  const orphanKeys = new Set(orphans.map((c) => normalizeSheetLabelKey(c.title)));
+  const mergedRows = [...(target.rows ?? []), ...orphanRows].sort((a, b) =>
+    a.name.localeCompare(b.name, "he"),
+  );
+
+  return categories
+    .filter((c) => !orphanKeys.has(normalizeSheetLabelKey(c.title)))
+    .map((c) =>
+      normalizeSheetLabelKey(c.title) === normalizeSheetLabelKey(target.title)
+        ? { ...c, rows: mergedRows }
+        : c,
+    )
+    .sort((a, b) => a.title.localeCompare(b.title, "he"));
 }
 
 /** שם תצוגה לאיחוד כפילויות (למשל «סברס» ו«סברס (לק״ג)» → אותו בסיס) */
@@ -383,6 +468,10 @@ function formatRowPriceDisplay(r: PriceRow): string {
 function mergeRowsByBaseProductName(rows: PriceRow[]): PriceRow[] {
   const byBase = new Map<string, PriceRow[]>();
   for (const r of rows) {
+    if (r.weightOptions?.length) {
+      byBase.set(`__weight_opts_${byBase.size}`, [r]);
+      continue;
+    }
     const b = baseProductNameForDedupe(r.name);
     const key = b || `__anon_${byBase.size}`;
     const arr = byBase.get(key) ?? [];

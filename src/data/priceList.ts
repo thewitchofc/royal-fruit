@@ -1,5 +1,10 @@
 /** מחירון, עדכון תאריכים ומחירים כאן */
 
+export type PriceWeightOption = {
+  weight: string;
+  price: string;
+};
+
 export type PriceRow = {
   emoji: string;
   name: string;
@@ -7,6 +12,8 @@ export type PriceRow = {
   /** משקל / מארז / יחידה / מדרגות מחיר, מהגיליון או מקוד */
   unit?: string;
   description?: string;
+  /** מוצר אחד עם מדרגות משקל (שם = מוצר, מחיר לפי בחירה) */
+  weightOptions?: PriceWeightOption[];
 };
 
 export type PriceSubsection = {
@@ -113,7 +120,27 @@ export function getProduceShortDescription(name: string): string {
     "עגבניות שרי בלה מאיה": "שרי מתוקות ועסיסיות, מצוינות לנשנוש וסלט.",
     "מלפפון אורגני בלה מאיה": "מלפפון אורגני בטעם נקי ורענן, פריך במיוחד.",
     "עגבניות אורגניות בלה מאיה": "עגבניות אורגניות מאוזנות למטבח יומי ולרוטב.",
+    "מלפפון חמוץ": "מלפפונים חמוצים בצנצנת; קראנץ' וחמיצות מאוזנות לצד מנות וסלטים.",
     "מלפפון חמוץ בעבודת יד": "כבישה ביתית עם קראנץ' וחמיצות מאוזנת.",
+    "חלפיניו מוחמץ": "חלפיניו פרוס במלחלוח חמוץ־חריף; מתאים לסנדוויצ'ים, סלטים ותיבול.",
+    שיפקה: "פלפל שיפקה מוחמץ שלם; חריפות נעימה לצד מנות, סלטים וכריכים.",
+    "כרובית חמוצה": "כרובית מוחמצת בצנצנת; חמיצות נעימה ופריכות לצד מנות וסלטים.",
+    "לפת מוחמץ": "לפת מוחמצת בצבע ורוד־סגול; חמיצות קלאסית לסלטים, פיתות ומנות ביתיות.",
+    "לפת מוחמצת": "לפת מוחמצת בצבע ורוד־סגול; חמיצות קלאסית לסלטים, פיתות ומנות ביתיות.",
+    זיתים: "זיתים ירוקים מוחמצים בצנצנת; מתאימים למזנונים, סלטים וארוחות ביתיות.",
+    "מיקס חמוצים": "תערובת ירקות מוחמצים בצנצנת; מגוון טעמים וצבעים לצד מנות וסלטים.",
+    "תות קפוא": "תות שדה מוקפא 100% פרי; מתאים לשייקים, קינוחים ואפייה.",
+    "תות שדה מוקפא": "תות שדה מוקפא 100% פרי; מתאים לשייקים, קינוחים ואפייה.",
+    "אננס קפוא": "חתיכות אננס מוקפאות 100% פרי; מתאימות לשייקים, קינוחים ואפייה.",
+    "חתיכות אננס מוקפאות": "חתיכות אננס מוקפאות 100% פרי; מתאימות לשייקים, קינוחים ואפייה.",
+    "תות בננה קפוא": "תות שדה ופרוסות בננה מוקפאים 100% פרי; מתאים לשייקים וקינוחים.",
+    "תות בננה": "תות שדה ופרוסות בננה מוקפאים 100% פרי; מתאים לשייקים וקינוחים.",
+    גוואקמולי: "ממרח אבוקדו בשל ומתובל; מוכן למריחה, טוסטים ומנות.",
+    "ממרח אבוקדו": "ממרח אבוקדו בשל ומתובל; מוכן למריחה, טוסטים ומנות.",
+    "פטל מצופה בפיסטוק": "פטל בציפוי שוקולד לבן ופיסטוק קפוא; מתוק־מלוח לקינוח ונשנוש.",
+    "פטל מצופה בשוקולד חלב ושוקולד לבן":
+      "פטל בציפוי כפול — שוקולד לבן ושוקולד חלב; מתוק וקרמי לקינוח ונשנוש.",
+    "פטל מצופה בשוקולד מריר": "פטל קפוא מצופה בשוקולד מריר; עמוק ומתוק לקינוח ונשנוש.",
     "אגוזי לוז": "חלווה שומשום עם אגוזי לוז; יחידה 350 גרם. טעם אגוזי קלאסי ומרקם פריך.",
     פיסטק: "חלווה שומשום עם פיסטוק; יחידה 350 גרם. טעם אגוזי־ירוק ומרקם עשיר.",
     פקאן: "חלווה שומשום עם פקאן; יחידה 350 גרם. קראנץ' אגוזי ומתיקות עמוקה.",
@@ -213,6 +240,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "עלי גפן טריים (500 גרם)": "/images/gallery/fresh-produce-box.webp",
     "מלפפון ארמטו ענק": "/images/gallery/fresh-produce-box.webp",
     "עגבניות שרי בלה מאיה": "/images/gallery/fresh-produce-box.webp",
+    "מלפפון חמוץ": "/images/catalog/pickled-cucumber.png",
     "מלפפון חמוץ בעבודת יד": "/images/catalog/pickled-cucumber.png",
     סברס: "/images/gallery/mixed-fruit-box.webp",
     "סברס (לק״ג)": "/images/gallery/mixed-fruit-box.webp",
@@ -243,6 +271,24 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "עלי גפן חמוצים": "/images/catalog/kitchen-grape-leaves.png",
     "כרוב חמוץ": "/images/catalog/kitchen-sauerkraut.png",
     "בצל חמוץ מתוק": "/images/catalog/kitchen-sweet-onion.png",
+    "חלפיניו מוחמץ": "/images/catalog/pickled-jalapeno.png",
+    שיפקה: "/images/catalog/pickled-shipka.png",
+    "כרובית חמוצה": "/images/catalog/pickled-cauliflower.png",
+    "לפת מוחמץ": "/images/catalog/pickled-turnip.png",
+    "לפת מוחמצת": "/images/catalog/pickled-turnip.png",
+    זיתים: "/images/catalog/pickled-olives.png",
+    "מיקס חמוצים": "/images/catalog/pickled-mix.png",
+    "תות קפוא": "/images/catalog/frozen-strawberry.png",
+    "תות שדה מוקפא": "/images/catalog/frozen-strawberry.png",
+    "אננס קפוא": "/images/catalog/frozen-pineapple.png",
+    "חתיכות אננס מוקפאות": "/images/catalog/frozen-pineapple.png",
+    "תות בננה קפוא": "/images/catalog/frozen-strawberry-banana.png",
+    "תות בננה": "/images/catalog/frozen-strawberry-banana.png",
+    גוואקמולי: "/images/catalog/guacamole.png",
+    "ממרח אבוקדו": "/images/catalog/guacamole.png",
+    "פטל מצופה בפיסטוק": "/images/catalog/raspberry-pistachio-coated.png",
+    "פטל מצופה בשוקולד חלב ושוקולד לבן": "/images/catalog/raspberry-double-chocolate.png",
+    "פטל מצופה בשוקולד מריר": "/images/catalog/raspberry-dark-chocolate.png",
 };
 
 /** מנרמל לרשימת עד 4 נתיבים ייחודיים */
@@ -261,12 +307,22 @@ export function normalizeProduceImages(entry: ProductImageEntry | undefined): re
   return out;
 }
 
-function resolveProduceImageEntry(name: string, description?: string): ProductImageEntry | undefined {
+function resolveProduceImageEntry(
+  name: string,
+  description?: string,
+  categoryTitle?: string,
+): ProductImageEntry | undefined {
   const n = name.trim();
   const text = `${n} ${description ?? ""}`.toLowerCase();
 
   const exact = BY_EXACT_PRODUCT_IMAGES[n];
   if (exact) return exact;
+
+  const cat = categoryTitle?.trim() ?? "";
+  if (cat) {
+    const catExact = BY_EXACT_PRODUCT_IMAGES[cat];
+    if (catExact) return catExact;
+  }
 
   if (n.startsWith("חלווה ")) {
     const rest = n.replace(/^חלווה\s+/, "").trim();
@@ -312,13 +368,21 @@ function resolveProduceImageEntry(name: string, description?: string): ProductIm
 }
 
 /** עד 4 תמונות למוצר — לקרוסלה בכרטיס */
-export function getProduceImages(name: string, description?: string): readonly string[] {
-  return normalizeProduceImages(resolveProduceImageEntry(name, description));
+export function getProduceImages(
+  name: string,
+  description?: string,
+  categoryTitle?: string,
+): readonly string[] {
+  return normalizeProduceImages(resolveProduceImageEntry(name, description, categoryTitle));
 }
 
 /** תמונת מוצר ראשונה (תאימות לאחור) */
-export function getProduceImage(name: string, description?: string): string | undefined {
-  return getProduceImages(name, description)[0];
+export function getProduceImage(
+  name: string,
+  description?: string,
+  categoryTitle?: string,
+): string | undefined {
+  return getProduceImages(name, description, categoryTitle)[0];
 }
 
 /** דף «פירות פרימיום» */
