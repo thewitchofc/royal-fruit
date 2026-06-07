@@ -26,8 +26,9 @@ export const NAVBAR_DROPDOWNS: NavbarDropdown[] = [
     id: "shop",
     label: "חנות",
     items: [
-      { label: "פירות מובחרים", to: ROUTES.shop.fruits },
-      { label: "ירקות טריים", to: ROUTES.shop.vegetables },
+      { label: "פירות", to: ROUTES.shop.fruits },
+      { label: "ירקות", to: ROUTES.shop.vegetables },
+      { label: "ירק ושורשים", to: ROUTES.shop.greensRoots },
     ],
   },
   {

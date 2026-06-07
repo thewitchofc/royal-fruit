@@ -3,12 +3,11 @@ import { getProduceShortDescription } from "../data/priceList";
 
 /**
  * טעינה ופרסור של מוצרים מקובץ CSV שמפורסם מ-Google Sheets.
- * דפים ייעודיים: ב־type או ב־category ערכים כמו «מיצים», «חלווה», «אוכל ביתי» (כינויים ב־*_CATEGORY_ALIASES).
- * עמודות: name, price, category, available, אופציונלי: type (מדור), unit (יחידה/משקל/מארז), packageTier (רמת מארז פירות: basic / premium / gold)
- * שורות מוכנות לגיליון: `data/google-sheets-price-append.csv` — עמודות כמו בגיליון: name,price,category,type,unit,deal,Checkbox.
- * כותרת Checkbox בגיליון ממופה ל-available (תיבות סימון ב-Google Sheets → TRUE/FALSE ב-CSV)
- * type = פירות/ירקות (או fruit/veg), איזה דף מציג; category = כותרת קבוצה במחירון (קלופים…).
- * בלי type: סינון לפי category כמו קודם (ערכים פירות/fruit או ירקות/veg).
+ * עמודות: name, price, category, type, unit, deal, Checkbox (+ אופציונלי packageTier למארזי פירות).
+ * כותרת Checkbox ממופה ל-available (ריק / TRUE = מוצג; FALSE / 0 / לא = מוסתר).
+ * type = סינון ראשי לדפי האתר (פירות, ירקות, ירק ושורשים, מטבח טרי).
+ * category = כותרת קבוצה בתוך כל type (פירות רגילים, קלופים, מיצים…).
+ * אין רשימות קשיחות — כל type/category חדשים בגיליון מופיעים אוטומטית.
  */
 
 export type SheetProduct = {
@@ -280,99 +279,32 @@ export async function loadSheetProducts(csvUrl: string): Promise<SheetProduct[]>
   }
 }
 
-export function normalizeCategoryKey(s: string): string {
-  return s.trim().toLowerCase();
+/** מפתח השוואה לערכי type/category מהגיליון */
+export function normalizeSheetLabelKey(s: string): string {
+  return s.trim().replace(/\s+/g, " ").toLocaleLowerCase("he-IL");
 }
 
-/** התאמת קטגוריה מול הגיליון, כמה כינויים לפירות/ירקות */
-export function categoryMatchesAliases(productCategory: string, aliases: readonly string[]): boolean {
-  const key = normalizeCategoryKey(productCategory);
-  return aliases.some((a) => normalizeCategoryKey(a) === key);
+/** האם שורת הגיליון שייכת ל-type מבוקש (עמודת type בגיליון) */
+export function productMatchesSheetType(p: SheetProduct, sheetType: string): boolean {
+  const expected = normalizeSheetLabelKey(sheetType);
+  if (!expected) return false;
+  const actual = normalizeSheetLabelKey(p.type);
+  return Boolean(actual) && actual === expected;
 }
 
-export const FRUIT_CATEGORY_ALIASES = ["פירות", "fruit", "fruits", "פרי", "תותים"] as const;
-export const VEG_CATEGORY_ALIASES = ["ירקות", "vegetable", "vegetables", "veg", "ירק"] as const;
-export const JUICE_CATEGORY_ALIASES = ["מיצים", "juices", "juice"] as const;
-/** עמודת type או category בגיליון — דף חלווה */
-export const HALVA_CATEGORY_ALIASES = ["חלווה", "חלווה וממרחים", "halva", "halvah"] as const;
-/** עמודת type או category — דף אוכל ביתי / מטבח טרי */
-export const HOMEFOOD_CATEGORY_ALIASES = [
-  "אוכל ביתי",
-  "אוכל-ביתי",
-  "מטבח טרי",
-  "מטבח",
-  "home food",
-  "homefood",
-  "homemade",
-  "home-food",
-] as const;
-
-/** כותרות קטגוריה בגיליון שנספחות לבלוק «מיצים» (מבנה קיים) */
-const JUICE_SHEET_CATEGORY_BUCKET = ["מיצים", "רגיל", "ליחידה"] as const;
-
-function isJuiceSheetCategoryTitle(title: string): boolean {
-  return (JUICE_SHEET_CATEGORY_BUCKET as readonly string[]).includes(title.trim());
-}
-
-/** שורה ששייכת לדף המיצים: מיץ בשם, קטגוריית מיצים בגיליון, או סוג «מיצים» */
-export function isJuiceProductBySheetMetadata(p: SheetProduct): boolean {
-  if (isFruitOnlyProductNameFromSheet(p.name)) return false;
-  if (isJuiceCatalogProductNameFromSheet(p.name)) return true;
-  if (isJuiceSheetCategoryTitle(p.category)) return true;
-  const t = p.type?.trim() ?? "";
-  if (t && categoryMatchesAliases(t, JUICE_CATEGORY_ALIASES)) return true;
-  if (categoryMatchesAliases(p.category, JUICE_CATEGORY_ALIASES)) return true;
-  return false;
-}
-
-export function isHalvaProductBySheetMetadata(p: SheetProduct): boolean {
-  const t = p.type?.trim() ?? "";
-  if (t && categoryMatchesAliases(t, HALVA_CATEGORY_ALIASES)) return true;
-  return categoryMatchesAliases(p.category, HALVA_CATEGORY_ALIASES);
-}
-
-export function isHomeFoodProductBySheetMetadata(p: SheetProduct): boolean {
-  const t = p.type?.trim() ?? "";
-  // חריג: מלפפון חמוץ בעבודת יד שייך למטבח טרי גם אם סווג כירקות בגיליון
-  if (p.name.trim().includes("מלפפון חמוץ")) return true;
-  if (t && categoryMatchesAliases(t, HOMEFOOD_CATEGORY_ALIASES)) return true;
-  return categoryMatchesAliases(p.category, HOMEFOOD_CATEGORY_ALIASES);
-}
-
-function isDedicatedCatalogPageProduct(p: SheetProduct): boolean {
-  return (
-    isJuiceProductBySheetMetadata(p) || isHalvaProductBySheetMetadata(p) || isHomeFoodProductBySheetMetadata(p)
-  );
-}
-
-export type SheetPageFilter = "fruits" | "vegetables" | "juices" | "halva" | "homeFood" | "all";
-
-export function productMatchesSheetPage(p: SheetProduct, page: SheetPageFilter): boolean {
-  if (page === "all") return true;
-  if (page === "juices") {
-    return isJuiceProductBySheetMetadata(p);
+/** כל ערכי type הייחודיים בגיליון (לפי סדר הופעה) */
+export function getDistinctSheetTypes(products: SheetProduct[]): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const p of products) {
+    const label = p.type.trim();
+    if (!label) continue;
+    const key = normalizeSheetLabelKey(label);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(label);
   }
-  if (page === "halva") {
-    return isHalvaProductBySheetMetadata(p);
-  }
-  if (page === "homeFood") {
-    return isHomeFoodProductBySheetMetadata(p);
-  }
-  if (page === "fruits" && isFruitOnlyProductNameFromSheet(p.name)) {
-    return true;
-  }
-  if (isDedicatedCatalogPageProduct(p)) {
-    return false;
-  }
-  const typeCell = p.type?.trim() ?? "";
-  if (typeCell) {
-    return page === "fruits"
-      ? categoryMatchesAliases(typeCell, FRUIT_CATEGORY_ALIASES)
-      : categoryMatchesAliases(typeCell, VEG_CATEGORY_ALIASES);
-  }
-  return page === "fruits"
-    ? categoryMatchesAliases(p.category, FRUIT_CATEGORY_ALIASES)
-    : categoryMatchesAliases(p.category, VEG_CATEGORY_ALIASES);
+  return out;
 }
 
 function slugForSheetCategory(title: string, idx: number): string {
@@ -384,68 +316,19 @@ function slugForSheetCategory(title: string, idx: number): string {
   return base || `c${idx}`;
 }
 
-/** שורות עם «מיץ» בשם (לא חומץ) — מוצגות בדף המיצים */
-function isJuiceProductNameFromSheet(name: string): boolean {
-  const n = name.trim();
-  return n.includes("מיץ") && !n.includes("חומץ");
-}
-
-/** חומץ תפוחים הוא מוצר בקבוק במדור המיצים, למרות שאינו מיץ לשתייה. */
-function isAppleCiderVinegarProductNameFromSheet(name: string): boolean {
-  const n = name.trim();
-  return n.includes("חומץ") && n.includes("תפוח");
-}
-
-function isJuiceCatalogProductNameFromSheet(name: string): boolean {
-  return isJuiceProductNameFromSheet(name) || isAppleCiderVinegarProductNameFromSheet(name);
-}
-
-/** מוצרים שנשארים בדף הפירות גם אם בגיליון סומנו בטעות כמיצים/סחוטים */
-function isFruitOnlyProductNameFromSheet(name: string): boolean {
-  const n = name.trim();
-  return n.startsWith("סברס") || n.includes("תות");
-}
-
-/** סדר תצוגת מדורים בדף חלווה לפי עמודת category בגיליון */
-function halvaSheetCategorySortOrder(title: string): number {
-  const t = title.trim().replace(/\s+/g, " ");
-  const lower = t.toLowerCase();
-  if (t === "חלווה בטעם" || (t.includes("חלווה") && t.includes("בטעם")) || t === "חלווה") return 0;
-  if (t === "טחינה וקרמים" || (t.includes("טחינה") && t.includes("קרמ"))) return 1;
-  if (t.includes("רטב") || lower.includes("sauce")) return 2;
-  return 50;
-}
-
-/** סדר שורות בתוך קבוצת «חלווה בטעם» — עקבי עם כרטיסי ההיכרות בעמוד */
-function halvaFlavorRowSortOrder(name: string): number {
-  const order = ["אגוזי לוז", "פיסטק", "פקאן", "טעם של פעם"];
-  const i = order.indexOf(name.trim());
-  return i >= 0 ? i : 100;
-}
-
-/** סדר שורות בקבוצת «טחינה וקרמים» */
-function halvaSpreadRowSortOrder(name: string): number {
-  const order = [
-    "טחינה אתיופית",
-    "טחינה מלאה עם וניל טהור",
-    "טחינה עם אגוזי לוז וקקאו",
-    "קרם פיסטוק",
-    "קרם אגוזי לוז",
-  ];
-  const i = order.indexOf(name.trim());
-  return i >= 0 ? i : 100;
-}
-
-/** קיבוץ מוצרים מהגיליון למבנה כמו מחירון האתר, כותרת קבוצה = עמודת category */
+/** קיבוץ מוצרים מהגיליון: סינון לפי type, כותרות קבוצה לפי category */
 export function groupSheetProductsToPriceCategories(
   products: SheetProduct[],
   opts: {
     idPrefix: string;
     defaultEmoji: string;
-    page: SheetPageFilter;
+    sheetType: string;
   },
 ): PriceCategory[] {
-  let list = products.filter((p) => p.available).filter((p) => productMatchesSheetPage(p, opts.page));
+  const list = products
+    .filter((p) => p.available)
+    .filter((p) => productMatchesSheetType(p, opts.sheetType));
+
   const groups = new Map<string, SheetProduct[]>();
   for (const p of list) {
     const title = p.category.trim() || "כללי";
@@ -454,76 +337,12 @@ export function groupSheetProductsToPriceCategories(
     groups.set(title, arr);
   }
 
-  if (opts.page === "juices") {
-    const pulledJuices: SheetProduct[] = [];
-    for (const [title, rows] of [...groups.entries()]) {
-      if (title === "מיצים" || title === "רגיל" || title === "ליחידה") continue;
-      const stay: SheetProduct[] = [];
-      for (const p of rows) {
-        if (isJuiceCatalogProductNameFromSheet(p.name)) pulledJuices.push(p);
-        else stay.push(p);
-      }
-      if (stay.length === 0) groups.delete(title);
-      else groups.set(title, stay);
-    }
-    if (pulledJuices.length > 0) {
-      const existing = groups.get("מיצים") ?? [];
-      groups.set("מיצים", [...existing, ...pulledJuices]);
-    }
-  }
-
-  let sheetJuiceBucket: SheetProduct[] = [];
-  let sheetRegularBucket: SheetProduct[] = [];
-
-  if (opts.page === "juices") {
-    sheetJuiceBucket = groups.get("מיצים") ?? [];
-    sheetRegularBucket = [...(groups.get("רגיל") ?? []), ...(groups.get("ליחידה") ?? [])];
-    groups.delete("מיצים");
-    groups.delete("רגיל");
-    groups.delete("ליחידה");
-  }
-
-  let entries = [...groups.entries()].filter(([, rows]) => rows.length > 0);
-  if (opts.page === "halva") {
-    entries.sort(([titleA], [titleB]) => {
-      const da = halvaSheetCategorySortOrder(titleA);
-      const db = halvaSheetCategorySortOrder(titleB);
-      if (da !== db) return da - db;
-      return titleA.localeCompare(titleB, "he");
-    });
-  } else {
-    entries.sort(([a], [b]) => a.localeCompare(b, "he"));
-  }
-
-  const sheetRow = (products: SheetProduct[], emoji: string): PriceRow[] =>
-    products.map((p) => ({
-      emoji,
-      name: p.name,
-      price: p.price.trim() || undefined,
-      unit: p.unit.trim() || undefined,
-      description: getProduceShortDescription(p.name),
-    }));
+  const entries = [...groups.entries()]
+    .filter(([, rows]) => rows.length > 0)
+    .sort(([a], [b]) => a.localeCompare(b, "he"));
 
   const categories: PriceCategory[] = entries.map(([title, rows], idx) => {
-    let orderedRows = rows;
-    if (opts.page === "halva") {
-      const bucket = halvaSheetCategorySortOrder(title);
-      if (bucket === 0) {
-        orderedRows = [...rows].sort((a, b) => {
-          const da = halvaFlavorRowSortOrder(a.name);
-          const db = halvaFlavorRowSortOrder(b.name);
-          if (da !== db) return da - db;
-          return a.name.localeCompare(b.name, "he");
-        });
-      } else if (bucket === 1) {
-        orderedRows = [...rows].sort((a, b) => {
-          const da = halvaSpreadRowSortOrder(a.name);
-          const db = halvaSpreadRowSortOrder(b.name);
-          if (da !== db) return da - db;
-          return a.name.localeCompare(b.name, "he");
-        });
-      }
-    }
+    const orderedRows = [...rows].sort((a, b) => a.name.localeCompare(b.name, "he"));
     return {
       id: `${opts.idPrefix}-${slugForSheetCategory(title, idx)}`,
       title,
@@ -537,23 +356,6 @@ export function groupSheetProductsToPriceCategories(
       })),
     };
   });
-
-  if (opts.page === "juices" && (sheetJuiceBucket.length > 0 || sheetRegularBucket.length > 0)) {
-    const subsections = [];
-    if (sheetRegularBucket.length > 0) {
-      subsections.push({ title: "רגיל", rows: sheetRow(sheetRegularBucket, "🍇") });
-    }
-    const merged: PriceCategory = {
-      id: `${opts.idPrefix}-juice-menu`,
-      title: "מיצים",
-      emoji: "🧃",
-      rows: sheetJuiceBucket.length > 0 ? sheetRow(sheetJuiceBucket, "🧃") : undefined,
-      subsections: subsections.length > 0 ? subsections : undefined,
-    };
-    const mi = categories.findIndex((c) => c.title === "מיוחדים");
-    if (mi >= 0) categories.splice(mi, 0, merged);
-    else categories.push(merged);
-  }
 
   return stripExactDuplicatePriceRows(categories);
 }

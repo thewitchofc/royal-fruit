@@ -145,11 +145,13 @@ export function getProduceShortDescription(name: string): string {
   return "תוצרת טרייה לפרימיום יומי, מותאמת לאכילה, בישול או אירוח לפי הצורך.";
 }
 
-/** תמונת מוצר מייצגת לפי שם/תיאור, לתצוגה במחירון */
-export function getProduceImage(name: string, description?: string): string | undefined {
-  const n = name.trim();
-  const text = `${n} ${description ?? ""}`.toLowerCase();
-  const byExactName: Record<string, string> = {
+/** ערך יחיד או עד 4 תמונות למוצר */
+export type ProductImageEntry = string | readonly string[];
+
+export const MAX_PRODUCT_IMAGES = 4;
+
+/** ממפה שם מוצר → תמונה/ות (גלריה WebP; קטלוג PNG) */
+const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     קרמבולה: "/images/gallery/starfruit-trays.webp",
     "קרמבולה פרימיום": "/images/gallery/starfruit-trays.webp",
     "תמרים ממולאים אגוזי מלך": "/images/gallery/dates-walnut-pack.webp",
@@ -241,36 +243,52 @@ export function getProduceImage(name: string, description?: string): string | un
     "עלי גפן חמוצים": "/images/catalog/kitchen-grape-leaves.png",
     "כרוב חמוץ": "/images/catalog/kitchen-sauerkraut.png",
     "בצל חמוץ מתוק": "/images/catalog/kitchen-sweet-onion.png",
-  };
-  // פריטים שמוצגים בלי תמונה (כרטיס “ריק”)
-  // (הוסר: בעבר הוצג בלי תמונה, עכשיו יש תמונה ייעודית)
-  const exact = byExactName[n];
+};
+
+/** מנרמל לרשימת עד 4 נתיבים ייחודיים */
+export function normalizeProduceImages(entry: ProductImageEntry | undefined): readonly string[] {
+  if (!entry) return [];
+  const list = typeof entry === "string" ? [entry] : [...entry];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const raw of list) {
+    const src = raw.trim();
+    if (!src || seen.has(src)) continue;
+    seen.add(src);
+    out.push(src);
+    if (out.length >= MAX_PRODUCT_IMAGES) break;
+  }
+  return out;
+}
+
+function resolveProduceImageEntry(name: string, description?: string): ProductImageEntry | undefined {
+  const n = name.trim();
+  const text = `${n} ${description ?? ""}`.toLowerCase();
+
+  const exact = BY_EXACT_PRODUCT_IMAGES[n];
   if (exact) return exact;
 
-  // חלווה: בדף המאוחד אנחנו מוסיפים prefix "חלווה " לטעמים (למשל "חלווה אגוזי לוז")
   if (n.startsWith("חלווה ")) {
     const rest = n.replace(/^חלווה\s+/, "").trim();
     const img =
-      byExactName[rest] ??
-      byExactName[`חלווה ${rest}`] ??
-      (rest === "אגוזי לוז" ? byExactName["אגוזי לוז"] : undefined) ??
-      (rest === "פיסטק" || rest === "פיסטוק" ? byExactName["פיסטק"] : undefined) ??
-      (rest === "פקאן" ? byExactName["פקאן"] : undefined) ??
-      (rest === "טעם של פעם" ? byExactName["טעם של פעם"] : undefined);
+      BY_EXACT_PRODUCT_IMAGES[rest] ??
+      BY_EXACT_PRODUCT_IMAGES[`חלווה ${rest}`] ??
+      (rest === "אגוזי לוז" ? BY_EXACT_PRODUCT_IMAGES["אגוזי לוז"] : undefined) ??
+      (rest === "פיסטק" || rest === "פיסטוק" ? BY_EXACT_PRODUCT_IMAGES["פיסטק"] : undefined) ??
+      (rest === "פקאן" ? BY_EXACT_PRODUCT_IMAGES["פקאן"] : undefined) ??
+      (rest === "טעם של פעם" ? BY_EXACT_PRODUCT_IMAGES["טעם של פעם"] : undefined);
     if (img) return img;
   }
 
-  // מטבח טרי: שורות “שם · משקל” (בדף המאוחד מוצגות כרשימה אחת)
-  if (n.startsWith("עלי גפן חמוצים")) return byExactName["עלי גפן חמוצים"];
-  if (n.startsWith("כרוב חמוץ")) return byExactName["כרוב חמוץ"];
-  if (n.startsWith("בצל חמוץ מתוק")) return byExactName["בצל חמוץ מתוק"];
+  if (n.startsWith("עלי גפן חמוצים")) return BY_EXACT_PRODUCT_IMAGES["עלי גפן חמוצים"];
+  if (n.startsWith("כרוב חמוץ")) return BY_EXACT_PRODUCT_IMAGES["כרוב חמוץ"];
+  if (n.startsWith("בצל חמוץ מתוק")) return BY_EXACT_PRODUCT_IMAGES["בצל חמוץ מתוק"];
   if (n.startsWith("מלפפון חמוץ")) return "/images/catalog/pickled-cucumber.png";
   if (n.startsWith("אבטיח חתוך")) return "/images/catalog/watermelon-sliced.png";
   if (n.startsWith("אננס חתוך")) return "/images/catalog/pineapple-sliced-tray.png";
-  if (n.startsWith("מלון חתוך")) return byExactName["מלון חתוך"];
-  if (n.startsWith("קוקוס חתוך")) return byExactName["קוקוס חתוך"];
+  if (n.startsWith("מלון חתוך")) return BY_EXACT_PRODUCT_IMAGES["מלון חתוך"];
+  if (n.startsWith("קוקוס חתוך")) return BY_EXACT_PRODUCT_IMAGES["קוקוס חתוך"];
 
-  // fallback for dynamic sheet rows so every product gets image
   if (n.includes("חומץ") && n.includes("תפוח")) return "/images/catalog/apple-cider-vinegar.png";
   if (n.includes("מיץ תפוחים") && n.includes("גזר")) return "/images/catalog/juice-apple-carrot.png";
   if (n.includes("מיץ תפוחים") && n.includes("סלק")) return "/images/catalog/juice-apple-beet.png";
@@ -291,6 +309,16 @@ export function getProduceImage(name: string, description?: string): string | un
   if (/(טחינה|קרם\s*פיסטוק|קרם\s*אגוזי)/.test(n)) return "/images/gallery/premium-delivery-box.webp";
   if (/(חלווה|halva|halvah)/.test(text)) return "/images/gallery/dates-walnut-pack.webp";
   return "/images/gallery/mixed-fruit-box.webp";
+}
+
+/** עד 4 תמונות למוצר — לקרוסלה בכרטיס */
+export function getProduceImages(name: string, description?: string): readonly string[] {
+  return normalizeProduceImages(resolveProduceImageEntry(name, description));
+}
+
+/** תמונת מוצר ראשונה (תאימות לאחור) */
+export function getProduceImage(name: string, description?: string): string | undefined {
+  return getProduceImages(name, description)[0];
 }
 
 /** דף «פירות פרימיום» */

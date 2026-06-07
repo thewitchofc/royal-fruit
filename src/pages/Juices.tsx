@@ -42,11 +42,10 @@ export function Juices() {
             defaultEmoji="🧃"
             emojiStrip=""
             showEmojis={false}
-            page="juices"
+            sheetType="מטבח טרי"
             listMeta={{
               title: "מחירון מיצים",
             }}
-            singleCategoryTitle="מיצים ושתייה טבעית זמינים היום"
             priceMenuEmbedClassName="price-menu-embed--premium-cards"
             showProductImages
             showImagesDisclaimer

@@ -9,6 +9,7 @@ import { ROUTES } from "./lib/publicRoutes";
 const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
 const Fruits = lazy(() => import("./pages/Fruits").then((m) => ({ default: m.Fruits })));
 const Vegetables = lazy(() => import("./pages/Vegetables").then((m) => ({ default: m.Vegetables })));
+const GreensRoots = lazy(() => import("./pages/GreensRoots").then((m) => ({ default: m.GreensRoots })));
 const HomeFood = lazy(() => import("./pages/HomeFood").then((m) => ({ default: m.HomeFood })));
 const Cart = lazy(() => import("./pages/Cart").then((m) => ({ default: m.Cart })));
 const Contact = lazy(() => import("./pages/Contact").then((m) => ({ default: m.Contact })));
@@ -41,6 +42,7 @@ export default function App() {
 
             <Route path={ROUTES.shop.fruits} element={<Fruits />} />
             <Route path={ROUTES.shop.vegetables} element={<Vegetables />} />
+            <Route path={ROUTES.shop.greensRoots} element={<GreensRoots />} />
             {/* מיצים התאחדו לתוך «מטבח טרי» */}
             <Route path={ROUTES.shop.juices} element={<Navigate to={ROUTES.ready.meals} replace />} />
 
@@ -73,6 +75,7 @@ export default function App() {
 
             <Route path="/fruits" element={<Navigate to={ROUTES.shop.fruits} replace />} />
             <Route path="/vegetables" element={<Navigate to={ROUTES.shop.vegetables} replace />} />
+            <Route path="/greens-roots" element={<Navigate to={ROUTES.shop.greensRoots} replace />} />
             <Route path="/juices" element={<Navigate to={ROUTES.ready.meals} replace />} />
             <Route path="/home-food" element={<Navigate to={ROUTES.ready.meals} replace />} />
             <Route path="/halva" element={<Navigate to={ROUTES.ready.meals} replace />} />

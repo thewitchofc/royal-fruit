@@ -543,11 +543,10 @@ export function Fruits() {
               defaultEmoji="fruit"
               emojiStrip=""
               showEmojis={false}
-              page="fruits"
+              sheetType="פירות"
               listMeta={{
                 title: "מחירון פירות",
               }}
-              singleCategoryTitle="הפירות הזמינים היום"
               priceMenuEmbedClassName="price-menu-embed--premium-cards"
               showProductImages
               showImagesDisclaimer

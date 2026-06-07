@@ -10,6 +10,7 @@ export const SEO_STATIC_PATHS: string[] = [
   ROUTES.reviews,
   ROUTES.shop.fruits,
   ROUTES.shop.vegetables,
+  ROUTES.shop.greensRoots,
   ROUTES.ready.meals,
   ROUTES.boxes.fruits,
   ROUTES.faq,

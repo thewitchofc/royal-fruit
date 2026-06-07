@@ -43,11 +43,10 @@ export function Vegetables() {
             defaultEmoji="veg"
             emojiStrip=""
             showEmojis={false}
-            page="vegetables"
+            sheetType="ירקות"
             listMeta={{
               title: "מחירון ירקות",
             }}
-            singleCategoryTitle="הירקות הזמינים היום"
             priceMenuEmbedClassName="price-menu-embed--premium-cards"
             showProductImages={false}
           />

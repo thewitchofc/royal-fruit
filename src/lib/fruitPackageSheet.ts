@@ -1,8 +1,6 @@
-import {
-  productMatchesSheetPage,
-  sheetProductKeyNormalized,
-  type SheetProduct,
-} from "./sheetProducts";
+import { productMatchesSheetType, sheetProductKeyNormalized, type SheetProduct } from "./sheetProducts";
+
+const FRUIT_SHEET_TYPE = "פירות";
 
 export type FruitPackageTier = Exclude<SheetProduct["packageTier"], "">;
 
@@ -33,7 +31,7 @@ export function dedupeFruitPackageProducts(products: SheetProduct[]): SheetProdu
 }
 
 function isFruitCatalogRow(p: SheetProduct): boolean {
-  return productMatchesSheetPage(p, "fruits");
+  return productMatchesSheetType(p, FRUIT_SHEET_TYPE);
 }
 
 function isExcludedFromFruitTrays(p: SheetProduct): boolean {
@@ -92,7 +90,7 @@ export function resolveProductsForFruitPackages(products: SheetProduct[]): Sheet
 /** שורת פירות לכרטיסי מארז: דף פירות, packageTier מלא, זמין */
 export function isFruitRowEligibleForPackageUi(p: SheetProduct): boolean {
   if (!p.available) return false;
-  if (!productMatchesSheetPage(p, "fruits")) return false;
+  if (!productMatchesSheetType(p, FRUIT_SHEET_TYPE)) return false;
   if (isExcludedFromFruitTrays(p)) return false;
   return Boolean(p.packageTier);
 }
@@ -101,7 +99,7 @@ export function isFruitRowEligibleForPackageUi(p: SheetProduct): boolean {
 export function buildFruitPackageTierByKey(products: SheetProduct[]): Map<string, FruitPackageTier> {
   const m = new Map<string, FruitPackageTier>();
   for (const p of products) {
-    if (!productMatchesSheetPage(p, "fruits")) continue;
+    if (!productMatchesSheetType(p, FRUIT_SHEET_TYPE)) continue;
     if (!p.packageTier) continue;
     const k = sheetProductKeyNormalized(p.name);
     if (!m.has(k)) m.set(k, p.packageTier);

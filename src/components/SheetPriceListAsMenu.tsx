@@ -6,19 +6,15 @@ import { useSheetProducts } from "../hooks/useSheetProducts";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { ROUTES } from "../lib/publicRoutes";
 import { findDuplicateDisplayNamesInCategories, type PriceCategory, type PriceListBannerMeta } from "../data/priceList";
-import {
-  getGoogleSheetsProductsCsvUrl,
-  groupSheetProductsToPriceCategories,
-  type SheetPageFilter,
-} from "../lib/sheetProducts";
+import { getGoogleSheetsProductsCsvUrl, groupSheetProductsToPriceCategories } from "../lib/sheetProducts";
 
 type SheetPriceListAsMenuProps = {
   idPrefix: string;
   defaultEmoji: string;
   emojiStrip?: string;
   showEmojis: boolean;
-  /** פירות / מיצים / חלווה / אוכל ביתי / ירקות / הכל */
-  page: SheetPageFilter;
+  /** ערך עמודת type בגיליון (פירות, ירקות, ירק ושורשים, מטבח טרי) */
+  sheetType: string;
   /** מעל הרשימה, כמו באנר המחירון. null = בלי באנר */
   listMeta: PriceListBannerMeta | null;
   categoryHeadingRank?: 2 | 3;
@@ -44,7 +40,7 @@ export function SheetPriceListAsMenu({
   defaultEmoji,
   emojiStrip,
   showEmojis,
-  page,
+  sheetType,
   listMeta,
   categoryHeadingRank = 2,
   singleCategoryTitle,
@@ -121,7 +117,7 @@ export function SheetPriceListAsMenu({
   const groupedCategories = groupSheetProductsToPriceCategories(state.products, {
     idPrefix,
     defaultEmoji,
-    page,
+    sheetType,
   });
   let categories: PriceCategory[] = singleCategoryTitle
     ? mergeCategoriesToSingleList(groupedCategories, {
@@ -147,16 +143,9 @@ export function SheetPriceListAsMenu({
     if (excludeCategoryTitles?.length) {
       return null;
     }
-    const hint =
-      page === "all"
-        ? "אין כרגע פריטים זמינים להצגה במחירון."
-        : page === "juices"
-          ? "אין כרגע מיצים או שתייה טבעית במחירון. אפשר לשאול בוואטסאפ מה זמין היום."
-          : page === "halva"
-            ? "אין כרגע פריטי חלווה במחירון. בהמשך תוסיפו שורות בגיליון עם סוג או קטגוריה «חלווה»."
-            : page === "homeFood"
-              ? "אין כרגע אוכל ביתי במחירון. בהמשך תוסיפו שורות עם סוג או קטגוריה «אוכל ביתי»."
-              : "אין כרגע פריטים זמינים בקטגוריה הזו. אם חסר משהו שחיפשתם, מומלץ לפנות ישירות לעסק.";
+    const hint = sheetType.trim()
+      ? `אין כרגע פריטים זמינים תחת «${sheetType.trim()}» במחירון. אם חסר משהו שחיפשתם, מומלץ לפנות ישירות לעסק.`
+      : "אין כרגע פריטים זמינים להצגה במחירון.";
     return <p className="muted">{hint}</p>;
   }
 

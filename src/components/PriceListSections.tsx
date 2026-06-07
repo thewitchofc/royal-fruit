@@ -1,10 +1,10 @@
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Apple, Cherry, Circle, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { PriceCategory } from "../data/priceList";
 import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { PRICE_LIST_META, type PriceListBannerMeta } from "../data/priceList";
-import { getProduceImage, getProduceShortDescription } from "../data/priceList";
+import { getProduceImage, getProduceImages, getProduceShortDescription } from "../data/priceList";
 import { useCart } from "../context/CartContext";
 import type { CartLineInput } from "../cart/types";
 import type { PriceRow, PriceSubsection } from "../data/priceList";
@@ -97,6 +97,139 @@ function productNameMatchesImagePrefixes(name: string, prefixes: readonly string
   });
 }
 
+const PRODUCT_CARD_IMG_SIZE = 400;
+const CAROUSEL_AUTO_MS = 4000;
+const CAROUSEL_SWIPE_PX = 40;
+
+/** כרטיס מוצר — קרוסלת תמונות (עד 4), בלי ספריות חיצוניות */
+function ProductCardCarousel({ images, productName }: { images: readonly string[]; productName: string }) {
+  const slides = images;
+  const [index, setIndex] = useState(0);
+  const [autoPlay, setAutoPlay] = useState(slides.length > 1);
+  const touchStartX = useRef(0);
+  const touchDeltaX = useRef(0);
+  const didSwipe = useRef(false);
+  const multi = slides.length > 1;
+
+  const goTo = useCallback(
+    (next: number) => {
+      const len = slides.length;
+      if (len < 2) return;
+      setIndex(((next % len) + len) % len);
+    },
+    [slides.length],
+  );
+
+  const goNext = useCallback(() => goTo(index + 1), [goTo, index]);
+  const goPrev = useCallback(() => goTo(index - 1), [goTo, index]);
+  const stopAuto = useCallback(() => setAutoPlay(false), []);
+
+  const slidesKey = slides.join("|");
+  useEffect(() => {
+    setIndex(0);
+    setAutoPlay(slides.length > 1);
+  }, [slidesKey, slides.length]);
+
+  useEffect(() => {
+    if (!multi || !autoPlay) return;
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+    const id = window.setInterval(() => {
+      setIndex((i) => (i + 1) % slides.length);
+    }, CAROUSEL_AUTO_MS);
+    return () => window.clearInterval(id);
+  }, [multi, autoPlay, slides.length]);
+
+  if (slides.length === 0) return null;
+
+  if (!multi) {
+    const src = slides[0]!;
+    return (
+      <img
+        src={src}
+        alt=""
+        className="price-menu-card-img"
+        width={PRODUCT_CARD_IMG_SIZE}
+        height={PRODUCT_CARD_IMG_SIZE}
+        sizes="(max-width: 960px) 42vw, 168px"
+        decoding="async"
+        draggable={false}
+      />
+    );
+  }
+
+  return (
+    <div
+      className="price-menu-card-carousel"
+      onClick={() => {
+        if (didSwipe.current) {
+          didSwipe.current = false;
+          return;
+        }
+        stopAuto();
+        goNext();
+      }}
+      onTouchStart={(e) => {
+        stopAuto();
+        touchStartX.current = e.touches[0]?.clientX ?? 0;
+        touchDeltaX.current = 0;
+        didSwipe.current = false;
+      }}
+      onTouchMove={(e) => {
+        touchDeltaX.current = (e.touches[0]?.clientX ?? 0) - touchStartX.current;
+      }}
+      onTouchEnd={() => {
+        const dx = touchDeltaX.current;
+        if (dx > CAROUSEL_SWIPE_PX) {
+          didSwipe.current = true;
+          goPrev();
+        } else if (dx < -CAROUSEL_SWIPE_PX) {
+          didSwipe.current = true;
+          goNext();
+        }
+        touchDeltaX.current = 0;
+      }}
+      onPointerDown={stopAuto}
+      role="group"
+      aria-roledescription="carousel"
+      aria-label={`תמונות ${productName}`}
+    >
+      <div className="price-menu-card-carousel-viewport">
+        <div
+          className="price-menu-card-carousel-track"
+          style={{ transform: `translate3d(-${index * 100}%, 0, 0)` }}
+        >
+          {slides.map((src, i) => (
+            <div
+              key={`${src}-${i}`}
+              className="price-menu-card-carousel-slide"
+              aria-hidden={i !== index}
+            >
+              <img
+                src={src}
+                alt=""
+                className="price-menu-card-img"
+                width={PRODUCT_CARD_IMG_SIZE}
+                height={PRODUCT_CARD_IMG_SIZE}
+                sizes="(max-width: 960px) 42vw, 168px"
+                decoding="async"
+                loading={i === 0 ? "eager" : "lazy"}
+                draggable={false}
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="price-menu-card-carousel-dots" aria-hidden>
+        {slides.map((_, i) => (
+          <span key={i} className={`price-menu-card-carousel-dot${i === index ? " is-active" : ""}`} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function PriceRowView({
   item,
   description,
@@ -118,8 +251,9 @@ function PriceRowView({
   const step = item.qtyStep ?? 1;
   const mayShowImage =
     showProductImages && productNameMatchesImagePrefixes(item.name, productImageOnlyPrefixes);
-  const thumb = mayShowImage ? getProduceImage(item.name, description) : undefined;
-  const showLeft = Boolean(thumb) || showEmojis;
+  const images = mayShowImage ? getProduceImages(item.name, description) : [];
+  const thumb = images[0];
+  const showLeft = images.length > 0 || showEmojis;
 
   const qtyBlock = (
     <div className={productCardLayout ? "price-menu-card-actions" : "price-menu-add-wrap"}>
@@ -156,8 +290,8 @@ function PriceRowView({
     return (
       <li className="price-menu-row price-menu-row--product-card">
         <div className="price-menu-card-media">
-          {thumb ? (
-            <img src={thumb} alt="" className="price-menu-card-img" loading="lazy" decoding="async" />
+          {images.length > 0 ? (
+            <ProductCardCarousel images={images} productName={item.name} />
           ) : (
             <div className="price-menu-card-img-placeholder" aria-hidden />
           )}

@@ -3,7 +3,7 @@ import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { SheetPriceListAsMenu } from "../components/SheetPriceListAsMenu";
 import { usePageSeo } from "../lib/seo";
 
-/** דף בסיס: מוצרים מגיליון עם type או category «חלווה» (ראו HALVA_CATEGORY_ALIASES ב־sheetProducts) */
+/** דף בסיס: מוצרים מגיליון עם type «מטבח טרי» */
 export function Halva() {
   usePageSeo({
     title: "Royal Fruit | חלווה וממרחים — חלווה בטעם",
@@ -38,7 +38,7 @@ export function Halva() {
             defaultEmoji="⭐"
             emojiStrip=""
             showEmojis={false}
-            page="halva"
+            sheetType="מטבח טרי"
             listMeta={{ title: "חלווה וממרחים — מחירון" }}
             priceMenuEmbedClassName="price-menu-embed--premium-cards"
             priceMenuSearchLabel="חיפוש במחירון"

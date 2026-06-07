@@ -6,6 +6,7 @@ export const ROUTES = {
   shop: {
     fruits: "/shop/fruits",
     vegetables: "/shop/vegetables",
+    greensRoots: "/shop/greens-roots",
     juices: "/shop/juices",
   },
   ready: {
@@ -32,6 +33,7 @@ export function blogArticlePath(slug: string): string {
 export const PRICE_LIST_PREFETCH_PATHS = new Set<string>([
   ROUTES.shop.fruits,
   ROUTES.shop.vegetables,
+  ROUTES.shop.greensRoots,
   ROUTES.ready.meals,
   ROUTES.boxes.fruits,
 ]);
