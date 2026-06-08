@@ -228,6 +228,16 @@ export type ProductImageEntry = string | readonly string[];
 
 export const MAX_PRODUCT_IMAGES = 4;
 
+/** מוצרים שמוצגים בלי תמונה (placeholder בלבד) */
+const PRODUCTS_WITHOUT_IMAGES = ["קולסלאו", "עגבניות מיובשות", "גוואקמולי"] as const;
+
+function productHasNoImage(name: string) {
+  const n = name.trim();
+  return PRODUCTS_WITHOUT_IMAGES.some(
+    (prefix) => n === prefix || n.startsWith(`${prefix} `) || n.startsWith(`${prefix}·`),
+  );
+}
+
 /** ממפה שם מוצר → תמונה/ות (גלריה WebP; קטלוג PNG) */
 const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     קרמבולה: ["/images/catalog/carambola-whole.png", "/images/catalog/carambola-sliced.png"],
@@ -437,7 +447,6 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "חתיכות אננס מוקפאות": "/images/catalog/frozen-pineapple.png",
     "תות בננה קפוא": "/images/catalog/frozen-strawberry-banana.png",
     "תות בננה": "/images/catalog/frozen-strawberry-banana.png",
-    גוואקמולי: "/images/catalog/guacamole.png",
     "ממרח אבוקדו": "/images/catalog/guacamole.png",
     "פטל מצופה בפיסטוק": "/images/catalog/raspberry-pistachio-coated.png",
     "פטל מצופה בשוקולד חלב ושוקולד לבן": "/images/catalog/raspberry-double-chocolate.png",
@@ -473,6 +482,8 @@ function resolveProduceImageEntry(
   categoryTitle?: string,
 ): ProductImageEntry | undefined {
   const n = name.trim();
+  if (productHasNoImage(n)) return undefined;
+
   const text = `${n} ${description ?? ""}`.toLowerCase();
 
   const exact = BY_EXACT_PRODUCT_IMAGES[n];

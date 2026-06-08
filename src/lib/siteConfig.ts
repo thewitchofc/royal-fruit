@@ -2,8 +2,11 @@
  * קבועי SEO / אתר ללא תלות ב-runtime (ניתן לייבא מ-vite.config ומהדפדפן).
  */
 
-/** תמונת שיתוף (WhatsApp / פייסבוק וכו׳) — אותו רקע כמו הירו בדסקטופ */
-export const SITE_OG_IMAGE_PATH = "/images/backgrounds/header-fruits-bg.png" as const;
+/** תמונת שיתוף (Google / WhatsApp / פייסבוק) — מרובעת 1200×1200 עם לוגו */
+export const SITE_OG_IMAGE_PATH = "/images/seo/og-image.png" as const;
+
+/** גרסה רחבה לכרטיסי שיתוף (summary_large_image) */
+export const SITE_OG_IMAGE_WIDE_PATH = "/images/seo/og-image-wide.png" as const;
 
 /** לוגו המותג ל־JSON-LD (publisher / Organization), לא לתמונת קישור */
 export const SITE_BRAND_LOGO_PATH = "/images/brand/brand-logo.png" as const;

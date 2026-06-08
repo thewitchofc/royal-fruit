@@ -130,6 +130,18 @@ export function usePageSeo(params: SeoParams) {
       property: "og:image",
       content: imageAbs,
     });
+    upsertMeta('meta[property="og:image:width"]', {
+      property: "og:image:width",
+      content: "1200",
+    });
+    upsertMeta('meta[property="og:image:height"]', {
+      property: "og:image:height",
+      content: ogImagePath === "/images/seo/og-image-wide.png" ? "630" : "1200",
+    });
+    upsertMeta('meta[property="og:image:alt"]', {
+      property: "og:image:alt",
+      content: "Royal Fruit — פירות וירקות פרימיום עד הבית",
+    });
 
     if (ogType === "article" && articlePublishedAt) {
       const iso = `${articlePublishedAt}T12:00:00+02:00`;

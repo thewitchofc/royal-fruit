@@ -7147,6 +7147,366 @@ main,
   }
 }
 
+/* —— כפתור ותפריט נגישות מובנה —— */
+.accessibility-widget {
+  position: fixed;
+  inset-inline-end: 1rem;
+  bottom: calc(1.1rem + env(safe-area-inset-bottom, 0px));
+  z-index: 72;
+}
+
+.accessibility-widget-backdrop {
+  display: none;
+}
+
+.accessibility-widget-fab {
+  width: 56px;
+  height: 56px;
+  touch-action: manipulation;
+  border-radius: 50%;
+  border: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.1rem;
+  background: linear-gradient(165deg, #1f6fd6 0%, #0b4fae 55%, #083d86 100%);
+  color: #fff;
+  box-shadow:
+    0 4px 20px rgba(11, 79, 174, 0.42),
+    0 2px 0 rgba(255, 255, 255, 0.2) inset;
+  cursor: pointer;
+}
+
+.accessibility-widget-fab:hover {
+  box-shadow:
+    0 6px 26px rgba(11, 79, 174, 0.5),
+    0 2px 0 rgba(255, 255, 255, 0.24) inset;
+}
+
+.accessibility-widget-fab:focus-visible {
+  outline: 3px solid rgba(31, 111, 214, 0.55);
+  outline-offset: 3px;
+}
+
+.accessibility-widget-fab-icon {
+  width: 1.45rem;
+  height: 1.45rem;
+}
+
+.accessibility-widget-fab-label {
+  font-size: 0.58rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.accessibility-widget-panel {
+  position: absolute;
+  inset-inline-end: 0;
+  bottom: calc(100% + 0.65rem);
+  width: min(18.5rem, calc(100vw - 2rem));
+  max-height: min(70svh, 34rem);
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(24, 33, 23, 0.1);
+  background: #fffef9;
+  color: var(--ink);
+  box-shadow:
+    0 14px 40px rgba(24, 33, 23, 0.18),
+    0 2px 0 rgba(255, 255, 255, 1) inset;
+}
+
+.accessibility-widget-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.85rem;
+}
+
+.accessibility-widget-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #0b4fae;
+}
+
+.accessibility-widget-title svg {
+  width: 1.15rem;
+  height: 1.15rem;
+}
+
+.accessibility-widget-close {
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(11, 79, 174, 0.08);
+  color: #0b4fae;
+  cursor: pointer;
+}
+
+.accessibility-widget-close:focus-visible {
+  outline: 2px solid rgba(11, 79, 174, 0.45);
+  outline-offset: 2px;
+}
+
+.accessibility-widget-section-label {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--muted);
+}
+
+.accessibility-widget-font-row {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr 2.5rem;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+
+.accessibility-widget-icon-btn {
+  width: 2.75rem;
+  height: 2.75rem;
+  touch-action: manipulation;
+  border: 1px solid rgba(11, 79, 174, 0.2);
+  border-radius: 10px;
+  background: #f4f8ff;
+  color: #0b4fae;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.accessibility-widget-icon-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.accessibility-widget-font-value {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  min-height: 2.5rem;
+  border-radius: 10px;
+  background: rgba(11, 79, 174, 0.06);
+  font-size: 0.88rem;
+  font-weight: 800;
+}
+
+.accessibility-widget-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+}
+
+.accessibility-widget-option {
+  width: 100%;
+  border: 1px solid rgba(24, 33, 23, 0.12);
+  border-radius: 10px;
+  background: #fff;
+  color: var(--ink);
+  min-height: 2.75rem;
+  touch-action: manipulation;
+  padding: 0.45rem 0.7rem;
+  text-align: start;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.accessibility-widget-option.is-active {
+  border-color: rgba(11, 79, 174, 0.45);
+  background: rgba(11, 79, 174, 0.1);
+  color: #0b4fae;
+}
+
+.accessibility-widget-actions {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(24, 33, 23, 0.08);
+}
+
+.accessibility-widget-reset,
+.accessibility-widget-statement {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-height: 2.45rem;
+  border-radius: 10px;
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.accessibility-widget-reset {
+  border: 1px solid rgba(24, 33, 23, 0.14);
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.accessibility-widget-statement {
+  border: 1px solid rgba(11, 79, 174, 0.25);
+  background: rgba(11, 79, 174, 0.08);
+  color: #0b4fae;
+}
+
+@media (max-width: 640px) {
+  .accessibility-widget {
+    inset-inline-end: max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+  }
+
+  .accessibility-widget.is-open {
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 96;
+  }
+
+  .accessibility-widget-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    border: 0;
+    margin: 0;
+    padding: 0;
+    background: rgba(24, 33, 23, 0.42);
+    cursor: pointer;
+    z-index: 1;
+  }
+
+  .accessibility-widget-panel {
+    position: fixed;
+    inset-inline: max(0.75rem, env(safe-area-inset-left, 0px))
+      max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: calc(4.5rem + env(safe-area-inset-bottom, 0px));
+    width: auto;
+    max-height: min(72svh, calc(100svh - 6.5rem - env(safe-area-inset-top, 0px)));
+    z-index: 2;
+  }
+
+  .accessibility-widget-fab {
+    position: fixed;
+    inset-inline-end: max(0.75rem, env(safe-area-inset-right, 0px));
+    bottom: calc(0.85rem + env(safe-area-inset-bottom, 0px));
+    z-index: 3;
+  }
+
+  .accessibility-widget-option,
+  .accessibility-widget-reset,
+  .accessibility-widget-statement {
+    min-height: 2.85rem;
+  }
+}
+
+/* התאמות נגישות גלובליות */
+html[data-a11y-font-scale="1"] {
+  font-size: 112.5%;
+}
+
+html[data-a11y-font-scale="2"] {
+  font-size: 125%;
+}
+
+html[data-a11y-font-scale="3"] {
+  font-size: 137.5%;
+}
+
+html[data-a11y-high-contrast] {
+  --ink: #000;
+  --muted: #1a1a1a;
+  --surface: #fff;
+  --green: #003300;
+  --olive: #000;
+}
+
+html[data-a11y-high-contrast] body {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+html[data-a11y-high-contrast] .site-header,
+html[data-a11y-high-contrast] .site-footer,
+html[data-a11y-high-contrast] .price-menu-card,
+html[data-a11y-high-contrast] .juices-intro-card,
+html[data-a11y-high-contrast] .cookie-consent-inner {
+  background: #fff !important;
+  color: #000 !important;
+  border-color: #000 !important;
+}
+
+html[data-a11y-high-contrast] a,
+html[data-a11y-high-contrast] button,
+html[data-a11y-high-contrast] .btn {
+  color: #000 !important;
+}
+
+html[data-a11y-highlight-links] a {
+  text-decoration: underline !important;
+  text-decoration-thickness: 2px !important;
+  background: #ffeb3b !important;
+  color: #000 !important;
+  outline: 1px solid #000 !important;
+}
+
+html[data-a11y-readable-font] body,
+html[data-a11y-readable-font] body *:not(svg):not(path) {
+  font-family: Arial, Helvetica, "Segoe UI", sans-serif !important;
+}
+
+html[data-a11y-text-spacing] body {
+  letter-spacing: 0.06em;
+  word-spacing: 0.1em;
+}
+
+html[data-a11y-text-spacing] p,
+html[data-a11y-text-spacing] li,
+html[data-a11y-text-spacing] .price-menu-card-name,
+html[data-a11y-text-spacing] .page-lead {
+  line-height: 1.85 !important;
+}
+
+html[data-a11y-stop-animations] *,
+html[data-a11y-stop-animations] *::before,
+html[data-a11y-stop-animations] *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+html[data-a11y-grayscale] {
+  filter: grayscale(100%);
+}
+
+html[data-a11y-large-cursor] body,
+html[data-a11y-large-cursor] body * {
+  cursor:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath fill='%23000' stroke='%23fff' stroke-width='1.5' d='M4 4 L4 24 L10 18 L14 28 L18 26 L14 16 L22 16 Z'/%3E%3C/svg%3E")
+      2 2,
+    auto !important;
+}
+
 /* Widget נגישות חיצוני: שמירת footprint יציב למפעיל הצף בדסקטופ */
 @media (min-width: 961px) {
   [id*="nagish"],

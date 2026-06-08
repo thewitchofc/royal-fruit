@@ -8,6 +8,7 @@ import { BreadcrumbJsonLd } from "./BreadcrumbJsonLd";
 import { OrganizationJsonLd } from "./OrganizationJsonLd";
 import { CookieConsent } from "./CookieConsent";
 import { SiteBottomWhatsappBar } from "./SiteBottomWhatsappBar";
+import { AccessibilityWidget } from "./AccessibilityWidget";
 import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibilityLoader";
 import { RoyalFruitWordmark } from "./RoyalFruitWordmark";
 import { Navbar } from "./Navbar";
@@ -21,6 +22,9 @@ const LOGO_PNG_URL = "/images/brand/brand-logo.png";
 const LOGO_PNG_MOBILE_URL = "/images/brand/brand-logo-mobile.png";
 const DEV_SIGNATURE_URL = "/images/brand/the-witch-signature.png";
 const DEV_CREDIT_URL = "https://thewitch.co.il";
+const ACCESSIBILITY_VENDOR_SCRIPT_URL = (
+  import.meta.env.VITE_ACCESSIBILITY_VENDOR_SCRIPT_URL as string | undefined
+)?.trim();
 
 function CartGlyph({ className }: { className?: string }) {
   return (
@@ -304,7 +308,7 @@ export function Layout({ children }: { children: ReactNode }) {
         </Link>
       ) : null}
       <CookieConsent />
-      <OptionalVendorAccessibilityLoader />
+      {ACCESSIBILITY_VENDOR_SCRIPT_URL ? <OptionalVendorAccessibilityLoader /> : <AccessibilityWidget />}
     </div>
   );
 }

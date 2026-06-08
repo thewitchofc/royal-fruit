@@ -173,7 +173,7 @@ export default defineConfig(({ mode }) => {
         },
         transformIndexHtml(html) {
           const canonical = `${siteUrl}/`;
-          const extra = `\n    <link rel="canonical" href="${escapeXml(canonical)}" />\n    <meta property="og:url" content="${escapeXml(canonical)}" />\n    <meta property="og:image" content="${escapeXml(ogImageAbs)}" />\n    <meta name="twitter:image" content="${escapeXml(ogImageAbs)}" />\n`;
+          const extra = `\n    <link rel="canonical" href="${escapeXml(canonical)}" />\n    <meta property="og:url" content="${escapeXml(canonical)}" />\n    <meta property="og:image" content="${escapeXml(ogImageAbs)}" />\n    <meta property="og:image:width" content="1200" />\n    <meta property="og:image:height" content="1200" />\n    <meta property="og:image:alt" content="Royal Fruit — פירות וירקות פרימיום עד הבית" />\n    <meta name="twitter:image" content="${escapeXml(ogImageAbs)}" />\n`;
           return html.replace("</head>", `${extra}  </head>`);
         },
         closeBundle() {
