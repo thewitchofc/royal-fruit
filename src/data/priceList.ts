@@ -155,7 +155,7 @@ export function getProduceShortDescription(name: string): string {
     "אספרגוס טרי": "גבעול עדין ופריך; מתאים לבישול קצר ולטעם אלגנטי בצלחת.",
     "עלי גפן טריים (500 גרם)": "עלים רכים למילוי ביתי; טעם טרי ונקי.",
     "עלי גפן חמוצים": "עלי גפן ממולאים בעבודת יד; חמיצות מאוזנת ומרקם רך.",
-    "כרוב חמוץ": "כרוב כבוש בעבודת יד; חמיצות נעימה ופריך טבעי.",
+    "עלי כרוב חמוץ": "עלי כרוב כבושים בעבודת יד; חמיצות נעימה ופריך טבעי.",
     "בצל חמוץ מתוק": "בצל ממולא ובישול מתוק־חמוץ; עבודת יד ומאוזן לצד מנות.",
     "מלפפון ארמטו ענק": "מלפפון גדול ופריך, טוב לסלט ולחיתוך גס.",
     "עגבניות שרי בלה מאיה": "שרי מתוקות ועסיסיות, מצוינות לנשנוש וסלט.",
@@ -432,7 +432,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "קרם אגוזי לוז": "/images/catalog/cream-hazelnut.png",
     "קרם אגוז לוז": "/images/catalog/cream-hazelnut.png",
     "עלי גפן חמוצים": "/images/catalog/kitchen-grape-leaves.png",
-    "כרוב חמוץ": "/images/catalog/kitchen-sauerkraut.png",
+    "עלי כרוב חמוץ": "/images/catalog/kitchen-sauerkraut.png",
     "בצל חמוץ מתוק": "/images/catalog/kitchen-sweet-onion.png",
     "חלפיניו מוחמץ": "/images/catalog/pickled-jalapeno.png",
     שיפקה: "/images/catalog/pickled-shipka.png",
@@ -508,7 +508,7 @@ function resolveProduceImageEntry(
   }
 
   if (n.startsWith("עלי גפן חמוצים")) return BY_EXACT_PRODUCT_IMAGES["עלי גפן חמוצים"];
-  if (n.startsWith("כרוב חמוץ")) return BY_EXACT_PRODUCT_IMAGES["כרוב חמוץ"];
+  if (n.startsWith("עלי כרוב חמוץ")) return BY_EXACT_PRODUCT_IMAGES["עלי כרוב חמוץ"];
   if (n.startsWith("בצל חמוץ מתוק")) return BY_EXACT_PRODUCT_IMAGES["בצל חמוץ מתוק"];
   if (n.startsWith("מלפפון חמוץ")) return "/images/catalog/pickled-cucumber.png";
   if (n.startsWith("אבטיח חתוך")) return "/images/catalog/watermelon-sliced.png";
