@@ -52,7 +52,9 @@ export function GreensRoots() {
               title: "מחירון ירק ושורשים",
             }}
             priceMenuEmbedClassName="price-menu-embed--premium-cards"
-            showProductImages={false}
+            showProductImages
+            showImagesDisclaimer
+            productImageOnlyPrefixes={["מיני תפוח אדמה", "תפוח אדמה לבן", "גזר ארוז דוד משה", "שום", "עלי בייבי", "עלי רוקט", "עלי תרד", "נבטים סינים", "נבטים סיניים", "רוברבר", "לבבות קיסר", "קולסלאו", "עלי סלרי", "עלי מנגולד", "עלי גפן", "פטרוזיליה", "בזיליקום", "עירית", "שיבה", "מרווה", "רוזמרין", "שמיר", "למון גראס", "צ׳ילי תאילנדי", "צ'ילי תאילנדי", "נענע", "בצל שאלוט", "בצל ירוק"]}
           />
         </div>
       </section>

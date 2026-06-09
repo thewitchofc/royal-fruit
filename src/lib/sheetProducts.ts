@@ -3,8 +3,8 @@ import { getProduceShortDescription } from "../data/priceList";
 
 /**
  * טעינה ופרסור של מוצרים מקובץ CSV שמפורסם מ-Google Sheets.
- * עמודות: name, price, category, type, unit, deal, Checkbox (+ אופציונלי packageTier למארזי פירות).
- * כותרת Checkbox ממופה ל-available (ריק / TRUE = מוצג; FALSE / 0 / לא = מוסתר).
+ * עמודות: name, price, category, type, unit, deal, Checkbox|FALSE (+ אופציונלי packageTier למארזי פירות).
+ * כותרת זמינות (Checkbox / FALSE / זמין) ממופה ל-available (ריק / TRUE = מוצג; FALSE / 0 / לא = מוסתר).
  * type = סינון ראשי לדפי האתר (פירות, ירקות, ירק ושורשים, מטבח טרי).
  * category = כותרת קבוצה בתוך כל type (פירות רגילים, קלופים, מיצים…).
  * אין רשימות קשיחות — כל type/category חדשים בגיליון מופיעים אוטומטית.
@@ -114,7 +114,7 @@ function canonicalHeaderKey(raw: string): string {
   if (lower === "unit" || lower === "package" || lower === "pack" || lower === "weight") return "unit";
   if (lower === "packagetier" || lower === "package_tier" || lower === "tier") return "packageTier";
   if (he[t] != null) return he[t]!;
-  if (lower === "checkbox") return "available";
+  if (lower === "checkbox" || lower === "false" || lower === "true") return "available";
   return lower;
 }
 
