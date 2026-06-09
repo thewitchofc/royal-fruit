@@ -86,6 +86,7 @@ export function getProduceShortDescription(name: string): string {
     "דובדבן אדום": "דובדבן אדום עסיסי ומתוק; בוהק, טרי ומושלם לעונה — דובדבני אבו עלם.",
     "דובדבן הזהב אדום": "דובדבן הזהב אדום מתוק; מובחר, עסיסי וטרי — 250 גרם במארז.",
     מישמש: "משמש ארומה קוט מתוק ועסיסי; כתום־אדום, רך וארומטי — פירות בן־דור איכות עלית.",
+    "מישמש מארז": "משמש ארומה קוט במארז; מתוק ועסיסי, כתום־אדום ורך — איכות עלית לעונה.",
     משמש: "משמש ארומה קוט מתוק ועסיסי; כתום־אדום, רך וארומטי — פירות בן־דור איכות עלית.",
     דומדמניות: "דומדמניות אדומות טריות; חמצמצות־מתוקות, עסיסיות ומושלמות לקינוח ולמגש.",
     "דומדמניות מארז": "דומדמניות אדומות במארז 125 גרם; טריות, עסיסיות ומובחרות.",
@@ -116,7 +117,8 @@ export function getProduceShortDescription(name: string): string {
     קרמבולה: "חמצמץ־מתקתק עם חיתוך כוכב ייחודי; מצוין לקישוט צלחות ולמגשי אירוח.",
     "קרמבולה פרימיום": "חמצמץ־מתקתק עם חיתוך כוכב ייחודי; מצוין לקישוט צלחות ולמגשי אירוח.",
     "תפוז דם": "הדר ארומטי עם מתיקות־חמיצות עמוקה וצבע בשר בולט.",
-    "תפוז פירמיום": "תפוז מתוק ומאוזן לשתייה/אכילה יומית.",
+    "תפוז פרימיום": "תפוז הפרדס במגש; מתוק ועסיסי — מושלם לשתייה, אכילה טרייה ומיצים.",
+    "תפוז פירמיום": "תפוז הפרדס במגש; מתוק ועסיסי — מושלם לשתייה, אכילה טרייה ומיצים.",
     "קיווי ירוק": "חמצמץ־מתוק עם סיבים עדינים; קליפה חומה ופרווה, בשר ירוק עז — מרענן וקליל.",
     "קיווי צהוב": "מתוק ועסיסי, בלי שיער; בשר צהוב־זהב רך ומרענן — SunGold מובחר.",
     "מלון כתום": "מתוק וארומטי, בשרני וריח בולט.",
@@ -126,10 +128,12 @@ export function getProduceShortDescription(name: string): string {
     נקטרינה: "מתוקה, עסיסה וחלקה; קליפה דקה וטעם אפרסקי עדין — מושלמת לעונה.",
     פאפאיה: "מתוקה, עסיסה וטרופית; בשר רך וריח עדין — מושלמת לעונה.",
     "פאפאיה זוג מארז": "פאפאיה טרייה במארז זוג; מתוקה, עסיסה וטרופית.",
+    "שזיף מטלי": "שזיף מתוק־חמצמץ, עסיסי ורך; קליפה סגולה־אדומה ובשר בוהק — מושלם לעונה.",
     "שזיף מיטלי": "שזיף מתוק־חמצמץ, עסיסי ורך; קליפה סגולה־אדומה ובשר בוהק — מושלם לעונה.",
     גויאבה: "מתוקה־חמצמצה, ארומטית ועסיסה; קליפה ירוקה ובשר לבן רך — טרופית ומרעננת.",
     קלמנטינה: "מתוקה, עסיסה וקלה לקליפה; הדר קטן ונוח לנשנוש — טרי ומרענן.",
     "אפרסק לבן": "מתוק ועסיסי, קליפה בהירה ובשר לבן־קרם רך; עדין ומושלם לעונה.",
+    "שקד ירוק": "שקד ירוק טרי בעונה; קליפה רכה ועסיסית עם שקד לבן בפנים — מושלם לנשנוש ולמאכלים מסורתיים.",
     תאנים: "תאנים טריות מישראל; מתוקות, רכות ועסיסיות — מושלמות לעונה.",
     תאנה: "תאנים טריות מישראל; מתוקות, רכות ועסיסיות — מושלמות לעונה.",
     "תאנה מארז": "תאנים טריות במארז מישראל; מתוקות, רכות ועסיסיות.",
@@ -147,6 +151,7 @@ export function getProduceShortDescription(name: string): string {
     "אבוקדו מוכן לאכילה מארז": "אבוקדו TOP GREEN בשל ומוכן לאכילה במארז; האס ואטינגר — מוכן להגשה מיידית.",
     שום: "שום טרי נוי השדה באריזה; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
     "שום טרי": "שום טרי נוי השדה באריזה; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
+    "סלק וואקום": "סלק אדום מבושל ומקולף ירוק, ארוז בוואקום; מוכן לשימוש — מושלם לסלטים, צלחות ותוספות.",
     "תירס מתוק": "תירס מתוק חנן הגנן במארז; קלחים צהובים ועסיסיים — מושלם לבישול, צלייה ואכילה טרייה.",
     "תירס צהוב מארז": "תירס צהוב מתוק נופק במארז; זן עסיסי — מושלם לבישול, צלייה ואכילה טרייה.",
     "תירס לבן מארז": "תירס לבן מתוק משק יעקובובסקי במארז; זן עסיסי — מושלם לבישול, צלייה ואכילה טרייה.",
@@ -172,6 +177,7 @@ export function getProduceShortDescription(name: string): string {
     "בצל שאלוט": "בצלי שאלוט טריים במגש; מתוקים ועדינים — מושלמים לבישול, צלייה ותיבול.",
     "בצלי שאלוט": "בצלי שאלוט טריים במגש; מתוקים ועדינים — מושלמים לבישול, צלייה ותיבול.",
     "בצל ירוק": "בצל ירוק טרי בשקית; פריך ורענן — מושלם לסלטים, תיבול ואירוח.",
+    "בצל לבן": "בצל לבן טרי במארז; מתוק־עדין יחסית — מושלם לבישול, צלייה ארוכה ותיבול.",
     "בצל ספרדי": "בצל ספרדי טרי במארז; מתוק־עדין יחסית — מושלם לבישול, צלייה ארוכה ותיבול.",
     "בצל ספרדי משק כהן": "בצל ספרדי משק כהן טרי; מתוק־עדין יחסית — מושלם לבישול, צלייה ארוכה ותיבול.",
     "מיני תפוח אדמה": "תפוחי אדמה זעירים פרימיום; לאפייה, בישול ומיקרוגל — אמא אדמה כרמל יבול.",
@@ -224,6 +230,8 @@ export function getProduceShortDescription(name: string): string {
     "קפיר ליים מארז": "עלי קפיר ליים טריים במארז; ארומטיים והדריים — מושלמים למטבח תאילנדי, מרקים ותיבול.",
     "עלי קפיר ליים": "עלי קפיר ליים טריים במארז; ארומטיים והדריים — מושלמים למטבח תאילנדי, מרקים ותיבול.",
     "ארטישוק ירושלמי מארז": "ארטישוק ירושלמי כהן חקלאות במארז; עדין ומתוק — מושלם לצלייה, מרקים ותבשילים.",
+    "צ׳ילי": "צ׳ילי אדום טרי; חריף וארומטי — מושלם לתיבול, מטבח אסייתי ורוטבים.",
+    "צ'ילי": "צ׳ילי אדום טרי; חריף וארומטי — מושלם לתיבול, מטבח אסייתי ורוטבים.",
     "פלפל צ׳ילי חריף": "פלפל צ׳ילי חריף במגש; אדום וירוק, חריף במיוחד — מושלם לתיבול ומטבח אסייתי.",
     "צ׳ילי תאילנדי זהבי": "צ׳ילי תאילנדי זהבי במגש; קטן, חריף וארומטי — מושלם למטבח תאילנדי, תיבול ורוטבים.",
     "צ'ילי תאילנדי זהבי": "צ׳ילי תאילנדי זהבי במגש; קטן, חריף וארומטי — מושלם למטבח תאילנדי, תיבול ורוטבים.",
@@ -342,7 +350,11 @@ export type ProductImageEntry = string | readonly string[];
 export const MAX_PRODUCT_IMAGES = 4;
 
 /** מוצרים שמוצגים בלי תמונה (placeholder בלבד) */
-const PRODUCTS_WITHOUT_IMAGES = [] as const;
+const PRODUCTS_WITHOUT_IMAGES = [
+  "תות לבבות מיוחד",
+  "תות חצאים",
+  "תפוז דם",
+] as const;
 
 function productHasNoImage(name: string) {
   const n = name.trim();
@@ -360,8 +372,6 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "מגש תמרים עם פקאן": "/images/catalog/dates-tray-pecan.png",
     "תמר עם אגוז מארז": "/images/catalog/dates-tray-pecan.png",
     "תמרים ממולאים אגוזי מלך": "/images/catalog/dates-tray-pecan.png",
-    "תות לבבות מיוחד": "/images/gallery/white-strawberries.webp",
-    "תות חצאים": "/images/gallery/white-strawberries.webp",
     "אוכמניות כרמל": "/images/gallery/blueberries-pack.webp",
     "אוכמניות כרמל קטן": [
       "/images/catalog/blueberry-carmel-small-pack.png",
@@ -446,8 +456,9 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
       "/images/catalog/golden-cherry-red-pack.png",
       "/images/catalog/golden-cherry-red-open.png",
     ],
-    מישמש: ["/images/catalog/apricot-pack.png", "/images/catalog/apricot-open.png"],
-    משמש: ["/images/catalog/apricot-pack.png", "/images/catalog/apricot-open.png"],
+    מישמש: "/images/catalog/apricot-pack.png",
+    "מישמש מארז": "/images/catalog/apricot-open.png",
+    משמש: "/images/catalog/apricot-pack.png",
     דומדמניות: ["/images/catalog/red-currant-pack.png", "/images/catalog/red-currant-open.png"],
     "דומדמניות מארז": ["/images/catalog/red-currant-pack.png", "/images/catalog/red-currant-open.png"],
     "תות פקיסטני": [
@@ -507,18 +518,20 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     ],
     "מלפפון אורגני בלה מאיה": "/images/catalog/organic-cucumber-bella-maya.png",
     "עגבניות אורגניות בלה מאיה": "/images/catalog/bella-maya-cherry-tomatoes.png",
-    "תפוז פירמיום": "/images/gallery/mixed-fruit-box.webp",
-    "תפוז דם": "/images/gallery/mixed-fruit-box.webp",
     פומלה: "/images/gallery/mixed-fruit-box.webp",
     אבטיח: ["/images/catalog/watermelon-whole.png", "/images/catalog/watermelon-half.png"],
     מנגו: ["/images/catalog/mango-whole.png", "/images/catalog/mango-halves.png"],
     נקטרינה: "/images/catalog/nectarine-tray.png",
     פאפאיה: ["/images/catalog/papaya-pack.png", "/images/catalog/papaya-open.png"],
     "פאפאיה זוג מארז": ["/images/catalog/papaya-pack.png", "/images/catalog/papaya-open.png"],
+    "תפוז פרימיום": "/images/catalog/premium-orange-tray.png",
+    "תפוז פירמיום": "/images/catalog/premium-orange-tray.png",
+    "שזיף מטלי": "/images/catalog/plum-methley-tray.png",
     "שזיף מיטלי": "/images/catalog/plum-methley-tray.png",
     גויאבה: ["/images/catalog/guava-whole.png", "/images/catalog/guava-cut.png"],
-    קלמנטינה: ["/images/catalog/clementine-whole.png", "/images/catalog/clementine-peeled.png"],
+    קלמנטינה: "/images/catalog/clementine-peeled.png",
     "אפרסק לבן": "/images/catalog/white-peach-tray.png",
+    "שקד ירוק": "/images/catalog/green-almond.png",
     תאנים: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
     תאנה: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
     "תאנה מארז": ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
@@ -542,6 +555,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "ג'ינג'ר טרי": "/images/catalog/fresh-ginger.png",
     שום: "/images/gallery/fresh-produce-box.webp",
     "שום טרי": "/images/catalog/garlic.png",
+    "סלק וואקום": "/images/catalog/beet-vacuum.png",
     "תירס מתוק": "/images/catalog/sweet-corn-pack.png",
     "תירס צהוב מארז": "/images/catalog/yellow-corn-pack.png",
     "תירס לבן מארז": "/images/catalog/white-corn-pack.png",
@@ -559,6 +573,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "בצל שאלוט": "/images/catalog/shallot.png",
     "בצלי שאלוט": "/images/catalog/shallot.png",
     "בצל ירוק": "/images/catalog/green-onion.png",
+    "בצל לבן": "/images/catalog/spanish-onion.png",
     "בצל ספרדי": "/images/catalog/spanish-onion.png",
     "בצל ספרדי משק כהן": "/images/catalog/spanish-onion.png",
     "מיני תפוח אדמה": "/images/catalog/mini-potatoes.png",
@@ -605,6 +620,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "קפיר ליים מארז": "/images/catalog/kaffir-lime-leaves.png",
     "עלי קפיר ליים": "/images/catalog/kaffir-lime-leaves.png",
     "ארטישוק ירושלמי מארז": "/images/catalog/jerusalem-artichoke.png",
+    "צ׳ילי": "/images/catalog/chili-red.png",
+    "צ'ילי": "/images/catalog/chili-red.png",
     "פלפל צ׳ילי חריף": "/images/catalog/chili-pepper.png",
     "צ׳ילי תאילנדי זהבי": "/images/catalog/thai-chili-zahavi.png",
     "צ'ילי תאילנדי זהבי": "/images/catalog/thai-chili-zahavi.png",
@@ -732,6 +749,11 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "תות מצופה שוקולד מריר": "/images/catalog/strawberry-dark-chocolate.png",
 };
 
+/** תמונת קטלוג ידנית (PNG) — לא גלריה גנרית */
+function isCatalogImagePath(src: string): boolean {
+  return src.trim().startsWith("/images/catalog/");
+}
+
 /** מנרמל לרשימת עד 4 נתיבים ייחודיים */
 export function normalizeProduceImages(entry: ProductImageEntry | undefined): readonly string[] {
   if (!entry) return [];
@@ -748,15 +770,14 @@ export function normalizeProduceImages(entry: ProductImageEntry | undefined): re
   return out;
 }
 
-function resolveProduceImageEntry(
+/** תמונות קטלוג ייעודיות (PNG) — בלי fallbacks גנריים מגלריה */
+function resolveCatalogImageEntry(
   name: string,
   description?: string,
   categoryTitle?: string,
 ): ProductImageEntry | undefined {
   const n = name.trim();
   if (productHasNoImage(n)) return undefined;
-
-  const text = `${n} ${description ?? ""}`.toLowerCase();
 
   const exact = BY_EXACT_PRODUCT_IMAGES[n];
   if (exact) return exact;
@@ -787,6 +808,7 @@ function resolveProduceImageEntry(
   if (n.startsWith("גזר צבעוני") || n.startsWith("זר גזר צבעוני")) return BY_EXACT_PRODUCT_IMAGES["גזר צבעוני"];
   if (n.startsWith("גזר ארוז דוד משה") || n.startsWith("גזר ארוז")) return BY_EXACT_PRODUCT_IMAGES["גזר ארוז דוד משה"];
   if (n.startsWith("שום טרי")) return BY_EXACT_PRODUCT_IMAGES["שום טרי"];
+  if (n.startsWith("סלק וואקום") || n.startsWith("סלק ואקום")) return BY_EXACT_PRODUCT_IMAGES["סלק וואקום"];
   if (n === "דלעת" || n.startsWith("דלעת מארז")) return BY_EXACT_PRODUCT_IMAGES["דלעת"];
   if (n.startsWith("כרוב סיני")) return BY_EXACT_PRODUCT_IMAGES["כרוב סיני"];
   if (n.startsWith("מגה פורטובלו") || n.startsWith("מגה פורטבלה")) return BY_EXACT_PRODUCT_IMAGES["מגה פורטובלו"];
@@ -815,6 +837,7 @@ function resolveProduceImageEntry(
   if (n.startsWith("עלי כרוב חמוץ")) return BY_EXACT_PRODUCT_IMAGES["עלי כרוב חמוץ"];
   if (/אפונת\s+שלג\s+צ['׳]רי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["אפונת שלג צ׳רי"];
   if (/אפונת\s+גינה\s+צ['׳]רי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["אפונת גינה צ׳רי"];
+  if (n.startsWith("בצל לבן")) return BY_EXACT_PRODUCT_IMAGES["בצל לבן"];
   if (n.startsWith("בצל ספרדי")) return BY_EXACT_PRODUCT_IMAGES["בצל ספרדי"];
   if (n.startsWith("בצל שאלוט") || n.startsWith("בצלי שאלוט")) return BY_EXACT_PRODUCT_IMAGES["בצל שאלוט"];
   if (n.startsWith("בצל ירוק")) return BY_EXACT_PRODUCT_IMAGES["בצל ירוק"];
@@ -834,6 +857,7 @@ function resolveProduceImageEntry(
   if (n.startsWith("גוואקמולי") || n.startsWith("גווקאמולי") || n.startsWith("ממרח אבוקדו"))
     return BY_EXACT_PRODUCT_IMAGES["גוואקמולי"];
   if (/צ['׳]ילי\s+תאילנדי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["צ׳ילי תאילנדי זהבי"];
+  if (n === "צ׳ילי" || n === "צ'ילי") return BY_EXACT_PRODUCT_IMAGES["צ׳ילי"];
   if (/פלפל\s+צ['׳]ילי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["פלפל צ׳ילי חריף"];
   if (n.startsWith("למון גראס")) return BY_EXACT_PRODUCT_IMAGES["למון גראס"];
   if (n.startsWith("מרווה")) return BY_EXACT_PRODUCT_IMAGES["מרווה"];
@@ -869,8 +893,12 @@ function resolveProduceImageEntry(
   if (n.startsWith("פאפאיה")) return BY_EXACT_PRODUCT_IMAGES["פאפאיה"];
   if (n.startsWith("תאנ")) return BY_EXACT_PRODUCT_IMAGES["תאנים"];
   if (n.startsWith("דובדבן הזהב")) return BY_EXACT_PRODUCT_IMAGES["דובדבן הזהב אדום"];
+  if (n.startsWith("מישמש מארז")) return BY_EXACT_PRODUCT_IMAGES["מישמש מארז"];
   if (n.startsWith("מישמש") || n.startsWith("משמש")) return BY_EXACT_PRODUCT_IMAGES["מישמש"];
   if (n.startsWith("דומדמניות")) return BY_EXACT_PRODUCT_IMAGES["דומדמניות"];
+  if (/תפוז\s+פ(יר|רי)מיום/.test(n)) return BY_EXACT_PRODUCT_IMAGES["תפוז פרימיום"];
+  if (/שזיף\s+מ[יט]לי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["שזיף מטלי"];
+  if (n.startsWith("שקד ירוק")) return BY_EXACT_PRODUCT_IMAGES["שקד ירוק"];
   if (n.startsWith("תות פקיסטני") || n.startsWith("תות עץ")) return BY_EXACT_PRODUCT_IMAGES["תות פקיסטני"];
   if (n.startsWith("פטל שחור בכר")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור בכר"];
   if (n.startsWith("פטל שחור רובי")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור רובי"];
@@ -899,6 +927,14 @@ function resolveProduceImageEntry(
   if (n.includes("מיץ תפוחים") && n.includes("סלק")) return "/images/catalog/juice-apple-beet.png";
   if (n.includes("מיץ תפוחים") && n.includes("חבוש")) return "/images/catalog/juice-apple-quince.png";
   if (n.includes("מיץ תפוחים") && !/(גזר|סלק|חבוש)/.test(n)) return "/images/catalog/juice-apple.png";
+
+  return undefined;
+}
+
+function resolveGalleryFallbackImageEntry(name: string, description?: string): ProductImageEntry {
+  const n = name.trim();
+  const text = `${n} ${description ?? ""}`.toLowerCase();
+
   if (/(תות|strawber)/.test(text)) return "/images/gallery/white-strawberries.webp";
   if (/(אוכמנ|blueber|פטל|berry)/.test(text)) return "/images/gallery/blueberries-pack.webp";
   if (/(ענב|grape)/.test(text)) return "/images/gallery/diva-green-grapes.webp";
@@ -914,6 +950,36 @@ function resolveProduceImageEntry(
   if (/(טחינה|קרם\s*פיסטוק|קרם\s*אגוזי)/.test(n)) return "/images/gallery/premium-delivery-box.webp";
   if (/(חלווה|halva|halvah)/.test(text)) return "/images/gallery/dates-walnut-pack.webp";
   return "/images/gallery/mixed-fruit-box.webp";
+}
+
+function resolveProduceImageEntry(
+  name: string,
+  description?: string,
+  categoryTitle?: string,
+): ProductImageEntry | undefined {
+  const n = name.trim();
+  if (productHasNoImage(n)) return undefined;
+  return resolveCatalogImageEntry(name, description, categoryTitle) ?? resolveGalleryFallbackImageEntry(name, description);
+}
+
+/** האם למוצר יש תמונת קטלוג ידנית (PNG בלבד, לא גלריה) */
+export function hasDedicatedProduceImage(
+  name: string,
+  description?: string,
+  categoryTitle?: string,
+): boolean {
+  return getCatalogProduceImages(name, description, categoryTitle).length > 0;
+}
+
+/** תמונות קטלוג ידניות בלבד — למחירון מהגיליון */
+export function getCatalogProduceImages(
+  name: string,
+  description?: string,
+  categoryTitle?: string,
+): readonly string[] {
+  return normalizeProduceImages(resolveCatalogImageEntry(name, description, categoryTitle)).filter(
+    isCatalogImagePath,
+  );
 }
 
 /** עד 4 תמונות למוצר — לקרוסלה בכרטיס */

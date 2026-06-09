@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { PriceCategory } from "../data/priceList";
 import { BUSINESS_CONTACT_FIRST_NAME, BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { PRICE_LIST_META, type PriceListBannerMeta } from "../data/priceList";
-import { getProduceImage, getProduceImages, getProduceShortDescription } from "../data/priceList";
+import { getCatalogProduceImages, getProduceShortDescription, hasDedicatedProduceImage } from "../data/priceList";
 import { useCart } from "../context/CartContext";
 import type { CartLineInput } from "../cart/types";
 import type { PriceRow, PriceSubsection } from "../data/priceList";
@@ -86,17 +86,6 @@ function filterSubsections(subsections: PriceSubsection[] | undefined, query: st
       };
     })
     .filter((sub) => sub.rows.length > 0);
-}
-
-/** כשמוגדר — תמונות מוצר רק לשמות שמתאימים לאחת מהקידומות (שם מלא או שורת שיטס עם סיומת). */
-function productNameMatchesImagePrefixes(name: string, prefixes: readonly string[] | undefined) {
-  if (!prefixes?.length) return true;
-  const n = name.trim();
-  return prefixes.some((p) => {
-    const prefix = p.trim();
-    if (!prefix) return false;
-    return n === prefix || n.startsWith(`${prefix} `) || n.startsWith(`${prefix}·`) || n.startsWith(`${prefix}.`);
-  });
 }
 
 const PRODUCT_CARD_IMG_SIZE = 336;
@@ -321,7 +310,6 @@ function PriceWeightRowView({
   showEmojis,
   productCardLayout,
   showProductImages = true,
-  productImageOnlyPrefixes,
   imageLoadPriority = false,
 }: {
   row: PriceRow;
@@ -330,7 +318,6 @@ function PriceWeightRowView({
   showEmojis: boolean;
   productCardLayout?: boolean;
   showProductImages?: boolean;
-  productImageOnlyPrefixes?: readonly string[];
   imageLoadPriority?: boolean;
 }) {
   const options = row.weightOptions ?? [];
@@ -340,8 +327,8 @@ function PriceWeightRowView({
   const { addItem, lines, setQty } = useCart();
   const description = row.description ?? getProduceShortDescription(row.name);
   const mayShowImage =
-    showProductImages && productNameMatchesImagePrefixes(row.name, productImageOnlyPrefixes);
-  const images = mayShowImage ? getProduceImages(row.name, description, categoryPath) : [];
+    showProductImages && hasDedicatedProduceImage(row.name, description, categoryPath);
+  const images = mayShowImage ? getCatalogProduceImages(row.name, description, categoryPath) : [];
   const displayName = selected ? `${row.name} · ${selected.weight}` : row.name;
   const item: CartLineInput = {
     id: makeRowId(catId, "_", displayName),
@@ -455,7 +442,6 @@ function PriceRowView({
   showEmojis,
   productCardLayout,
   showProductImages = true,
-  productImageOnlyPrefixes,
   imageLoadPriority = false,
 }: {
   item: CartLineInput;
@@ -464,15 +450,14 @@ function PriceRowView({
   productCardLayout?: boolean;
   /** תמונות מוצר מהקטלוג — רק בדף חלווה; בשאר המחירונים false */
   showProductImages?: boolean;
-  productImageOnlyPrefixes?: readonly string[];
   imageLoadPriority?: boolean;
 }) {
   const { addItem, lines, setQty } = useCart();
   const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
   const step = item.qtyStep ?? 1;
   const mayShowImage =
-    showProductImages && productNameMatchesImagePrefixes(item.name, productImageOnlyPrefixes);
-  const images = mayShowImage ? getProduceImages(item.name, description, item.categoryPath) : [];
+    showProductImages && hasDedicatedProduceImage(item.name, description, item.categoryPath);
+  const images = mayShowImage ? getCatalogProduceImages(item.name, description, item.categoryPath) : [];
   const thumb = images[0];
   const showLeft = images.length > 0 || showEmojis;
 
@@ -583,8 +568,6 @@ type Props = {
   showProductImages?: boolean;
   /** טקסט “התמונות להמחשה בלבד” — לשליטה ברמת עמוד (כדי שיופיע פעם אחת) */
   showImagesDisclaimer?: boolean;
-  /** אם מוגדר — רק שמות שמתחילים בערכים האלה (או זהים) יקבלו תמונה מ־getProduceImage */
-  productImageOnlyPrefixes?: readonly string[];
   /** false = בלי שורת חיפוש (לדפים עם מעט פריטים שכבר מוצגים למעלה) */
   showSearch?: boolean;
 };
@@ -607,7 +590,6 @@ export function PriceListSections({
   productCardLayout: productCardLayoutProp,
   showProductImages = true,
   showImagesDisclaimer = false,
-  productImageOnlyPrefixes,
   showSearch = true,
 }: Props) {
   const productCardLayout =
@@ -680,11 +662,7 @@ export function PriceListSections({
         {(() => {
           let imagePriorityBudget = CARD_IMAGE_PRIORITY_BUDGET;
           const takeImagePriority = (name: string) => {
-            if (
-              !productCardLayout ||
-              !showProductImages ||
-              !productNameMatchesImagePrefixes(name, productImageOnlyPrefixes)
-            ) {
+            if (!productCardLayout || !showProductImages || !hasDedicatedProduceImage(name)) {
               return false;
             }
             if (imagePriorityBudget <= 0) return false;
@@ -725,7 +703,6 @@ export function PriceListSections({
                         showEmojis={showEmojis}
                         productCardLayout={productCardLayout}
                         showProductImages={showProductImages}
-                        productImageOnlyPrefixes={productImageOnlyPrefixes}
                         imageLoadPriority={takeImagePriority(row.name)}
                       />
                     );
@@ -754,7 +731,6 @@ export function PriceListSections({
                       showEmojis={showEmojis}
                       productCardLayout={productCardLayout}
                       showProductImages={showProductImages}
-                      productImageOnlyPrefixes={productImageOnlyPrefixes}
                       imageLoadPriority={takeImagePriority(row.name)}
                     />
                   );
@@ -796,7 +772,6 @@ export function PriceListSections({
                           showEmojis={showEmojis}
                           productCardLayout={productCardLayout}
                           showProductImages={showProductImages}
-                          productImageOnlyPrefixes={productImageOnlyPrefixes}
                           imageLoadPriority={takeImagePriority(row.name)}
                         />
                       );
