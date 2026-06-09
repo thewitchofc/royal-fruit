@@ -52,13 +52,14 @@ export function Fruits() {
   const [sheetReloadNonce, setSheetReloadNonce] = useState(0);
 
   const isFruitBoxesPage = pathname === ROUTES.boxes.fruits;
-  const sheetCsvUrl = getGoogleSheetsProductsCsvUrl();
+  const sheetCsvUrl = isFruitBoxesPage ? getGoogleSheetsProductsCsvUrl() : undefined;
   const sheetState = useSheetProducts(sheetCsvUrl, sheetReloadNonce);
 
   useEffect(() => {
+    if (!isFruitBoxesPage) return;
     const id = window.setInterval(() => setSheetReloadNonce((n) => n + 1), SHEET_POLL_MS);
     return () => window.clearInterval(id);
-  }, []);
+  }, [isFruitBoxesPage]);
 
   const fruitPackageProducts = useMemo(
     () => (sheetState.status === "ok" ? resolveProductsForFruitPackages(sheetState.products) : []),
@@ -234,7 +235,7 @@ export function Fruits() {
         <div className="container fruits-premium-shell">
           <div className="fruits-intro-card catalog-intro-card--centered" aria-label="סטנדרט הפירות של רויאל פרוט">
             <div>
-              <RoyalFruitWordmark className="fruits-intro-wordmark" />
+              <RoyalFruitWordmark className="fruits-intro-wordmark" priority />
               <h2>פירות שנבחרים לפי טעם, צבע ובשלות, לא רק לפי מראה.</h2>
             </div>
             <div className="fruits-intro-points">

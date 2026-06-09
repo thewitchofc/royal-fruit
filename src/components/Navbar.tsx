@@ -34,10 +34,6 @@ export function Navbar({ mobileOpen, onNavigate }: NavbarProps) {
 
   const prefetchIfPricePage = useCallback((to: string) => {
     if (PRICE_LIST_PREFETCH_PATHS.has(to)) {
-      void import("../pages/Fruits");
-      void import("../pages/Halva");
-      void import("../pages/HomeFood");
-      void import("../pages/Vegetables");
       warmSheetProductsCache(getGoogleSheetsProductsCsvUrl());
     }
   }, []);

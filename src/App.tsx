@@ -3,14 +3,14 @@ import { Navigate, Route, Routes, useLocation, useParams } from "react-router-do
 import { Layout } from "./components/Layout";
 import { PageLoadFallback } from "./components/PageLoadFallback";
 import { Home } from "./pages/Home";
+import { Fruits } from "./pages/Fruits";
+import { Vegetables } from "./pages/Vegetables";
+import { GreensRoots } from "./pages/GreensRoots";
+import { HomeFood } from "./pages/HomeFood";
 import { ROUTES } from "./lib/publicRoutes";
 
-/** דף הבית נטען במנה הראשית — משפר LCP במובייל (בלי המתנה ל־chunk נפרד). שאר הדפים נשארים lazy */
+/** דפי חנות נטענים יחד עם האפליקציה — פחות המתנה ל־chunk בכניסה ישירה ל־/shop/fruits */
 const About = lazy(() => import("./pages/About").then((m) => ({ default: m.About })));
-const Fruits = lazy(() => import("./pages/Fruits").then((m) => ({ default: m.Fruits })));
-const Vegetables = lazy(() => import("./pages/Vegetables").then((m) => ({ default: m.Vegetables })));
-const GreensRoots = lazy(() => import("./pages/GreensRoots").then((m) => ({ default: m.GreensRoots })));
-const HomeFood = lazy(() => import("./pages/HomeFood").then((m) => ({ default: m.HomeFood })));
 const Cart = lazy(() => import("./pages/Cart").then((m) => ({ default: m.Cart })));
 const Contact = lazy(() => import("./pages/Contact").then((m) => ({ default: m.Contact })));
 const Faq = lazy(() => import("./pages/Faq").then((m) => ({ default: m.Faq })));

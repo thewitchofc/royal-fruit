@@ -8216,6 +8216,73 @@ html[data-a11y-large-cursor] body * {
   }
 }
 
+.sheet-products-skeleton {
+  width: 100%;
+}
+
+.sheet-products-skeleton-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+}
+
+.sheet-products-skeleton-card {
+  pointer-events: none;
+}
+
+.sheet-products-skeleton-media {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  background: linear-gradient(110deg, rgba(24, 33, 23, 0.06) 8%, rgba(24, 33, 23, 0.1) 18%, rgba(24, 33, 23, 0.06) 33%);
+  background-size: 200% 100%;
+  animation: sheet-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+
+.sheet-products-skeleton-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.55rem;
+}
+
+.sheet-products-skeleton-line {
+  display: block;
+  height: 0.72rem;
+  border-radius: 999px;
+  background: rgba(24, 33, 23, 0.08);
+}
+
+.sheet-products-skeleton-line--title {
+  width: 72%;
+  height: 0.82rem;
+}
+
+.sheet-products-skeleton-line--price {
+  width: 46%;
+}
+
+.sheet-products-skeleton-status {
+  margin: 0.85rem 0 0;
+  text-align: center;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+@keyframes sheet-skeleton-shimmer {
+  to {
+    background-position-x: -200%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-products-skeleton-media {
+    animation: none;
+  }
+}
+
 .sheet-products-loading {
   max-width: 34rem;
   margin: 0 auto;

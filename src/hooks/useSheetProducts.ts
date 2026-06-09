@@ -12,7 +12,7 @@ type SheetProductsCacheEntry = {
   fetchedAt: number;
 };
 
-const SHEET_PRODUCTS_CACHE_TTL_MS = 30 * 1000;
+const SHEET_PRODUCTS_CACHE_TTL_MS = 2 * 60 * 1000;
 const sheetProductsCache = new Map<string, SheetProductsCacheEntry>();
 const inflightLoads = new Map<string, Promise<SheetProduct[]>>();
 
@@ -53,8 +53,17 @@ export function invalidateSheetProductsCache(csvUrl: string | undefined): void {
   inflightLoads.delete(key);
 }
 
+function sheetProductsInitialState(csvUrl: string | undefined, reloadNonce: number): SheetProductsState {
+  const key = csvUrl?.trim();
+  if (!key) return { status: "idle" };
+  if (reloadNonce > 0) return { status: "loading" };
+  const cached = sheetProductsCache.get(key);
+  if (cached) return { status: "ok", products: cached.products };
+  return { status: "loading" };
+}
+
 export function useSheetProducts(csvUrl: string | undefined, reloadNonce = 0): SheetProductsState {
-  const [state, setState] = useState<SheetProductsState>({ status: "idle" });
+  const [state, setState] = useState<SheetProductsState>(() => sheetProductsInitialState(csvUrl, reloadNonce));
 
   useEffect(() => {
     const key = csvUrl?.trim();

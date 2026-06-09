@@ -16,6 +16,7 @@ import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { ROUTES } from "../lib/publicRoutes";
 import { useMatchMedia } from "../hooks/useMatchMedia";
 import { useScrollReveal } from "../hooks/useScrollReveal";
+import { useWarmPriceSheetOnRoute } from "../hooks/useWarmPriceSheetOnRoute";
 
 /** לוגו: רק PNG — בפריסות מסוימות קובץ `logo.webp` לא מוצג והדפדפן עלול להציג תמונה שבורה אם משתמשים ב־<picture type=webp>. preload ב-index ב־`brand-logo.png`. */
 const LOGO_PNG_URL = "/images/brand/brand-logo.png";
@@ -70,6 +71,7 @@ export function Layout({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
   const { totalItemCount } = useCart();
   useScrollReveal(pathname);
+  useWarmPriceSheetOnRoute();
 
   useLayoutEffect(() => {
     const el = headerRef.current;

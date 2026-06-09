@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { CloudOff, Phone, ShoppingBag } from "lucide-react";
 import { PriceListSections } from "./PriceListSections";
+import { SheetProductsSkeleton } from "./SheetProductsSkeleton";
 import { useSheetProducts } from "../hooks/useSheetProducts";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { ROUTES } from "../lib/publicRoutes";
@@ -54,14 +55,8 @@ export function SheetPriceListAsMenu({
   const [reloadNonce, setReloadNonce] = useState(0);
   const state = useSheetProducts(csvUrl, reloadNonce);
 
-  if (state.status === "loading") {
-    return (
-      <div className="sheet-products-loading" role="status" aria-live="polite">
-        <span className="sheet-products-loading-orb" aria-hidden />
-        <p className="sheet-products-loading-title">מסדרים את הדוכן הטרי...</p>
-        <p className="muted small">טוענים מחירים ומלאי עדכניים מהגיליון.</p>
-      </div>
-    );
+  if (state.status === "loading" || state.status === "idle") {
+    return <SheetProductsSkeleton embedClassName={priceMenuEmbedClassName} />;
   }
 
   if (state.status === "error") {
