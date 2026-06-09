@@ -146,28 +146,34 @@ export function getProduceShortDescription(name: string): string {
     "אבוקדו מוכן לאכילה": "אבוקדו האס ואטינגר בשל ומוכן לאכילה; קרמי ועשיר — מושלם לסלטים, טוסטים וגוואקמולי.",
     "אבוקדו מוכן לאכילה מארז": "אבוקדו TOP GREEN בשל ומוכן לאכילה במארז; האס ואטינגר — מוכן להגשה מיידית.",
     שום: "שום טרי נוי השדה באריזה; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
-    "שום טרי": "ארומה חזקה ונקייה לתיבול; חד וטרי.",
-    "תירס מתוק": "גרגרים מתקתקים ועסיסיים; ביס רך ומתוק.",
+    "שום טרי": "שום טרי נוי השדה באריזה; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
+    "תירס מתוק": "תירס מתוק חנן הגנן במארז; קלחים צהובים ועסיסיים — מושלם לבישול, צלייה ואכילה טרייה.",
     "תירס צהוב מארז": "תירס צהוב מתוק נופק במארז; זן עסיסי — מושלם לבישול, צלייה ואכילה טרייה.",
     "תירס לבן מארז": "תירס לבן מתוק משק יעקובובסקי במארז; זן עסיסי — מושלם לבישול, צלייה ואכילה טרייה.",
     "פינגר ליים": "פינגר ליים משק מוטשן במארז; מתפוצץ ומרענן — מושלם לסלטים, דגים, מטבח אסייתי וקוקטיילים.",
     "פינגר ליים מארז": "פינגר ליים משק מוטשן במארז; מתפוצץ ומרענן — מושלם לסלטים, דגים, מטבח אסייתי וקוקטיילים.",
-    "תרד גוליבר צ׳רי": "עלי תרד רכים ומהירים לסלט או הקפצה; טעם עדין ונעים.",
-    "אפונת שלג צ׳רי": "תרמיל פריך ועדין; ביס ירוק ורענן.",
-    "אפונת גינה צ׳רי חדש": "אפונה מתוקה יחסית, מתאימה לסלטים ותבשילים קלים.",
+    "תרד גוליבר צ׳רי": "תרד גוליבר משק צ׳רי במארז; עלים ירוקים גדולים ובשרניים — מושלם לסלטים, מוקפצים ובישול.",
+    "תרד גוליבר צ'רי": "תרד גוליבר משק צ׳רי במארז; עלים ירוקים גדולים ובשרניים — מושלם לסלטים, מוקפצים ובישול.",
+    "אפונת שלג צ׳רי": "אפונת שלג משק צ׳רי במארז; תרמיל פריך ועדין — מושלמת לסלטים, מוקפצים ותבשילים.",
+    "אפונת שלג צ'רי": "אפונת שלג משק צ׳רי במארז; תרמיל פריך ועדין — מושלמת לסלטים, מוקפצים ותבשילים.",
+    "אפונת גינה צ׳רי": "אפונת גינה משק צ׳רי במארז; גרגרים מתוקים וטריים — מושלמת לסלטים, מוקפצים ותבשילים.",
+    "אפונת גינה צ'רי": "אפונת גינה משק צ׳רי במארז; גרגרים מתוקים וטריים — מושלמת לסלטים, מוקפצים ותבשילים.",
+    "אפונת גינה צ׳רי חדש": "אפונת גינה משק צ׳רי במארז; גרגרים מתוקים וטריים — מושלמת לסלטים, מוקפצים ותבשילים.",
     "כורכום צ׳רי": "כורכום ישראלי משק צ׳רי במארז; שורש טרי וארומטי — מושלם לתבשילים, מרקים ותיבול.",
     "כורכום צ'רי": "כורכום ישראלי משק צ׳רי במארז; שורש טרי וארומטי — מושלם לתבשילים, מרקים ותיבול.",
     "מיקס כרובית טריו": "מיקס כרובית טריו משק בר-נס במארז; לבן, כתום וסגול — מושלם לצלייה, אידוי ותבשילים.",
     "כרובית לבנה": "כרובית לבנה טרייה פרן במארז; עדינה וקלאסית — מושלמת לצלייה, אידוי וטיגון.",
-    "זר גזר צבעוני": "גזרים צבעוניים עם מתיקות טבעית ומראה מרשים במגש.",
-    "נשנושי גזר מתוק": "קטנים ומתוקים לנשנוש מהיר; רכים ונוחים לאכילה.",
+    "גזר צבעוני": "גזר צבעוני חוות תקוע במארז; כתום, סגול וצהוב — מתוק ופריך, מושלם לסלטים, בישול ואירוח.",
+    "זר גזר צבעוני": "גזר צבעוני במארז; כתום, סגול וצהוב — מתוק ופריך, מושלם לסלטים, בישול ואירוח.",
+    "נשנושי גזר מתוק": "חטיפי גזר גזרונים במארז; קטנים, מתוקים ומוכנים לנשנוש.",
     "ברוקולי ג׳מבו": "ברוקולי ג׳מבו טרי במארז; פרחים גדולים ובשרניים — מושלם לצלייה, אידוי ותבשילים.",
     "ברוקולי ג'מבו": "ברוקולי ג׳מבו טרי במארז; פרחים גדולים ובשרניים — מושלם לצלייה, אידוי ותבשילים.",
     "ברוקולי ג׳מבו משק כהן": "ברוקולי ג׳מבו טרי במארז; פרחים גדולים ובשרניים — מושלם לצלייה, אידוי ותבשילים.",
     "בצל שאלוט": "בצלי שאלוט טריים במגש; מתוקים ועדינים — מושלמים לבישול, צלייה ותיבול.",
     "בצלי שאלוט": "בצלי שאלוט טריים במגש; מתוקים ועדינים — מושלמים לבישול, צלייה ותיבול.",
     "בצל ירוק": "בצל ירוק טרי בשקית; פריך ורענן — מושלם לסלטים, תיבול ואירוח.",
-    "בצל ספרדי משק כהן": "בצל מתוק־עדין יחסית, מתאים גם לצלייה ארוכה.",
+    "בצל ספרדי": "בצל ספרדי טרי במארז; מתוק־עדין יחסית — מושלם לבישול, צלייה ארוכה ותיבול.",
+    "בצל ספרדי משק כהן": "בצל ספרדי משק כהן טרי; מתוק־עדין יחסית — מושלם לבישול, צלייה ארוכה ותיבול.",
     "מיני תפוח אדמה": "תפוחי אדמה זעירים פרימיום; לאפייה, בישול ומיקרוגל — אמא אדמה כרמל יבול.",
     "תפוח אדמה לבן": "תפוח אדמה לבן לאפייה דוד משה גורמה; זני שף באריזה — מושלם לאפייה בתנור, בישול ותבשילים.",
     "גזר ארוז דוד משה": "גזר טרי מובחר דוד משה באריזה; מתוק ופריך — מושלם לסלטים, בישול, מרקים ונשנוש.",
@@ -184,10 +190,12 @@ export function getProduceShortDescription(name: string): string {
     "שעועית ירוקה משק כהן": "שעועית ירוקה טרייה כהן חקלאות במארז; פריכה ועדינה — מושלמת לבישול, מוקפצים ותבשילים.",
     "שעועית צהובה": "שעועית צהובה טרייה במארז; רכה ועדינה — מושלמת לבישול, מוקפצים ותבשילים.",
     "שעועית צהובה משק כהן": "שעועית צהובה טרייה במארז; רכה ועדינה — מושלמת לבישול, מוקפצים ותבשילים.",
-    "שעועית רחבה משק כהן": "שעועית בשרנית עם טעם עמוק לתבשילים.",
+    "שעועית רחבה": "שעועית רחבה טרייה במארז; שטוחה, עסיסית ובשרנית — מושלמת לבישול, מוקפצים ותבשילים.",
+    "שעועית רחבה משק כהן": "שעועית רחבה טרייה במארז; שטוחה, עסיסית ובשרנית — מושלמת לבישול, מוקפצים ותבשילים.",
     פרוס: "ירק שורש עונתי בטעם עדין־מתקתק לבישול וצלייה.",
     חזרת: "שורש חריף וחד להגשה לצד דגים ובשרים.",
-    "מארז פול": "קטניות טריות ועשירות במרקם, מצוינות לתבשילים אביביים.",
+    פול: "פול טרי במארז; קטניות עסיסיות ורכות — מושלמות לתבשילים, מרקים וסלטים.",
+    "מארז פול": "פול טרי במארז; קטניות עסיסיות ורכות — מושלמות לתבשילים, מרקים וסלטים.",
     "אספרגוס טרי": "גבעול עדין ופריך; מתאים לבישול קצר ולטעם אלגנטי בצלחת.",
     "עלי גפן": "עלי גפן טריים למילוי ביתי; רכים, ירוקים ונקיים — כ־500 גרם במארז.",
     "עלי גפן מארז": "עלי גפן טריים למילוי ביתי; רכים, ירוקים ונקיים — 500 גרם במארז.",
@@ -210,6 +218,7 @@ export function getProduceShortDescription(name: string): string {
     "מיני מלפפון": "מיני מלפפונים טריים במגש; פריכים וירוקים — מוכנים לנשנוש, סלטים ואירוח.",
     "מלפפון יפני": "מלפפון יפני הוחלט במארז; ארוך, כהה ופריך — מושלם לסלטים, סושי ונשנוש.",
     פאקוס: "פאקוס כהן חקלאות במארז; מלפפון ארמני פריך ועדין — מושלם לסלטים, יוגורט ונשנוש.",
+    ארטישוק: "ארטישוק טרי במארז; קליפה ירוקה ולב לבן עדין — מושלם לבישול, צלייה ותבשילים.",
     "ארטישוק ירושלמי": "ארטישוק ירושלמי כהן חקלאות במארז; עדין ומתוק — מושלם לצלייה, מרקים ותבשילים.",
     "קפיר ליים": "עלי קפיר ליים טריים במארז; ארומטיים והדריים — מושלמים למטבח תאילנדי, מרקים ותיבול.",
     "קפיר ליים מארז": "עלי קפיר ליים טריים במארז; ארומטיים והדריים — מושלמים למטבח תאילנדי, מרקים ותיבול.",
@@ -243,14 +252,15 @@ export function getProduceShortDescription(name: string): string {
     "רוברבר מארז": "רוברבר טרי במארז; חמוץ ועסיסי — מושלם לקינוחים, ריבות, פשטידות ורוטבים.",
     רוקולה: "עלי רוקט טריים במארז; חריפים וארומטיים — מושלמים לסלטים, פיצה ותיבול.",
     "לבבות קיסר": "לבבות קיסר טריות ופריכות; חסה רומית במארז שקית — מושלמות לסלט קיסר.",
+    "חסה סלנובה": "חסה סלנובה משק בכור במארז; ירוקה ואדומה, עלים קטנים ועסיסיים — מושלמת לסלטים ואירוח.",
     "עלי סלרי": "עלי סלרי טריים בשקית; ירוקים וארומטיים — מושלמים לתיבול, סלטים ובישול.",
     "סלרי עלים": "עלי סלרי טריים בשקית; ירוקים וארומטיים — מושלמים לתיבול, סלטים ובישול.",
     "מיני גמבה": "מיני גמבה סוויט בייט במגש; מתוקות, צבעוניות ופריכות — מושלמות לנשנוש ואירוח.",
     "סוויט בייט": "מיני גמבה סוויט בייט במגש; מתוקות, צבעוניות ופריכות — מושלמות לנשנוש ואירוח.",
     "מלפפון ארמטו ענק": "מלפפון גדול ופריך, טוב לסלט ולחיתוך גס.",
-    "עגבניות שרי בלה מאיה": "שרי מתוקות ועסיסיות, מצוינות לנשנוש וסלט.",
-    "מלפפון אורגני בלה מאיה": "מלפפון אורגני בטעם נקי ורענן, פריך במיוחד.",
-    "עגבניות אורגניות בלה מאיה": "עגבניות אורגניות מאוזנות למטבח יומי ולרוטב.",
+    "עגבניות שרי בלה מאיה": "עגבניות שרי בלה מאיה במארז; מתוקות, עסיסיות ואחידות — מושלמות לנשנוש, סלטים ואירוח.",
+    "מלפפון אורגני בלה מאיה": "מלפפון אורגני בלה מאיה במארז; פריך ורענן — מושלם לסלטים, נשנוש ואירוח.",
+    "עגבניות אורגניות בלה מאיה": "עגבניות אורגניות בלה מאיה במארז; מתוקות ועסיסיות — מושלמות לסלטים, בישול ורוטב.",
     "מלפפון חמוץ": "מלפפונים חמוצים בצנצנת; קראנץ' וחמיצות מאוזנות לצד מנות וסלטים.",
     "מלפפון חמוץ בעבודת יד": "כבישה ביתית עם קראנץ' וחמיצות מאוזנת.",
     "חלפיניו מוחמץ": "חלפיניו פרוס במלחלוח חמוץ־חריף; מתאים לסנדוויצ'ים, סלטים ותיבול.",
@@ -267,6 +277,7 @@ export function getProduceShortDescription(name: string): string {
     "תות בננה קפוא": "תות שדה ופרוסות בננה מוקפאים 100% פרי; מתאים לשייקים וקינוחים.",
     "תות בננה": "תות שדה ופרוסות בננה מוקפאים 100% פרי; מתאים לשייקים וקינוחים.",
     גוואקמולי: "ממרח אבוקדו בשל ומתובל; מוכן למריחה, טוסטים ומנות.",
+    גווקאמולי: "ממרח אבוקדו בשל ומתובל; מוכן למריחה, טוסטים ומנות.",
     "ממרח אבוקדו": "ממרח אבוקדו בשל ומתובל; מוכן למריחה, טוסטים ומנות.",
     "פטל מצופה בפיסטוק": "פטל בציפוי שוקולד לבן ופיסטוק קפוא; מתוק־מלוח לקינוח ונשנוש.",
     "פטל מצופה בשוקולד חלב ושוקולד לבן":
@@ -483,8 +494,9 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "ברוקולי ג׳מבו": "/images/catalog/jumbo-broccoli.png",
     "ברוקולי ג'מבו": "/images/catalog/jumbo-broccoli.png",
     "ברוקולי ג׳מבו משק כהן": "/images/catalog/jumbo-broccoli.png",
-    "זר גזר צבעוני": "/images/gallery/fresh-produce-box.webp",
-    "נשנושי גזר מתוק": "/images/gallery/fresh-produce-box.webp",
+    "גזר צבעוני": "/images/catalog/colored-carrots.png",
+    "זר גזר צבעוני": "/images/catalog/colored-carrots.png",
+    "נשנושי גזר מתוק": "/images/catalog/sweet-carrot-snacks.png",
     "אבוקדו מוכן לאכילה": [
       "/images/catalog/avocado-ready-to-eat.png",
       "/images/catalog/avocado-ready-to-eat-tray.png",
@@ -493,8 +505,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
       "/images/catalog/avocado-ready-to-eat-tray.png",
       "/images/catalog/avocado-ready-to-eat.png",
     ],
-    "מלפפון אורגני בלה מאיה": "/images/gallery/fresh-produce-box.webp",
-    "עגבניות אורגניות בלה מאיה": "/images/gallery/fresh-produce-box.webp",
+    "מלפפון אורגני בלה מאיה": "/images/catalog/organic-cucumber-bella-maya.png",
+    "עגבניות אורגניות בלה מאיה": "/images/catalog/bella-maya-cherry-tomatoes.png",
     "תפוז פירמיום": "/images/gallery/mixed-fruit-box.webp",
     "תפוז דם": "/images/gallery/mixed-fruit-box.webp",
     פומלה: "/images/gallery/mixed-fruit-box.webp",
@@ -528,22 +540,27 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "קוקוס לשתייה עם קש": "/images/catalog/coconut-drink.png",
     "ג׳ינג׳ר טרי": "/images/catalog/fresh-ginger.png",
     "ג'ינג'ר טרי": "/images/catalog/fresh-ginger.png",
-    שום: "/images/catalog/garlic.png",
-    "שום טרי": "/images/gallery/fresh-produce-box.webp",
-    "תירס מתוק": "/images/gallery/fresh-produce-box.webp",
+    שום: "/images/gallery/fresh-produce-box.webp",
+    "שום טרי": "/images/catalog/garlic.png",
+    "תירס מתוק": "/images/catalog/sweet-corn-pack.png",
     "תירס צהוב מארז": "/images/catalog/yellow-corn-pack.png",
     "תירס לבן מארז": "/images/catalog/white-corn-pack.png",
     "פינגר ליים": "/images/catalog/finger-lime.png",
     "פינגר ליים מארז": "/images/catalog/finger-lime.png",
-    "תרד גוליבר צ׳רי": "/images/gallery/fresh-produce-box.webp",
-    "אפונת שלג צ׳רי": "/images/gallery/fresh-produce-box.webp",
-    "אפונת גינה צ׳רי חדש": "/images/gallery/fresh-produce-box.webp",
+    "תרד גוליבר צ׳רי": "/images/catalog/spinach-gulliver-cherry.png",
+    "תרד גוליבר צ'רי": "/images/catalog/spinach-gulliver-cherry.png",
+    "אפונת שלג צ׳רי": "/images/catalog/snow-peas-cherry.png",
+    "אפונת שלג צ'רי": "/images/catalog/snow-peas-cherry.png",
+    "אפונת גינה צ׳רי": "/images/catalog/garden-peas-cherry.png",
+    "אפונת גינה צ'רי": "/images/catalog/garden-peas-cherry.png",
+    "אפונת גינה צ׳רי חדש": "/images/catalog/garden-peas-cherry.png",
     "כורכום צ׳רי": "/images/catalog/turmeric-cherry.png",
     "כורכום צ'רי": "/images/catalog/turmeric-cherry.png",
     "בצל שאלוט": "/images/catalog/shallot.png",
     "בצלי שאלוט": "/images/catalog/shallot.png",
     "בצל ירוק": "/images/catalog/green-onion.png",
-    "בצל ספרדי משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "בצל ספרדי": "/images/catalog/spanish-onion.png",
+    "בצל ספרדי משק כהן": "/images/catalog/spanish-onion.png",
     "מיני תפוח אדמה": "/images/catalog/mini-potatoes.png",
     "תפוח אדמה לבן": "/images/catalog/white-potatoes.png",
     "גזר ארוז דוד משה": "/images/catalog/carrots-dod-moshe.png",
@@ -560,10 +577,12 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "שעועית ירוקה משק כהן": "/images/catalog/green-beans.png",
     "שעועית צהובה": "/images/catalog/yellow-beans.png",
     "שעועית צהובה משק כהן": "/images/catalog/yellow-beans.png",
-    "שעועית רחבה משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "שעועית רחבה": "/images/catalog/broad-beans.png",
+    "שעועית רחבה משק כהן": "/images/catalog/broad-beans.png",
     פרוס: "/images/gallery/fresh-produce-box.webp",
     חזרת: "/images/gallery/fresh-produce-box.webp",
-    "מארז פול": "/images/gallery/fresh-produce-box.webp",
+    פול: "/images/catalog/fava-beans.png",
+    "מארז פול": "/images/catalog/fava-beans.png",
     "אספרגוס טרי": "/images/catalog/fresh-asparagus.png",
     "עלי גפן": [
       "/images/catalog/grape-leaves-pack.png",
@@ -580,6 +599,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "מיני מלפפון": "/images/catalog/mini-cucumber.png",
     "מלפפון יפני": "/images/catalog/japanese-cucumber.png",
     פאקוס: "/images/catalog/fakkous.png",
+    ארטישוק: "/images/catalog/artichoke.png",
     "ארטישוק ירושלמי": "/images/catalog/jerusalem-artichoke.png",
     "קפיר ליים": "/images/catalog/kaffir-lime-leaves.png",
     "קפיר ליים מארז": "/images/catalog/kaffir-lime-leaves.png",
@@ -613,12 +633,13 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "רוברבר מארז": "/images/catalog/rhubarb.png",
     רוקולה: "/images/catalog/rocket-leaves.png",
     "לבבות קיסר": "/images/catalog/caesar-hearts.png",
+    "חסה סלנובה": "/images/catalog/salanova-lettuce.png",
     "עלי סלרי": "/images/catalog/celery-leaves.png",
     "סלרי עלים": "/images/catalog/celery-leaves.png",
     "מיני גמבה": "/images/catalog/mini-bell-pepper.png",
     "סוויט בייט": "/images/catalog/mini-bell-pepper.png",
     "מלפפון ארמטו ענק": "/images/gallery/fresh-produce-box.webp",
-    "עגבניות שרי בלה מאיה": "/images/gallery/fresh-produce-box.webp",
+    "עגבניות שרי בלה מאיה": "/images/catalog/bella-maya-cherry-tomatoes.png",
     "מלפפון חמוץ": "/images/catalog/pickled-cucumber.png",
     "מלפפון חמוץ בעבודת יד": "/images/catalog/pickled-cucumber.png",
     סברס: "/images/gallery/mixed-fruit-box.webp",
@@ -697,6 +718,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "תות בננה קפוא": "/images/catalog/frozen-strawberry-banana.png",
     "תות בננה": "/images/catalog/frozen-strawberry-banana.png",
     גוואקמולי: "/images/catalog/guacamole.png",
+    גווקאמולי: "/images/catalog/guacamole.png",
     "ממרח אבוקדו": "/images/catalog/guacamole.png",
     "פטל מצופה בפיסטוק": "/images/catalog/raspberry-pistachio-coated.png",
     "פטל מצופה בשוקולד חלב ושוקולד לבן": "/images/catalog/raspberry-double-chocolate.png",
@@ -761,7 +783,10 @@ function resolveProduceImageEntry(
   if (n.startsWith("עלי גפן")) return BY_EXACT_PRODUCT_IMAGES["עלי גפן מארז"];
   if (/מיני\s+תפוח|תפוח(י)?\s*אדמה\s+זעיר/.test(n)) return BY_EXACT_PRODUCT_IMAGES["מיני תפוח אדמה"];
   if (n.startsWith("תפוח אדמה לבן")) return BY_EXACT_PRODUCT_IMAGES["תפוח אדמה לבן"];
+  if (n.startsWith("נשנושי גזר מתוק")) return BY_EXACT_PRODUCT_IMAGES["נשנושי גזר מתוק"];
+  if (n.startsWith("גזר צבעוני") || n.startsWith("זר גזר צבעוני")) return BY_EXACT_PRODUCT_IMAGES["גזר צבעוני"];
   if (n.startsWith("גזר ארוז דוד משה") || n.startsWith("גזר ארוז")) return BY_EXACT_PRODUCT_IMAGES["גזר ארוז דוד משה"];
+  if (n.startsWith("שום טרי")) return BY_EXACT_PRODUCT_IMAGES["שום טרי"];
   if (n === "דלעת" || n.startsWith("דלעת מארז")) return BY_EXACT_PRODUCT_IMAGES["דלעת"];
   if (n.startsWith("כרוב סיני")) return BY_EXACT_PRODUCT_IMAGES["כרוב סיני"];
   if (n.startsWith("מגה פורטובלו") || n.startsWith("מגה פורטבלה")) return BY_EXACT_PRODUCT_IMAGES["מגה פורטובלו"];
@@ -773,28 +798,41 @@ function resolveProduceImageEntry(
   if (/כורכום\s+צ['׳]רי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["כורכום צ׳רי"];
   if (n.startsWith("תירס צהוב")) return BY_EXACT_PRODUCT_IMAGES["תירס צהוב מארז"];
   if (n.startsWith("תירס לבן")) return BY_EXACT_PRODUCT_IMAGES["תירס לבן מארז"];
+  if (n.startsWith("תירס מתוק")) return BY_EXACT_PRODUCT_IMAGES["תירס מתוק"];
   if (n.startsWith("אספרגוס")) return BY_EXACT_PRODUCT_IMAGES["אספרגוס טרי"];
   if (n.startsWith("מיקס כרובית")) return BY_EXACT_PRODUCT_IMAGES["מיקס כרובית טריו"];
   if (n.startsWith("כרובית לבנה")) return BY_EXACT_PRODUCT_IMAGES["כרובית לבנה"];
   if (n.startsWith("שעועית ירוקה")) return BY_EXACT_PRODUCT_IMAGES["שעועית ירוקה"];
   if (n.startsWith("שעועית צהובה")) return BY_EXACT_PRODUCT_IMAGES["שעועית צהובה"];
+  if (n.startsWith("שעועית רחבה")) return BY_EXACT_PRODUCT_IMAGES["שעועית רחבה"];
+  if (/תרד\s+גוליבר\s+צ['׳]רי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["תרד גוליבר צ׳רי"];
+  if (n.startsWith("מארז פול")) return BY_EXACT_PRODUCT_IMAGES["מארז פול"];
+  if (n === "פול" || n.startsWith("פול ")) return BY_EXACT_PRODUCT_IMAGES["פול"];
   if (/ברוקולי\s+ג['׳]מבו/.test(n)) return BY_EXACT_PRODUCT_IMAGES["ברוקולי ג׳מבו"];
   if (n.startsWith("כרוב ניצנים")) return BY_EXACT_PRODUCT_IMAGES["כרוב ניצנים"];
   if (n.startsWith("עלי מנגולד") || n.startsWith("סלק עלים")) return BY_EXACT_PRODUCT_IMAGES["עלי מנגולד"];
   if (n.startsWith("עגבניות מיובשות")) return BY_EXACT_PRODUCT_IMAGES["עגבניות מיובשות"];
   if (n.startsWith("עלי כרוב חמוץ")) return BY_EXACT_PRODUCT_IMAGES["עלי כרוב חמוץ"];
+  if (/אפונת\s+שלג\s+צ['׳]רי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["אפונת שלג צ׳רי"];
+  if (/אפונת\s+גינה\s+צ['׳]רי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["אפונת גינה צ׳רי"];
+  if (n.startsWith("בצל ספרדי")) return BY_EXACT_PRODUCT_IMAGES["בצל ספרדי"];
   if (n.startsWith("בצל שאלוט") || n.startsWith("בצלי שאלוט")) return BY_EXACT_PRODUCT_IMAGES["בצל שאלוט"];
   if (n.startsWith("בצל ירוק")) return BY_EXACT_PRODUCT_IMAGES["בצל ירוק"];
   if (n.startsWith("בצל חמוץ מתוק")) return BY_EXACT_PRODUCT_IMAGES["בצל חמוץ מתוק"];
+  if (n.startsWith("מלפפון אורגני בלה מאיה")) return BY_EXACT_PRODUCT_IMAGES["מלפפון אורגני בלה מאיה"];
+  if (n.startsWith("עגבניות אורגניות בלה מאיה")) return BY_EXACT_PRODUCT_IMAGES["עגבניות אורגניות בלה מאיה"];
+  if (n.startsWith("עגבניות שרי בלה מאיה")) return BY_EXACT_PRODUCT_IMAGES["עגבניות שרי בלה מאיה"];
   if (n.startsWith("מיני מלפפון")) return BY_EXACT_PRODUCT_IMAGES["מיני מלפפון"];
   if (n.startsWith("מלפפון יפני")) return BY_EXACT_PRODUCT_IMAGES["מלפפון יפני"];
   if (n.startsWith("פאקוס")) return BY_EXACT_PRODUCT_IMAGES["פאקוס"];
   if (n.startsWith("ארטישוק ירושלמי")) return BY_EXACT_PRODUCT_IMAGES["ארטישוק ירושלמי"];
+  if (n === "ארטישוק") return BY_EXACT_PRODUCT_IMAGES["ארטישוק"];
   if (n.startsWith("קפיר ליים") || n.startsWith("עלי קפיר ליים")) return BY_EXACT_PRODUCT_IMAGES["קפיר ליים"];
   if (n.startsWith("פינגר ליים")) return BY_EXACT_PRODUCT_IMAGES["פינגר ליים"];
   if (n.startsWith("אבוקדו מוכן לאכילה מארז")) return BY_EXACT_PRODUCT_IMAGES["אבוקדו מוכן לאכילה מארז"];
   if (n.startsWith("אבוקדו מוכן לאכילה")) return BY_EXACT_PRODUCT_IMAGES["אבוקדו מוכן לאכילה"];
-  if (n.startsWith("גוואקמולי") || n.startsWith("ממרח אבוקדו")) return BY_EXACT_PRODUCT_IMAGES["גוואקמולי"];
+  if (n.startsWith("גוואקמולי") || n.startsWith("גווקאמולי") || n.startsWith("ממרח אבוקדו"))
+    return BY_EXACT_PRODUCT_IMAGES["גוואקמולי"];
   if (/צ['׳]ילי\s+תאילנדי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["צ׳ילי תאילנדי זהבי"];
   if (/פלפל\s+צ['׳]ילי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["פלפל צ׳ילי חריף"];
   if (n.startsWith("למון גראס")) return BY_EXACT_PRODUCT_IMAGES["למון גראס"];
@@ -813,6 +851,7 @@ function resolveProduceImageEntry(
   if (n.startsWith("נבטים סיני")) return BY_EXACT_PRODUCT_IMAGES["נבטים סינים"];
   if (n.startsWith("רוברבר")) return BY_EXACT_PRODUCT_IMAGES["רוברבר"];
   if (n.startsWith("לבבות קיסר")) return BY_EXACT_PRODUCT_IMAGES["לבבות קיסר"];
+  if (n.startsWith("חסה סלנובה")) return BY_EXACT_PRODUCT_IMAGES["חסה סלנובה"];
   if (n.startsWith("עלי סלרי") || n.startsWith("סלרי עלים")) return BY_EXACT_PRODUCT_IMAGES["עלי סלרי"];
   if (n.startsWith("מיני גמבה") || n.startsWith("סוויט בייט")) return BY_EXACT_PRODUCT_IMAGES["מיני גמבה"];
   if (n.startsWith("מלפפון חמוץ")) return "/images/catalog/pickled-cucumber.png";
