@@ -1,5 +1,5 @@
 import type { CartLine } from "../cart/types";
-import { estimateCartTotal } from "./cartEstimate";
+import { estimateCartTotal, estimateLineBreakdown } from "./cartEstimate";
 import { cartTotalDisplayUnits } from "./cartItemCount";
 
 /** מספר וואטסאפ בפורמט בינלאומי ללא + */
@@ -98,6 +98,18 @@ export function buildOrderMessage(params: {
     const priceBits = [line.priceLabel, line.unit?.trim()].filter(Boolean);
     if (priceBits.length > 0) {
       parts.push(`  ${priceBits.join(", ")}`);
+    }
+    if (line.deal?.trim()) {
+      parts.push(`  מבצע: ${line.deal.trim()}`);
+    }
+    const lineEstimate = estimateLineBreakdown(line);
+    if (lineEstimate.total !== null) {
+      const rounded = Math.round(lineEstimate.total).toLocaleString("he-IL");
+      parts.push(
+        lineEstimate.bundleCount > 0
+          ? `  משוער לשורה: ~${rounded} ₪ (כולל ${lineEstimate.bundleCount}× מבצע)`
+          : `  משוער לשורה: ~${rounded} ₪`,
+      );
     }
     if (line.sheetUnavailable) parts.push("  (מסומן לא זמין במחירון)");
     if (line.sheetMissing) parts.push("  (לא נמצא במחירון — לאשר מולכם)");

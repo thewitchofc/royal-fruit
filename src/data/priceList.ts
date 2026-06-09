@@ -11,6 +11,8 @@ export type PriceRow = {
   price?: string;
   /** משקל / מארז / יחידה / מדרגות מחיר, מהגיליון או מקוד */
   unit?: string;
+  /** מבצע מהגיליון (למשל 2 ב-30) */
+  deal?: string;
   description?: string;
   /** מוצר אחד עם מדרגות משקל (שם = מוצר, מחיר לפי בחירה) */
   weightOptions?: PriceWeightOption[];

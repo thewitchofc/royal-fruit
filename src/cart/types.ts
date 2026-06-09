@@ -6,6 +6,8 @@ export type CartLine = {
   priceLabel: string;
   /** משקל, מארז או הערת מחיר (למשל לק״ג, 2 יח׳ 40₪) */
   unit?: string;
+  /** מבצע מהגיליון (למשל 2 ב-30) */
+  deal?: string;
   /** למשל: "ענבים › שקיות" */
   categoryPath: string;
   /** קפיצת כמות: יחידות רגילות = 1, פריטים לק״ג = 0.5 */

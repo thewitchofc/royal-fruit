@@ -18,6 +18,8 @@ export type SheetProduct = {
   type: string;
   /** משקל/מארז/יחידה או מדרגות מחיר, מוצג ליד המחיר */
   unit: string;
+  /** מבצע מהגיליון (למשל 2 ב-30) */
+  deal: string;
   available: boolean;
   /**
    * רמת מארז פירות מהגיליון (basic / premium / gold).
@@ -108,11 +110,14 @@ function canonicalHeaderKey(raw: string): string {
     יחידות: "unit",
     משקל: "unit",
     מארז: "unit",
+    מבצע: "deal",
+    "מבצעים": "deal",
     "רמת מארז": "packageTier",
     "חבילת פירות": "packageTier",
   };
   if (lower === "unit" || lower === "package" || lower === "pack" || lower === "weight") return "unit";
   if (lower === "packagetier" || lower === "package_tier" || lower === "tier") return "packageTier";
+  if (lower === "deal" || lower === "promo" || lower === "promotion" || lower === "sale") return "deal";
   if (he[t] != null) return he[t]!;
   if (lower === "checkbox" || lower === "false" || lower === "true") return "available";
   return lower;
@@ -181,6 +186,7 @@ export function parseProductsCsv(text: string): SheetProduct[] {
   const ai = map.get("available");
   const ti = map.get("type");
   const ui = map.get("unit");
+  const di = map.get("deal");
   const pti = map.get("packageTier");
 
   if (ni == null || pi == null || ci == null || ai == null) {
@@ -201,6 +207,7 @@ export function parseProductsCsv(text: string): SheetProduct[] {
       category: (cells[ci] ?? "").trim(),
       type: ti != null ? (cells[ti] ?? "").trim() : "",
       unit: ui != null ? (cells[ui] ?? "").trim() : "",
+      deal: di != null ? (cells[di] ?? "").trim() : "",
       available: parseAvailable(cells[ai]),
       packageTier: pti != null ? normalizePackageTierFromCell(cells[pti]) : "",
     });
@@ -389,6 +396,7 @@ export function groupSheetProductsToPriceCategories(
           name: p.name,
           price: p.price.trim() || undefined,
           unit: p.unit.trim() || undefined,
+          deal: p.deal.trim() || undefined,
           description: getProduceShortDescription(p.name),
         })),
         title,

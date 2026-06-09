@@ -8,7 +8,8 @@ import { getCatalogProduceImages, getProduceShortDescription, hasDedicatedProduc
 import { useCart } from "../context/CartContext";
 import type { CartLineInput } from "../cart/types";
 import type { PriceRow, PriceSubsection } from "../data/priceList";
-import { formatPriceLabelForDisplay, formatUnitWordsWithLamed } from "../lib/priceDisplay";
+import { estimateLineBreakdown, parseBundleDeal } from "../lib/cartEstimate";
+import { formatDealLabelForDisplay, formatPriceLabelForDisplay, formatUnitWordsWithLamed } from "../lib/priceDisplay";
 import { isKgPricingLabel } from "../lib/kgPricing";
 import { formatPremiumCardPriceLine } from "../lib/premiumProductCardPrice";
 import { getCatalogCardImageSources } from "../lib/catalogImage";
@@ -338,9 +339,11 @@ function PriceWeightRowView({
     unit: formatUnitWordsWithLamed("לפריט"),
     categoryPath,
     qtyStep: 1,
+    deal: row.deal?.trim() ? formatDealLabelForDisplay(row.deal) : undefined,
   };
   const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
   const step = item.qtyStep ?? 1;
+  const dealLabel = item.deal?.trim();
 
   const qtyBlock = (
     <div className={productCardLayout ? "price-menu-card-actions" : "price-menu-add-wrap"}>
@@ -430,6 +433,7 @@ function PriceWeightRowView({
             {formatPremiumCardPriceLine(formatPriceLabelForDisplay(selected.price), item.unit)}
           </span>
         ) : null}
+        {dealLabel ? <span className="price-menu-deal">{dealLabel}</span> : null}
         {qtyBlock}
       </div>
     </li>
@@ -460,6 +464,14 @@ function PriceRowView({
   const images = mayShowImage ? getCatalogProduceImages(item.name, description, item.categoryPath) : [];
   const thumb = images[0];
   const showLeft = images.length > 0 || showEmojis;
+  const dealLabel = item.deal?.trim();
+  const bundleDeal = parseBundleDeal(item.deal);
+  const inCartEstimate =
+    inCartQty > 0 ? estimateLineBreakdown({ ...item, qty: inCartQty }) : null;
+  const dealHint =
+    bundleDeal && inCartQty > 0 && inCartQty % bundleDeal.bundleQty !== 0
+      ? `עוד ${formatQty(bundleDeal.bundleQty - (inCartQty % bundleDeal.bundleQty))} למבצע`
+      : null;
 
   const qtyBlock = (
     <div className={productCardLayout ? "price-menu-card-actions" : "price-menu-add-wrap"}>
@@ -492,6 +504,15 @@ function PriceRowView({
     </div>
   );
 
+  const cartSubtotalBlock =
+    inCartEstimate?.total !== null && inCartQty > 0 ? (
+      <span className="price-menu-cart-subtotal">
+        {inCartEstimate.bundleCount > 0
+          ? `בסל: ~${Math.round(inCartEstimate.total).toLocaleString("he-IL")} ₪ (כולל מבצע)`
+          : `בסל: ~${Math.round(inCartEstimate.total).toLocaleString("he-IL")} ₪`}
+      </span>
+    ) : null;
+
   if (productCardLayout) {
     return (
       <li className="price-menu-row price-menu-row--product-card">
@@ -505,6 +526,9 @@ function PriceRowView({
         <div className="price-menu-card-footer">
           <span className="price-menu-card-name">{item.name}</span>
           <span className="price-menu-card-price-line">{formatPremiumCardPriceLine(item.priceLabel, item.unit)}</span>
+          {dealLabel ? <span className="price-menu-deal">{dealLabel}</span> : null}
+          {dealHint ? <span className="price-menu-deal-hint">{dealHint}</span> : null}
+          {cartSubtotalBlock}
           {qtyBlock}
         </div>
       </li>
@@ -532,6 +556,7 @@ function PriceRowView({
         {item.unit?.trim() ? (
           <span className="price-menu-unit">{item.unit.trim()}</span>
         ) : null}
+        {dealLabel ? <span className="price-menu-deal">{dealLabel}</span> : null}
       </span>
     </li>
   );
@@ -719,6 +744,7 @@ export function PriceListSections({
                     name: row.name,
                     priceLabel: formatPriceLabelForDisplay(row.price ?? priceDisplay),
                     unit: unitDefaultHalva ? formatUnitWordsWithLamed(unitDefaultHalva) : undefined,
+                    deal: row.deal?.trim() ? formatDealLabelForDisplay(row.deal) : undefined,
                     categoryPath: cat.title,
                     qtyStep: isKgPricingLabel(kgLabel) ? 0.5 : 1,
                   };
@@ -760,6 +786,7 @@ export function PriceListSections({
                         name: row.name,
                         priceLabel: formatPriceLabelForDisplay(row.price ?? priceDisplay),
                         unit: unitDefaultHalva ? formatUnitWordsWithLamed(unitDefaultHalva) : undefined,
+                        deal: row.deal?.trim() ? formatDealLabelForDisplay(row.deal) : undefined,
                         categoryPath: `${cat.title} › ${sub.title}`,
                         qtyStep: isKgPricingLabel(kgLabel) ? 0.5 : 1,
                       };

@@ -3,6 +3,7 @@ import type { CartLine, CartLineInput } from "../cart/types";
 import { cartTotalDisplayUnits } from "../lib/cartItemCount";
 import { formatPriceLabelForDisplay, formatUnitWordsWithLamed } from "../lib/priceDisplay";
 import { findSheetProductByName, type SheetProduct } from "../lib/sheetProducts";
+import { formatDealLabelForDisplay } from "../lib/priceDisplay";
 
 type CartContextValue = {
   lines: CartLine[];
@@ -38,12 +39,14 @@ function isSheetBackedCartLineId(id: string): boolean {
 function mergeLineWithSheetProduct(line: CartLine, hit: SheetProduct): CartLine {
   const nextPrice = formatPriceLabelForDisplay(hit.price.trim() || line.priceLabel);
   const nextUnit = hit.unit.trim() ? formatUnitWordsWithLamed(hit.unit.trim()) : undefined;
+  const nextDeal = hit.deal.trim() ? formatDealLabelForDisplay(hit.deal) : undefined;
   const nextPath = hit.category.trim() || line.categoryPath;
   const nextUnavailable = hit.available ? undefined : true;
   return {
     ...line,
     priceLabel: nextPrice,
     unit: nextUnit,
+    deal: nextDeal,
     categoryPath: nextPath,
     sheetUnavailable: nextUnavailable,
     sheetMissing: undefined,
@@ -54,6 +57,7 @@ function linesEqualSheetMerge(a: CartLine, b: CartLine): boolean {
   return (
     a.priceLabel === b.priceLabel &&
     (a.unit ?? "") === (b.unit ?? "") &&
+    (a.deal ?? "") === (b.deal ?? "") &&
     a.categoryPath === b.categoryPath &&
     (a.sheetUnavailable === true) === (b.sheetUnavailable === true) &&
     (a.sheetMissing === true) === (b.sheetMissing === true)
@@ -70,7 +74,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
       if (idx >= 0) {
         const next = [...prev];
         const nextQty = Math.min(99, normalizeQty(next[idx].qty + step));
-        next[idx] = { ...next[idx], qty: withStep(nextQty, step), qtyStep: next[idx].qtyStep ?? step };
+        next[idx] = {
+          ...next[idx],
+          priceLabel: item.priceLabel,
+          unit: item.unit,
+          deal: item.deal,
+          categoryPath: item.categoryPath,
+          qty: withStep(nextQty, step),
+          qtyStep: next[idx].qtyStep ?? step,
+        };
         return next;
       }
       return [...prev, { ...item, qty: withStep(step, step) }];

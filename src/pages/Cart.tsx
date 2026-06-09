@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import type { CartLineInput } from "../cart/types";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
 import { useCart } from "../context/CartContext";
-import { estimateCartTotal } from "../lib/cartEstimate";
+import { estimateCartTotal, estimateLineBreakdown } from "../lib/cartEstimate";
 import { deliveryMinimumStatus, MIN_DELIVERY_ORDER_NIS } from "../lib/cartPolicies";
 import { isPlausibleFullName, isPlausibleIsraeliPhone } from "../lib/formValidation";
 import { buildOrderMessage, whatsappOrderUrl } from "../lib/whatsappOrder";
@@ -445,6 +445,8 @@ export function Cart() {
               <ul className="cart-lines">
                 {lines.map((line) => {
                   const step = line.qtyStep ?? 1;
+                  const lineEstimate = estimateLineBreakdown(line);
+                  const dealLabel = line.deal?.trim();
                   return (
                   <li key={line.id} className="cart-line">
                     <span className="cart-line-emoji" aria-hidden>
@@ -467,6 +469,14 @@ export function Cart() {
                           <span className="cart-line-price-main">{line.priceLabel}</span>
                           {line.unit?.trim() ? (
                             <span className="cart-line-unit muted">{line.unit.trim()}</span>
+                          ) : null}
+                          {dealLabel ? <span className="cart-line-deal">{dealLabel}</span> : null}
+                          {lineEstimate.total !== null ? (
+                            <span className="cart-line-subtotal">
+                              {lineEstimate.bundleCount > 0
+                                ? `משוער ~${Math.round(lineEstimate.total).toLocaleString("he-IL")} ₪ (כולל מבצע)`
+                                : `משוער ~${Math.round(lineEstimate.total).toLocaleString("he-IL")} ₪`}
+                            </span>
                           ) : null}
                         </div>
                       </div>
@@ -510,6 +520,11 @@ export function Cart() {
                       סכום משוערך:{" "}
                       <strong className="cart-estimate-sum">~{cartEstimate.knownTotal.toLocaleString("he-IL")} ₪</strong>
                     </p>
+                    {cartEstimate.dealLineCount > 0 ? (
+                      <p className="cart-estimate-note muted small">
+                        הסכום כולל <strong>{cartEstimate.dealLineCount}</strong> פריטים עם מבצע «N ב-P» מהמחירון.
+                      </p>
+                    ) : null}
                     {cartEstimate.unknownLineCount > 0 ? (
                       <p className="cart-estimate-note muted small">
                         בנוסף <strong>{cartEstimate.unknownLineCount}</strong> סוגי פריטים ללא מחיר ברור

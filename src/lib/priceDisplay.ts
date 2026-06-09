@@ -28,3 +28,16 @@ export function formatPriceLabelForDisplay(label: string): string {
 
   return formatUnitWordsWithLamed(out);
 }
+
+/** מבצע מהגיליון — מוסיף ₪ בסוף כשחסר */
+export function formatDealLabelForDisplay(deal: string): string {
+  const t = deal.trim();
+  if (!t) return deal;
+  if (/₪|ש["׳']?ח/u.test(t)) return t;
+  const m = t.match(/^(.*?)(\d+(?:[.,]\d+)?)\s*$/u);
+  if (m) {
+    const [, lead, num] = m;
+    return `${lead?.trimEnd() ?? ""} ${num} ₪`.replace(/\s+/g, " ").trim();
+  }
+  return t;
+}
