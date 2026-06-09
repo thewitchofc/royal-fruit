@@ -247,6 +247,8 @@ export function getProduceShortDescription(name: string): string {
     שמיר: "שמיר טרי בשקית; ירוק וארומטי — מושלם לתיבול, דגים, חמוצים ובישול.",
     "שמיר טרי": "שמיר טרי בשקית; ירוק וארומטי — מושלם לתיבול, דגים, חמוצים ובישול.",
     פטרוזיליה: "פטרוזיליה טרייה בשקית; ירוקה וארומטית — מושלמת לתיבול, סלטים ובישול.",
+    כוסברה: "כוסברה טרייה בצרור; עלים רכים וארומטיים — מושלמת לתיבול, סלטים, גוואקמולי ומטבח אסייתי.",
+    קוסברה: "כוסברה טרייה בצרור; עלים רכים וארומטיים — מושלמת לתיבול, סלטים, גוואקמולי ומטבח אסייתי.",
     נענע: "נענע טרייה בשקית; ירוקה, ארומטית ורעננה — מושלמת לתה, סלטים ותיבול.",
     "נענע טרייה": "נענע טרייה בשקית; ירוקה, ארומטית ורעננה — מושלמת לתה, סלטים ותיבול.",
     קולסלאו: "סלט קולסלאו טעם הטבע; כרוב לבן וגזר קצוצים — שטוף וטרי, מוכן לסלט.",
@@ -620,14 +622,14 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "קפיר ליים מארז": "/images/catalog/kaffir-lime-leaves.png",
     "עלי קפיר ליים": "/images/catalog/kaffir-lime-leaves.png",
     "ארטישוק ירושלמי מארז": "/images/catalog/jerusalem-artichoke.png",
-    "צ׳ילי": "/images/catalog/chili-red.png",
-    "צ'ילי": "/images/catalog/chili-red.png",
-    "פלפל צ׳ילי חריף": "/images/catalog/chili-pepper.png",
+    "צ׳ילי": "/images/catalog/chili-pepper.png",
+    "צ'ילי": "/images/catalog/chili-pepper.png",
+    "פלפל צ׳ילי חריף": "/images/catalog/chili-red.png",
     "צ׳ילי תאילנדי זהבי": "/images/catalog/thai-chili-zahavi.png",
     "צ'ילי תאילנדי זהבי": "/images/catalog/thai-chili-zahavi.png",
     "צ׳ילי תאילנדי": "/images/catalog/thai-chili-zahavi.png",
-    "פלפל צ'ילי חריף": "/images/catalog/chili-pepper.png",
-    "פלפל צ׳ילי": "/images/catalog/chili-pepper.png",
+    "פלפל צ'ילי חריף": "/images/catalog/chili-red.png",
+    "פלפל צ׳ילי": "/images/catalog/chili-red.png",
     "למון גראס": "/images/catalog/lemongrass.png",
     מרווה: "/images/catalog/sage.png",
     רוזמרין: "/images/catalog/rosemary.png",
@@ -637,6 +639,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     שמיר: "/images/catalog/dill.png",
     "שמיר טרי": "/images/catalog/dill.png",
     פטרוזיליה: "/images/catalog/parsley.png",
+    כוסברה: "/images/catalog/cilantro.png",
+    קוסברה: "/images/catalog/cilantro.png",
     נענע: "/images/catalog/mint.png",
     "נענע טרייה": "/images/catalog/mint.png",
     קולסלאו: "/images/catalog/coleslaw.png",
@@ -867,6 +871,7 @@ function resolveCatalogImageEntry(
   if (n.startsWith("עירית")) return BY_EXACT_PRODUCT_IMAGES["עירית"];
   if (n.startsWith("שמיר")) return BY_EXACT_PRODUCT_IMAGES["שמיר"];
   if (n.startsWith("פטרוזיליה")) return BY_EXACT_PRODUCT_IMAGES["פטרוזיליה"];
+  if (n.startsWith("כוסברה") || n.startsWith("קוסברה")) return BY_EXACT_PRODUCT_IMAGES["כוסברה"];
   if (n.startsWith("נענע")) return BY_EXACT_PRODUCT_IMAGES["נענע"];
   if (n.startsWith("קולסלאו") || n.startsWith("סלט קולסלאו")) return BY_EXACT_PRODUCT_IMAGES["קולסלאו"];
   if (n.startsWith("עלי בייבי")) return BY_EXACT_PRODUCT_IMAGES["עלי בייבי"];
