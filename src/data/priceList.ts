@@ -151,6 +151,7 @@ export function getProduceShortDescription(name: string): string {
     "אבוקדו מוכן לאכילה מארז": "אבוקדו TOP GREEN בשל ומוכן לאכילה במארז; האס ואטינגר — מוכן להגשה מיידית.",
     שום: "שום טרי נוי השדה באריזה; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
     "שום טרי": "שום טרי נוי השדה באריזה; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
+    "מארז שום": "שום טרי לימור באריזת רשת; ארומטי וחזק — מושלם לתיבול, בישול ומרינדות.",
     "סלק וואקום": "סלק אדום מבושל ומקולף ירוק, ארוז בוואקום; מוכן לשימוש — מושלם לסלטים, צלחות ותוספות.",
     "תירס מתוק": "תירס מתוק חנן הגנן במארז; קלחים צהובים ועסיסיים — מושלם לבישול, צלייה ואכילה טרייה.",
     "תירס צהוב מארז": "תירס צהוב מתוק נופק במארז; זן עסיסי — מושלם לבישול, צלייה ואכילה טרייה.",
@@ -557,6 +558,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "ג'ינג'ר טרי": "/images/catalog/fresh-ginger.png",
     שום: "/images/gallery/fresh-produce-box.webp",
     "שום טרי": "/images/catalog/garlic.png",
+    "מארז שום": "/images/catalog/garlic-pack.png",
     "סלק וואקום": "/images/catalog/beet-vacuum.png",
     "תירס מתוק": "/images/catalog/sweet-corn-pack.png",
     "תירס צהוב מארז": "/images/catalog/yellow-corn-pack.png",
@@ -811,6 +813,7 @@ function resolveCatalogImageEntry(
   if (n.startsWith("נשנושי גזר מתוק")) return BY_EXACT_PRODUCT_IMAGES["נשנושי גזר מתוק"];
   if (n.startsWith("גזר צבעוני") || n.startsWith("זר גזר צבעוני")) return BY_EXACT_PRODUCT_IMAGES["גזר צבעוני"];
   if (n.startsWith("גזר ארוז דוד משה") || n.startsWith("גזר ארוז")) return BY_EXACT_PRODUCT_IMAGES["גזר ארוז דוד משה"];
+  if (n.startsWith("מארז שום")) return BY_EXACT_PRODUCT_IMAGES["מארז שום"];
   if (n.startsWith("שום טרי")) return BY_EXACT_PRODUCT_IMAGES["שום טרי"];
   if (n.startsWith("סלק וואקום") || n.startsWith("סלק ואקום")) return BY_EXACT_PRODUCT_IMAGES["סלק וואקום"];
   if (n === "דלעת" || n.startsWith("דלעת מארז")) return BY_EXACT_PRODUCT_IMAGES["דלעת"];
