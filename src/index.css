@@ -2604,6 +2604,21 @@ main,
   font-weight: 850;
 }
 
+.fruit-package-showcase {
+  display: flex;
+  justify-content: center;
+  margin: 0.15rem 0 0.05rem;
+}
+
+.fruit-package-showcase img {
+  width: min(100%, 20rem);
+  aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 14px 32px rgba(24, 33, 23, 0.1);
+}
+
 .fruit-package-options {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 10.5rem), 1fr));

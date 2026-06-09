@@ -32,6 +32,9 @@ const MAX_BASIC_PACKAGE_FRUITS = 5;
 const MAX_PREMIUM_PACKAGE_FRUITS = 8;
 const MAX_GOLD_PACKAGE_FRUITS = 12;
 const BASIC_PACKAGE_PRICE = 199;
+const BASIC_FRUIT_PLATTER_IMAGE = "/images/catalog/basic-fruit-platter.png";
+const PREMIUM_FRUIT_PLATTER_IMAGE = "/images/catalog/premium-fruit-platter.png";
+const GOLD_FRUIT_PLATTER_IMAGE = "/images/catalog/gold-fruit-platter.png";
 const PREMIUM_PACKAGE_PRICE = 329;
 const GOLD_PACKAGE_PRICE = 549;
 const GOLD_FREE_ADDONS = 4;
@@ -264,6 +267,17 @@ export function Fruits() {
               </span>
             </div>
 
+            <figure className="fruit-package-showcase">
+              <img
+                src={BASIC_FRUIT_PLATTER_IMAGE}
+                alt="מגש פירות בסיסי: אבטיח, מלון, ענבים, דובדבנים, מנגו, קיווי ומנדרינות מסודרים על צלחת זכוכית"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+
             <div className="fruit-package-options" role="list" aria-label="בחירת פירות לחבילה בסיסית">
               {sheetState.status === "ok" &&
                 poolBasic.map((option) => {
@@ -341,6 +355,17 @@ export function Fruits() {
                 {totalSelected(selectedPremiumPackageFruits)}/{MAX_PREMIUM_PACKAGE_FRUITS} נבחרו
               </span>
             </div>
+
+            <figure className="fruit-package-showcase">
+              <img
+                src={PREMIUM_FRUIT_PLATTER_IMAGE}
+                alt="מגש פירות פרימיום: אננס, מלון, אבטיח, ענבים, דובדבנים, פטל, תפוחים ופירות יער מסודרים על צלחת עגולה"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
 
             <div className="fruit-package-options" role="list" aria-label="בחירת פירות לחבילת פרימיום">
               {sheetState.status === "ok" &&
@@ -431,6 +456,17 @@ export function Fruits() {
                 );
               })()}
             </div>
+
+            <figure className="fruit-package-showcase">
+              <img
+                src={GOLD_FRUIT_PLATTER_IMAGE}
+                alt="מגש פירות גולד: ענבים, פטל, אוכמניות, אבטיח, דובדבנים, מלון, פסיפלורה ופירות יער מסודרים על צלחת עגולה"
+                width={1024}
+                height={1024}
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
 
             <div className="fruit-package-options" role="list" aria-label="בחירת פירות לחבילת גולד">
               {sheetState.status === "ok" &&
@@ -602,6 +638,9 @@ export function Fruits() {
                 "פקאן בוואקום",
                 "מארז פקאן",
                 "פקאן עם קליפה",
+                "קפיר ליים",
+                "פינגר ליים",
+                "אבוקדו מוכן לאכילה",
               ]}
             />
           ) : null}
