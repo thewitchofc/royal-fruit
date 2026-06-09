@@ -11,6 +11,7 @@ import type { PriceRow, PriceSubsection } from "../data/priceList";
 import { formatPriceLabelForDisplay, formatUnitWordsWithLamed } from "../lib/priceDisplay";
 import { isKgPricingLabel } from "../lib/kgPricing";
 import { formatPremiumCardPriceLine } from "../lib/premiumProductCardPrice";
+import { getCatalogCardImageSources } from "../lib/catalogImage";
 
 function makeRowId(catId: string, subKey: string, name: string) {
   return `${catId}::${subKey}::${name}`.replace(/\s+/g, " ").trim();
@@ -98,35 +99,85 @@ function productNameMatchesImagePrefixes(name: string, prefixes: readonly string
   });
 }
 
-const PRODUCT_CARD_IMG_SIZE = 400;
+const PRODUCT_CARD_IMG_SIZE = 336;
 const CAROUSEL_AUTO_MS = 4000;
 const CAROUSEL_SWIPE_PX = 40;
+const CARD_IMAGE_PRIORITY_BUDGET = 4;
+const CARD_IMAGE_ROOT_MARGIN = "360px 0px";
+
+function useNearViewport(loadImmediately: boolean) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(loadImmediately);
+
+  useEffect(() => {
+    if (near) return;
+    const node = ref.current;
+    if (!node) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setNear(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting) {
+          setNear(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: CARD_IMAGE_ROOT_MARGIN },
+    );
+    io.observe(node);
+    return () => io.disconnect();
+  }, [near]);
+
+  return { ref, near };
+}
 
 function ProductCardImage({
   src,
-  fetchPriority,
+  priority = false,
 }: {
   src: string;
-  fetchPriority?: "high" | "low" | "auto";
+  priority?: boolean;
 }) {
+  const { ref, near } = useNearViewport(priority);
+  const { png, webp } = getCatalogCardImageSources(src);
+
   return (
-    <img
-      src={src}
-      alt=""
-      className="price-menu-card-img"
-      width={PRODUCT_CARD_IMG_SIZE}
-      height={PRODUCT_CARD_IMG_SIZE}
-      sizes="(max-width: 960px) 42vw, 168px"
-      decoding="async"
-      loading="eager"
-      fetchPriority={fetchPriority}
-      draggable={false}
-    />
+    <div ref={ref} className="price-menu-card-img-frame">
+      {near ? (
+        <picture className="price-menu-card-img-picture">
+          {webp ? <source srcSet={webp} type="image/webp" /> : null}
+          <img
+            src={png}
+            alt=""
+            className="price-menu-card-img"
+            width={PRODUCT_CARD_IMG_SIZE}
+            height={PRODUCT_CARD_IMG_SIZE}
+            sizes="(max-width: 960px) 42vw, 168px"
+            decoding="async"
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            draggable={false}
+          />
+        </picture>
+      ) : (
+        <div className="price-menu-card-img-placeholder" aria-hidden />
+      )}
+    </div>
   );
 }
 
 /** כרטיס מוצר — קרוסלה לפי מספר התמונות במוצר; תמונה בודדת בלי קרוסלה */
-function ProductCardCarousel({ images, productName }: { images: readonly string[]; productName: string }) {
+function ProductCardCarousel({
+  images,
+  productName,
+  priority = false,
+}: {
+  images: readonly string[];
+  productName: string;
+  priority?: boolean;
+}) {
   const slides = images;
   const [index, setIndex] = useState(0);
   const [autoPlay, setAutoPlay] = useState(slides.length > 1);
@@ -137,6 +188,11 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
   const didSwipe = useRef(false);
   const imagesKey = images.join("|");
   const multi = slides.length > 1;
+  const shouldLoadSlide = (i: number) => {
+    if (!multi) return true;
+    const next = (index + 1) % slides.length;
+    return i === index || i === next;
+  };
 
   useEffect(() => {
     setIndex(0);
@@ -185,7 +241,7 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
   if (!multi) {
     const src = slides[0];
     if (!src) return null;
-    return <ProductCardImage src={src} fetchPriority="high" />;
+    return <ProductCardImage src={src} priority={priority} />;
   }
 
   return (
@@ -240,7 +296,11 @@ function ProductCardCarousel({ images, productName }: { images: readonly string[
               className="price-menu-card-carousel-slide"
               aria-hidden={i !== index}
             >
-              <ProductCardImage src={src} fetchPriority={i === 0 ? "high" : "auto"} />
+              {shouldLoadSlide(i) ? (
+                <ProductCardImage src={src} priority={priority && i === index} />
+              ) : (
+                <div className="price-menu-card-img-placeholder" aria-hidden />
+              )}
             </div>
           ))}
         </div>
@@ -262,6 +322,7 @@ function PriceWeightRowView({
   productCardLayout,
   showProductImages = true,
   productImageOnlyPrefixes,
+  imageLoadPriority = false,
 }: {
   row: PriceRow;
   catId: string;
@@ -270,6 +331,7 @@ function PriceWeightRowView({
   productCardLayout?: boolean;
   showProductImages?: boolean;
   productImageOnlyPrefixes?: readonly string[];
+  imageLoadPriority?: boolean;
 }) {
   const options = row.weightOptions ?? [];
   const [selectedIdx, setSelectedIdx] = useState(0);
@@ -355,7 +417,7 @@ function PriceWeightRowView({
     <li className="price-menu-row price-menu-row--product-card price-menu-row--weight-product">
       <div className="price-menu-card-media">
         {images.length > 0 ? (
-          <ProductCardCarousel images={images} productName={row.name} />
+          <ProductCardCarousel images={images} productName={row.name} priority={imageLoadPriority} />
         ) : (
           <div className="price-menu-card-img-placeholder" aria-hidden />
         )}
@@ -394,6 +456,7 @@ function PriceRowView({
   productCardLayout,
   showProductImages = true,
   productImageOnlyPrefixes,
+  imageLoadPriority = false,
 }: {
   item: CartLineInput;
   description: string;
@@ -402,6 +465,7 @@ function PriceRowView({
   /** תמונות מוצר מהקטלוג — רק בדף חלווה; בשאר המחירונים false */
   showProductImages?: boolean;
   productImageOnlyPrefixes?: readonly string[];
+  imageLoadPriority?: boolean;
 }) {
   const { addItem, lines, setQty } = useCart();
   const inCartQty = lines.find((l) => l.id === item.id)?.qty ?? 0;
@@ -448,7 +512,7 @@ function PriceRowView({
       <li className="price-menu-row price-menu-row--product-card">
         <div className="price-menu-card-media">
           {images.length > 0 ? (
-            <ProductCardCarousel images={images} productName={item.name} />
+            <ProductCardCarousel images={images} productName={item.name} priority={imageLoadPriority} />
           ) : (
             <div className="price-menu-card-img-placeholder" aria-hidden />
           )}
@@ -466,7 +530,7 @@ function PriceRowView({
     <li className={`price-menu-row${showLeft ? "" : " no-emoji"}${thumb ? " price-menu-row--with-thumb" : ""}`}>
       {thumb ? (
         <span className="price-menu-emoji price-menu-emoji--thumb" aria-hidden>
-          <img src={thumb} alt="" className="price-menu-thumb" width={36} height={36} />
+          <img src={thumb} alt="" className="price-menu-thumb" width={36} height={36} loading="lazy" decoding="async" />
         </span>
       ) : showEmojis ? (
         <span className="price-menu-emoji" aria-hidden>
@@ -613,7 +677,22 @@ export function PriceListSections({
       ) : null}
 
       <div className="price-menu-categories-grid">
-        {filteredCategories.map((cat) => {
+        {(() => {
+          let imagePriorityBudget = CARD_IMAGE_PRIORITY_BUDGET;
+          const takeImagePriority = (name: string) => {
+            if (
+              !productCardLayout ||
+              !showProductImages ||
+              !productNameMatchesImagePrefixes(name, productImageOnlyPrefixes)
+            ) {
+              return false;
+            }
+            if (imagePriorityBudget <= 0) return false;
+            imagePriorityBudget -= 1;
+            return true;
+          };
+
+          return filteredCategories.map((cat) => {
           const singleWeightProduct =
             cat.rows?.length === 1 && (cat.rows[0]?.weightOptions?.length ?? 0) > 1;
           return (
@@ -647,6 +726,7 @@ export function PriceListSections({
                         productCardLayout={productCardLayout}
                         showProductImages={showProductImages}
                         productImageOnlyPrefixes={productImageOnlyPrefixes}
+                        imageLoadPriority={takeImagePriority(row.name)}
                       />
                     );
                   }
@@ -675,6 +755,7 @@ export function PriceListSections({
                       productCardLayout={productCardLayout}
                       showProductImages={showProductImages}
                       productImageOnlyPrefixes={productImageOnlyPrefixes}
+                      imageLoadPriority={takeImagePriority(row.name)}
                     />
                   );
                 })}
@@ -716,6 +797,7 @@ export function PriceListSections({
                           productCardLayout={productCardLayout}
                           showProductImages={showProductImages}
                           productImageOnlyPrefixes={productImageOnlyPrefixes}
+                          imageLoadPriority={takeImagePriority(row.name)}
                         />
                       );
                     })}
@@ -725,7 +807,8 @@ export function PriceListSections({
             })}
           </article>
           );
-        })}
+        });
+        })()}
       </div>
       {filteredCategories.length === 0 ? (
         <p className="price-menu-no-results muted">לא נמצאו תוצאות לחיפוש הזה. נסו מילה אחרת.</p>

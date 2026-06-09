@@ -11,6 +11,8 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_DIR = ROOT / "public" / "images" / "catalog"
 OUTPUT_SIZE = 1024
+CARD_WEBP_SIZE = 480
+CARD_WEBP_QUALITY = 82
 PADDING_RATIO = 0.06
 WHITE_THRESHOLD = 240
 
@@ -62,10 +64,28 @@ def normalize_image(path: Path) -> bool:
     y = (OUTPUT_SIZE - nh) // 2
     canvas.paste(resized, (x, y))
     canvas.save(path, "PNG", optimize=True)
+    write_mobile_webp(canvas, path)
+    return True
+
+
+def write_mobile_webp(canvas: Image.Image, png_path: Path) -> None:
+    card = canvas.resize((CARD_WEBP_SIZE, CARD_WEBP_SIZE), Image.Resampling.LANCZOS)
+    webp_path = png_path.with_name(f"{png_path.stem}.mobile.webp")
+    card.save(webp_path, "WEBP", quality=CARD_WEBP_QUALITY, method=6)
+
+
+def generate_mobile_webp_only(path: Path) -> bool:
+    try:
+        im = flatten_alpha(Image.open(path))
+    except OSError:
+        print(f"skip (read error): {path.name}")
+        return False
+    write_mobile_webp(im, path)
     return True
 
 
 def main() -> int:
+    mobile_only = "--mobile-only" in sys.argv
     targets = sorted(CATALOG_DIR.glob("*.png"))
     if not targets:
         print("No PNG files found.")
@@ -73,11 +93,17 @@ def main() -> int:
 
     ok = 0
     for path in targets:
+        if mobile_only:
+            if generate_mobile_webp_only(path):
+                ok += 1
+                print(f"mobile webp: {path.stem}.mobile.webp")
+            continue
         if normalize_image(path):
             ok += 1
             print(f"normalized: {path.name}")
 
-    print(f"Done: {ok}/{len(targets)} images")
+    action = "mobile webp" if mobile_only else "normalized"
+    print(f"Done: {ok}/{len(targets)} images ({action})")
     return 0
 
 
