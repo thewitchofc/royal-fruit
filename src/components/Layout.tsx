@@ -12,6 +12,7 @@ import { AccessibilityWidget } from "./AccessibilityWidget";
 import { OptionalVendorAccessibilityLoader } from "./OptionalVendorAccessibilityLoader";
 import { RoyalFruitWordmark } from "./RoyalFruitWordmark";
 import { Navbar } from "./Navbar";
+import { SocialMediaLinks } from "./SocialMediaLinks";
 import { BUSINESS_PHONE, BUSINESS_PHONE_E164 } from "../lib/business";
 import { ROUTES } from "../lib/publicRoutes";
 import { useMatchMedia } from "../hooks/useMatchMedia";
@@ -248,6 +249,7 @@ export function Layout({ children }: { children: ReactNode }) {
               <a href={`tel:${BUSINESS_PHONE_E164}`} className="footer-contact-link">
                 {BUSINESS_PHONE}
               </a>
+              <SocialMediaLinks />
               <Link
                 to={ROUTES.cart}
                 className="btn btn-cart-fill footer-wa-cta"

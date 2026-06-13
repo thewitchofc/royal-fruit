@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { Apple, CheckCircle, Leaf, ShoppingBag, ShoppingBasket, Star, Truck, Zap } from "lucide-react";
 import { OrderUrgencyLines } from "../components/OrderUrgencyLines";
 import { RoyalFruitWordmark } from "../components/RoyalFruitWordmark";
+import { SocialMediaLinks } from "../components/SocialMediaLinks";
 import {
   BUSINESS_AREA_SERVED,
   BUSINESS_TRUST_CUSTOMERS_LINE,
@@ -87,6 +88,10 @@ export function Home() {
               <Link className="btn btn-ghost" to={ROUTES.shop.vegetables}>
                 ירקות טריים
               </Link>
+            </div>
+            <div className="home-social-follow">
+              <p className="home-social-follow-label">עקבו אחרינו</p>
+              <SocialMediaLinks variant="inline" />
             </div>
           </div>
           <OrderUrgencyLines className="order-urgency-lines order-urgency-lines--hero" />
