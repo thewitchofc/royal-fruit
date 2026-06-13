@@ -62,7 +62,7 @@ export function getProduceShortDescription(name: string): string {
     "מלון חתוך": "מתוק ובשרני עם ארומה בולטת; מתאים למגשי אירוח ולקינוח קליל.",
     "פומלה קלופה": "פומלה קלופה מוכנה לאכילה; מתוקה־עדינה, עסיסית ומרעננת — מושלמת לנשנוש ולמגש.",
     "פומלה קלופה מארז": "פומלה קלופה במארז מוכן לאכילה; מתוקה־עדינה, עסיסית ומרעננת.",
-    "קיווי קלוף": "חמצמץ־מתקתק ומוכן לשימוש; חמיצות חדה ומרעננת.",
+    "קיווי קלוף": "פרוסי קיווי קלופים במגש; חמצמץ־מתקתק ומוכנים לאכילה מיידית.",
     סברס: "מתוק עדין וקריר; מרקם גרגירי עדין, ייחודי בצלחת ובסלט פירות.",
     "אוכמניות כרמל": "מתיקות מאוזנת ומרקם יציב; עסיסיות נעימה ונוחה לנשנוש.",
     "אוכמניות כרמל קטן": "אוכמניות כרמל קטנות מרמת הגולן; עסיסיות, מתוקות וטריות — 125 גרם במארז.",
@@ -501,7 +501,7 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
       "/images/catalog/pineapple-kapi-labeled.png",
       "/images/catalog/pineapple-kapi-slice.png",
     ],
-    "קיווי קלוף": "/images/gallery/kikoka-gold-kiwi.webp",
+    "קיווי קלוף": "/images/catalog/kiwi-peeled.png",
     "קיווי ירוק": "/images/catalog/green-kiwi-tray.png",
     "קיווי צהוב": ["/images/catalog/yellow-kiwi-whole.png", "/images/catalog/yellow-kiwi-cut.png"],
     "בקבוק חומץ תפוחים": "/images/catalog/apple-cider-vinegar.png",
@@ -922,6 +922,9 @@ function resolveCatalogImageEntry(
   if (n.startsWith("אוכמניות ישראלי")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות ישראלי"];
   if (n.startsWith("אוכמניות פרו סקויה") || n.startsWith("אוכמניות פרו סויקה"))
     return BY_EXACT_PRODUCT_IMAGES["אוכמניות פרו סקויה"];
+  if (n.startsWith("קיווי קלוף")) return BY_EXACT_PRODUCT_IMAGES["קיווי קלוף"];
+  if (n.startsWith("קיווי צהוב")) return BY_EXACT_PRODUCT_IMAGES["קיווי צהוב"];
+  if (n.startsWith("קיווי ירוק")) return BY_EXACT_PRODUCT_IMAGES["קיווי ירוק"];
   if (n.startsWith("פקאן עם קליפה")) return BY_EXACT_PRODUCT_IMAGES["פקאן עם קליפה"];
   if (n.startsWith("פקאן בוואקום") || n.startsWith("מארז פקאן")) return BY_EXACT_PRODUCT_IMAGES["פקאן בוואקום"];
   if (/טחינה.*(אגוזי?\s*לוז|אגוז\s*לוז).*קקאו/.test(n))

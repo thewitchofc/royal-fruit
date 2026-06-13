@@ -94,9 +94,7 @@ export function Terms() {
               .
             </p>
 
-            <p className="legal-foot muted">
-              המידע באתר אינו מהווה ייעוץ משפטי. לבדיקה משפטית מלאה פנו ליועץ מתאים.
-            </p>
+            <p className="legal-foot muted">המידע באתר אינו מהווה ייעוץ משפטי.</p>
           </div>
         </div>
       </section>

@@ -111,7 +111,7 @@ export function Accessibility() {
             <h2>עדכון הצהרה</h2>
             <p>הצהרה זו עשויה להתעדכן מעת לעת. תאריך העדכון האחרון מופיע בראש העמוד.</p>
 
-            <p className="legal-foot muted">מסמך זה כללי; להתאמה משפטית מלאה פנו ליועץ מתאים.</p>
+            <p className="legal-foot muted">המידע באתר אינו מהווה ייעוץ משפטי.</p>
           </div>
         </div>
       </section>

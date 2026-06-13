@@ -4187,7 +4187,7 @@ main,
 
 .contact-aside-head {
   margin-bottom: 1rem;
-  text-align: start;
+  text-align: center;
 }
 
 .contact-aside-head h2 {
@@ -4205,6 +4205,7 @@ main,
   background: rgba(255, 255, 255, 0.075);
   border: 1px solid rgba(255, 255, 255, 0.13);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  text-align: center;
 }
 
 .contact-info-card + .contact-info-card {
@@ -4217,6 +4218,7 @@ main,
   color: rgba(211, 164, 71, 0.95);
   font-size: 0.76rem;
   font-weight: 900;
+  text-align: center;
 }
 
 .contact-info-value {
@@ -4225,6 +4227,12 @@ main,
   font-size: 1rem;
   font-weight: 900;
   text-decoration: none;
+  text-align: center;
+}
+
+.contact-info-value[href^="tel:"] {
+  direction: ltr;
+  unicode-bidi: isolate;
 }
 
 .contact-info-card p,
@@ -4247,6 +4255,11 @@ main,
   font-size: 1.05rem;
   font-weight: 900;
   color: #fff;
+  text-align: center;
+}
+
+.contact-aside .small {
+  text-align: center;
 }
 
 .contact-aside a {

@@ -85,7 +85,7 @@ export function Returns() {
               .
             </p>
 
-            <p className="legal-foot muted">מסמך כללי; יש להתאים לעסק ולדין לפני פרסום רשמי.</p>
+            <p className="legal-foot muted">המידע באתר אינו מהווה ייעוץ משפטי.</p>
           </div>
         </div>
       </section>
