@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Apple, Cherry, Circle, ShoppingBag, Star, Truck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { CartLineInput } from "../cart/types";
@@ -263,8 +263,22 @@ export function Cart() {
   const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const deliveryDateRef = useRef<HTMLInputElement>(null);
-  const submitBtnRef = useRef<HTMLButtonElement>(null);
   const reviewPopupShown = useRef(false);
+
+  const submitBtnRef = useCallback((node: HTMLButtonElement | null) => {
+    if (!node || reviewPopupShown.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !reviewPopupShown.current && window.scrollY > 150) {
+          reviewPopupShown.current = true;
+          setShowReviewPopup(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.8 },
+    );
+    observer.observe(node);
+  }, []);
   const deliveryAddressRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -308,23 +322,6 @@ export function Cart() {
       listener?.remove();
     };
   }, [fulfillmentMethod]);
-
-  useEffect(() => {
-    const btn = submitBtnRef.current;
-    if (!btn || reviewPopupShown.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !reviewPopupShown.current) {
-          reviewPopupShown.current = true;
-          setShowReviewPopup(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 },
-    );
-    observer.observe(btn);
-    return () => observer.disconnect();
-  }, [lines.length]);
 
   function openDeliveryDatePicker() {
     const input = deliveryDateRef.current;
