@@ -12,6 +12,7 @@ import { ROUTES } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
 import { getGoogleSheetsProductsCsvUrl, type SheetProduct } from "../lib/sheetProducts";
 import { useSheetProducts } from "../hooks/useSheetProducts";
+import { ReviewPromptPopup } from "../components/ReviewPromptPopup";
 
 const EMPTY_SHEET_PRODUCTS: SheetProduct[] = [];
 
@@ -259,8 +260,11 @@ export function Cart() {
   const [deliveryWindow, setDeliveryWindow] = useState("09:00-13:00");
   const [notes, setNotes] = useState("");
   const [sentHint, setSentHint] = useState(false);
+  const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const deliveryDateRef = useRef<HTMLInputElement>(null);
+  const submitBtnRef = useRef<HTMLButtonElement>(null);
+  const reviewPopupShown = useRef(false);
   const deliveryAddressRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -304,6 +308,23 @@ export function Cart() {
       listener?.remove();
     };
   }, [fulfillmentMethod]);
+
+  useEffect(() => {
+    const btn = submitBtnRef.current;
+    if (!btn || reviewPopupShown.current) return;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && !reviewPopupShown.current) {
+          reviewPopupShown.current = true;
+          setShowReviewPopup(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.5 },
+    );
+    observer.observe(btn);
+    return () => observer.disconnect();
+  }, [lines.length]);
 
   function openDeliveryDatePicker() {
     const input = deliveryDateRef.current;
@@ -784,6 +805,7 @@ export function Cart() {
                 </label>
 
                 <button
+                  ref={submitBtnRef}
                   type="submit"
                   className="btn btn-primary btn-whatsapp btn-whatsapp-strong"
                   disabled={!canSubmitOrder}
@@ -806,6 +828,10 @@ export function Cart() {
           )}
         </div>
       </section>
+
+      {showReviewPopup && (
+        <ReviewPromptPopup onClose={() => setShowReviewPopup(false)} />
+      )}
     </div>
   );
 }
