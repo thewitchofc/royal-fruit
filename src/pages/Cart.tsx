@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { Apple, Cherry, Circle, ShoppingBag, Star, Truck, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { CartLineInput } from "../cart/types";
@@ -12,7 +12,7 @@ import { ROUTES } from "../lib/publicRoutes";
 import { usePageSeo } from "../lib/seo";
 import { getGoogleSheetsProductsCsvUrl, type SheetProduct } from "../lib/sheetProducts";
 import { useSheetProducts } from "../hooks/useSheetProducts";
-import { ReviewPromptPopup } from "../components/ReviewPromptPopup";
+
 
 const EMPTY_SHEET_PRODUCTS: SheetProduct[] = [];
 
@@ -260,25 +260,8 @@ export function Cart() {
   const [deliveryWindow, setDeliveryWindow] = useState("09:00-13:00");
   const [notes, setNotes] = useState("");
   const [sentHint, setSentHint] = useState(false);
-  const [showReviewPopup, setShowReviewPopup] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const deliveryDateRef = useRef<HTMLInputElement>(null);
-  const reviewPopupShown = useRef(false);
-
-  const submitBtnRef = useCallback((node: HTMLButtonElement | null) => {
-    if (!node || reviewPopupShown.current) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && !reviewPopupShown.current && window.scrollY > 150) {
-          reviewPopupShown.current = true;
-          setShowReviewPopup(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.8 },
-    );
-    observer.observe(node);
-  }, []);
   const deliveryAddressRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -802,7 +785,6 @@ export function Cart() {
                 </label>
 
                 <button
-                  ref={submitBtnRef}
                   type="submit"
                   className="btn btn-primary btn-whatsapp btn-whatsapp-strong"
                   disabled={!canSubmitOrder}
@@ -826,9 +808,6 @@ export function Cart() {
         </div>
       </section>
 
-      {showReviewPopup && (
-        <ReviewPromptPopup onClose={() => setShowReviewPopup(false)} />
-      )}
     </div>
   );
 }
