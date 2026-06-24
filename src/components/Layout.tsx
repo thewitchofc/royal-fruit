@@ -206,32 +206,25 @@ export function Layout({ children }: { children: ReactNode }) {
             </span>
           </NavLink>
           <NavLink
+            to={ROUTES.boxes.fruits}
+            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
+            onClick={() => setOpen(false)}
+          >
+            מגשי פירות
+          </NavLink>
+          <NavLink
             to={ROUTES.shop.vegetables}
             className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
             onClick={() => setOpen(false)}
           >
-            ירקות טריים
+            ירקות מובחרים
           </NavLink>
           <NavLink
-            to={ROUTES.gallery}
+            to={ROUTES.shop.greensRoots}
             className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
             onClick={() => setOpen(false)}
           >
-            גלריה
-          </NavLink>
-          <NavLink
-            to={ROUTES.cart}
-            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
-            onClick={() => setOpen(false)}
-          >
-            סל קניות
-          </NavLink>
-          <NavLink
-            to={ROUTES.contact}
-            className={({ isActive }) => `mobile-quick-nav-link${isActive ? " active" : ""}`}
-            onClick={() => setOpen(false)}
-          >
-            צור קשר
+            שורשים ועלים
           </NavLink>
         </nav>
         {children}
