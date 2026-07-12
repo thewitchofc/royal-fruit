@@ -552,6 +552,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "אפרסק לבן": "/images/catalog/white-peach-tray.png",
     "אפרסק פיתה": "/images/catalog/peach-flat.png",
     "אפרסק פיתה מארז": "/images/catalog/peach-flat.png",
+    "נקטרינה פיתה": "/images/catalog/peach-flat.png",
+    "נקטרינה פיתה מארז": "/images/catalog/peach-flat.png",
     "פיתה": "/images/catalog/peach-flat.png",
     "שקד ירוק": "/images/catalog/green-almond.png",
     תאנים: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
@@ -950,7 +952,7 @@ function resolveCatalogImageEntry(
   if ((n.startsWith("מישמש") || n.startsWith("משמש")) && n.includes("לחי אדומה")) return BY_EXACT_PRODUCT_IMAGES["משמש לחי אדומה"];
   if ((n.startsWith("מישמש") || n.startsWith("משמש")) && n.includes("צבעוני")) return BY_EXACT_PRODUCT_IMAGES["משמש צבעוני"];
   if (n.startsWith("שזיפון")) return BY_EXACT_PRODUCT_IMAGES["שזיפון"];
-  if (n.startsWith("אפרסק פיתה") || n === "פיתה") return BY_EXACT_PRODUCT_IMAGES["אפרסק פיתה"];
+  if (n.startsWith("אפרסק פיתה") || n.startsWith("נקטרינה פיתה") || n === "פיתה") return BY_EXACT_PRODUCT_IMAGES["אפרסק פיתה"];
   if (n.startsWith("אפרסק לבן")) return BY_EXACT_PRODUCT_IMAGES["אפרסק לבן"];
   if (n.startsWith("מישמש") || n.startsWith("משמש")) return BY_EXACT_PRODUCT_IMAGES["מישמש"];
   if (n.startsWith("דומדמניות")) return BY_EXACT_PRODUCT_IMAGES["דומדמניות"];
