@@ -377,6 +377,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "מגש תמרים עם פקאן": "/images/catalog/dates-tray-pecan.png",
     "תמר עם אגוז מארז": "/images/catalog/dates-tray-pecan.png",
     "תמרים ממולאים אגוזי מלך": "/images/catalog/dates-tray-pecan.png",
+    "אוכמניות Boom": "/images/catalog/blueberry-boom.png",
+    "אוכמניות בום": "/images/catalog/blueberry-boom.png",
     "אוכמניות כרמל": "/images/gallery/blueberries-pack.webp",
     "אוכמניות כרמל קטן": [
       "/images/catalog/blueberry-carmel-small-pack.png",
@@ -464,6 +466,10 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     מישמש: "/images/catalog/apricot-pack.png",
     "מישמש מארז": "/images/catalog/apricot-open.png",
     משמש: "/images/catalog/apricot-pack.png",
+    "משמש לחי אדומה": "/images/catalog/apricot-red-cheek.png",
+    "מישמש לחי אדומה": "/images/catalog/apricot-red-cheek.png",
+    "משמש צבעוני": "/images/catalog/apricot-colorful.png",
+    "מישמש צבעוני": "/images/catalog/apricot-colorful.png",
     דומדמניות: ["/images/catalog/red-currant-pack.png", "/images/catalog/red-currant-open.png"],
     "דומדמניות מארז": ["/images/catalog/red-currant-pack.png", "/images/catalog/red-currant-open.png"],
     "תות פקיסטני": [
@@ -497,13 +503,15 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
       "/images/catalog/pineapple-kapi-labeled.png",
       "/images/catalog/pineapple-kapi-slice.png",
     ],
+    "אננס דלמונטה": ["/images/catalog/pineapple-delmonte.png", "/images/catalog/pineapple-delmonte-2.png"],
+    "אננס דל מונטה": ["/images/catalog/pineapple-delmonte.png", "/images/catalog/pineapple-delmonte-2.png"],
     "אננס קאפי יחידה": [
       "/images/catalog/pineapple-kapi-labeled.png",
       "/images/catalog/pineapple-kapi-slice.png",
     ],
     "קיווי קלוף": "/images/catalog/kiwi-peeled.png",
     "קיווי ירוק": "/images/catalog/green-kiwi-tray.png",
-    "קיווי צהוב": ["/images/catalog/yellow-kiwi-whole.png", "/images/catalog/yellow-kiwi-cut.png"],
+    "קיווי צהוב": ["/images/catalog/yellow-kiwi-zespri-pack.png", "/images/catalog/yellow-kiwi-whole.png", "/images/catalog/yellow-kiwi-cut.png"],
     "בקבוק חומץ תפוחים": "/images/catalog/apple-cider-vinegar.png",
     "מיקס כרובית טריו": "/images/catalog/cauliflower-trio-mix.png",
     "כרובית לבנה": "/images/catalog/white-cauliflower.png",
@@ -531,11 +539,20 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "פאפאיה זוג מארז": ["/images/catalog/papaya-pack.png", "/images/catalog/papaya-open.png"],
     "תפוז פרימיום": "/images/catalog/premium-orange-tray.png",
     "תפוז פירמיום": "/images/catalog/premium-orange-tray.png",
+    "תפוח ג׳ויה": "/images/catalog/apple-joya.png",
+    "ג׳ויה": "/images/catalog/apple-joya.png",
+    שזיפון: "/images/catalog/plumcot.png",
+    "שזיפון מארז": "/images/catalog/plumcot.png",
     "שזיף מטלי": "/images/catalog/plum-methley-tray.png",
     "שזיף מיטלי": "/images/catalog/plum-methley-tray.png",
+    "שזיף בלאק דיימונד": "/images/catalog/plum-black-diamond.png",
+    "בלאק דיימונד": "/images/catalog/plum-black-diamond.png",
     גויאבה: ["/images/catalog/guava-whole.png", "/images/catalog/guava-cut.png"],
     קלמנטינה: "/images/catalog/clementine-peeled.png",
     "אפרסק לבן": "/images/catalog/white-peach-tray.png",
+    "אפרסק פיתה": "/images/catalog/peach-flat.png",
+    "אפרסק פיתה מארז": "/images/catalog/peach-flat.png",
+    "פיתה": "/images/catalog/peach-flat.png",
     "שקד ירוק": "/images/catalog/green-almond.png",
     תאנים: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
     תאנה: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
@@ -567,6 +584,12 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "תירס לבן מארז": "/images/catalog/white-corn-pack.png",
     "פינגר ליים": "/images/catalog/finger-lime.png",
     "פינגר ליים מארז": "/images/catalog/finger-lime.png",
+    ליים: "/images/catalog/lime.png",
+    "לימון ליים": "/images/catalog/lime.png",
+    "ליים מארז": "/images/catalog/lime.png",
+    "ליצ׳י": "/images/catalog/lychee-pack.png",
+    "ליצ׳י מארז": "/images/catalog/lychee-pack.png",
+    "ליצ׳י מובחר": "/images/catalog/lychee-premium.png",
     "תרד גוליבר צ׳רי": "/images/catalog/spinach-gulliver-cherry.png",
     "תרד גוליבר צ'רי": "/images/catalog/spinach-gulliver-cherry.png",
     "אפונת שלג צ׳רי": "/images/catalog/snow-peas-cherry.png",
@@ -590,6 +613,13 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     דלעת: "/images/catalog/pumpkin-peeled.png",
     "דלעת מארז": "/images/catalog/pumpkin-peeled.png",
     "דלעת משק כהן": "/images/gallery/fresh-produce-box.webp",
+    "דלעת יפנית": "/images/catalog/pumpkin-japanese.png",
+    "דלעת יפנית מארז": "/images/catalog/pumpkin-japanese.png",
+    "דלעת הרמונים": "/images/catalog/pumpkin-acorn.png",
+    "דלעת הרמונים מארז": "/images/catalog/pumpkin-acorn.png",
+    שיזף: "/images/catalog/jujube-dried.png",
+    "שיזף מיובש": "/images/catalog/jujube-dried.png",
+    "שיזף מארז": "/images/catalog/jujube-dried.png",
     "כרוב ניצנים": "/images/catalog/brussels-sprouts.png",
     "כרוב ניצנים משק כהן": "/images/catalog/brussels-sprouts.png",
     "חרשוף משק כהן": "/images/gallery/fresh-produce-box.webp",
@@ -667,8 +697,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "עגבניות שרי בלה מאיה": "/images/catalog/bella-maya-cherry-tomatoes.png",
     "מלפפון חמוץ": "/images/catalog/pickled-cucumber.png",
     "מלפפון חמוץ בעבודת יד": "/images/catalog/pickled-cucumber.png",
-    סברס: "/images/gallery/mixed-fruit-box.webp",
-    "סברס (לק״ג)": "/images/gallery/mixed-fruit-box.webp",
+    סברס: "/images/catalog/sabres.png",
+    "סברס (לק״ג)": "/images/catalog/sabres.png",
     "גולדן ברי": [
       "/images/catalog/golden-berry-pack.png",
       "/images/catalog/golden-berry-open.png",
@@ -736,6 +766,13 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "לפת מוחמצת": "/images/catalog/pickled-turnip.png",
     זיתים: "/images/catalog/pickled-olives.png",
     "מיקס חמוצים": "/images/catalog/pickled-mix.png",
+    "תות יער": ["/images/catalog/wild-strawberry-patal-bahar.png", "/images/catalog/wild-strawberry.png"],
+    "תות יער מארז": ["/images/catalog/wild-strawberry-patal-bahar.png", "/images/catalog/wild-strawberry.png"],
+    פיטאיה: "/images/catalog/pitaya.png",
+    פטאיה: "/images/catalog/pitaya.png",
+    "פיטאיה לבנה": "/images/catalog/pitaya.png",
+    "פיטאיה אדומה": "/images/catalog/pitaya.png",
+    "דרגון פרוט": "/images/catalog/pitaya.png",
     "תות קפוא": "/images/catalog/frozen-strawberry.png",
     "תות שדה מוקפא": "/images/catalog/frozen-strawberry.png",
     "אננס קפוא": "/images/catalog/frozen-pineapple.png",
@@ -818,6 +855,9 @@ function resolveCatalogImageEntry(
   if (n.startsWith("מארז שום")) return BY_EXACT_PRODUCT_IMAGES["מארז שום"];
   if (n.startsWith("שום טרי")) return BY_EXACT_PRODUCT_IMAGES["שום טרי"];
   if (n.startsWith("סלק וואקום") || n.startsWith("סלק ואקום")) return BY_EXACT_PRODUCT_IMAGES["סלק וואקום"];
+  if (n.startsWith("דלעת יפנית")) return BY_EXACT_PRODUCT_IMAGES["דלעת יפנית"];
+  if (n.startsWith("דלעת הרמונים")) return BY_EXACT_PRODUCT_IMAGES["דלעת הרמונים"];
+  if (n.startsWith("שיזף")) return BY_EXACT_PRODUCT_IMAGES["שיזף"];
   if (n === "דלעת" || n.startsWith("דלעת מארז")) return BY_EXACT_PRODUCT_IMAGES["דלעת"];
   if (n.startsWith("כרוב סיני")) return BY_EXACT_PRODUCT_IMAGES["כרוב סיני"];
   if (n.startsWith("מגה פורטובלו") || n.startsWith("מגה פורטבלה")) return BY_EXACT_PRODUCT_IMAGES["מגה פורטובלו"];
@@ -861,6 +901,8 @@ function resolveCatalogImageEntry(
   if (n === "ארטישוק") return BY_EXACT_PRODUCT_IMAGES["ארטישוק"];
   if (n.startsWith("קפיר ליים") || n.startsWith("עלי קפיר ליים")) return BY_EXACT_PRODUCT_IMAGES["קפיר ליים"];
   if (n.startsWith("פינגר ליים")) return BY_EXACT_PRODUCT_IMAGES["פינגר ליים"];
+  if (n === "ליים" || n.startsWith("לימון ליים") || n.startsWith("ליים ")) return BY_EXACT_PRODUCT_IMAGES["ליים"];
+  if (n.startsWith("ליצ׳י")) return BY_EXACT_PRODUCT_IMAGES["ליצ׳י"];
   if (n.startsWith("אבוקדו מוכן לאכילה מארז")) return BY_EXACT_PRODUCT_IMAGES["אבוקדו מוכן לאכילה מארז"];
   if (n.startsWith("אבוקדו מוכן לאכילה")) return BY_EXACT_PRODUCT_IMAGES["אבוקדו מוכן לאכילה"];
   if (n.startsWith("גוואקמולי") || n.startsWith("גווקאמולי") || n.startsWith("ממרח אבוקדו"))
@@ -892,6 +934,7 @@ function resolveCatalogImageEntry(
   if (n.startsWith("אבטיח חתוך")) return "/images/catalog/watermelon-sliced.png";
   if (n.startsWith("אננס חתוך")) return BY_EXACT_PRODUCT_IMAGES["אננס חתוך"];
   if (n.startsWith("אננס קאפי")) return BY_EXACT_PRODUCT_IMAGES["אננס קאפי"];
+  if (n.includes("דלמונטה") || n.includes("דל מונטה")) return BY_EXACT_PRODUCT_IMAGES["אננס דלמונטה"];
   if (n.startsWith("מלון חתוך")) return BY_EXACT_PRODUCT_IMAGES["מלון חתוך"];
   if (/מגש\s+תמרים\s+עם\s+(פקאן|אגוז)|^תמר\s+עם\s+אגוז/.test(n))
     return BY_EXACT_PRODUCT_IMAGES["מגש תמרים עם פקאן"];
@@ -904,17 +947,25 @@ function resolveCatalogImageEntry(
   if (n.startsWith("תאנ")) return BY_EXACT_PRODUCT_IMAGES["תאנים"];
   if (n.startsWith("דובדבן הזהב")) return BY_EXACT_PRODUCT_IMAGES["דובדבן הזהב אדום"];
   if (n.startsWith("מישמש מארז")) return BY_EXACT_PRODUCT_IMAGES["מישמש מארז"];
+  if ((n.startsWith("מישמש") || n.startsWith("משמש")) && n.includes("לחי אדומה")) return BY_EXACT_PRODUCT_IMAGES["משמש לחי אדומה"];
+  if ((n.startsWith("מישמש") || n.startsWith("משמש")) && n.includes("צבעוני")) return BY_EXACT_PRODUCT_IMAGES["משמש צבעוני"];
+  if (n.startsWith("שזיפון")) return BY_EXACT_PRODUCT_IMAGES["שזיפון"];
+  if (n.startsWith("אפרסק פיתה") || n === "פיתה") return BY_EXACT_PRODUCT_IMAGES["אפרסק פיתה"];
+  if (n.startsWith("אפרסק לבן")) return BY_EXACT_PRODUCT_IMAGES["אפרסק לבן"];
   if (n.startsWith("מישמש") || n.startsWith("משמש")) return BY_EXACT_PRODUCT_IMAGES["מישמש"];
   if (n.startsWith("דומדמניות")) return BY_EXACT_PRODUCT_IMAGES["דומדמניות"];
   if (/תפוז\s+פ(יר|רי)מיום/.test(n)) return BY_EXACT_PRODUCT_IMAGES["תפוז פרימיום"];
   if (/שזיף\s+מ[יט]לי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["שזיף מטלי"];
   if (n.startsWith("שקד ירוק")) return BY_EXACT_PRODUCT_IMAGES["שקד ירוק"];
+  if (n.startsWith("תות יער")) return BY_EXACT_PRODUCT_IMAGES["תות יער"];
+  if (n.startsWith("פיטאיה") || n.startsWith("פטאיה") || n.startsWith("דרגון פרוט")) return BY_EXACT_PRODUCT_IMAGES["פיטאיה"];
   if (n.startsWith("תות פקיסטני") || n.startsWith("תות עץ")) return BY_EXACT_PRODUCT_IMAGES["תות פקיסטני"];
   if (n.startsWith("פטל שחור בכר")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור בכר"];
   if (n.startsWith("פטל שחור רובי")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור רובי"];
   if (n.startsWith("פטל שחור בהר")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור בהר"];
   if (n.startsWith("גולדן ברי")) return BY_EXACT_PRODUCT_IMAGES["גולדן ברי"];
   if (n.startsWith("פטל אדום בהר")) return BY_EXACT_PRODUCT_IMAGES["פטל אדום בהר"];
+  if (n.startsWith("אוכמניות Boom") || n.startsWith("אוכמניות בום")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות Boom"];
   if (n.startsWith("אוכמניות כרמל גדול")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות כרמל גדול"];
   if (n.startsWith("אוכמניות כרמל בינוני")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות כרמל בינוני"];
   if (n.startsWith("אוכמניות גליל ים")) return BY_EXACT_PRODUCT_IMAGES["אוכמניות גליל ים"];
@@ -955,6 +1006,7 @@ function resolveGalleryFallbackImageEntry(name: string, description?: string): P
   if (/(קרמבולה|starfruit|כוכב)/.test(text)) return "/images/gallery/starfruit-trays.webp";
   if (/(תמר|אגוז|פקאן|nuts|walnut)/.test(text)) return "/images/gallery/dates-walnut-pack.webp";
   if (/(כרובית|ברוקולי|cauliflower|broccoli)/.test(text)) return "/images/gallery/colorful-cauliflower.webp";
+  if (/ג׳ויה/.test(text)) return "/images/catalog/apple-joya.png";
   if (/(תפוח|apple)/.test(text) && !/אדמה/.test(text)) return "/images/gallery/red-kissabel-apples.webp";
   if (/(קיווי|kiwi)/.test(text)) return "/images/gallery/kikoka-gold-kiwi.webp";
   if (/(מלפפון|עגבני|גזר|אבוקדו|דלעת|תרד|אפונה|שום|בצל|אספרגוס|ירק|vegetable|veg)/.test(text)) {
