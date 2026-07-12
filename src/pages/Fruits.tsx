@@ -448,7 +448,6 @@ export function Fruits() {
                 return (
                   <>
               <span>{MAX_GOLD_PACKAGE_FRUITS} סוגי פירות</span>
-              <span>כל הרמות מהגיליון</span>
               <span>{priceText}</span>
               <span>
                 {totalSelected(selectedGoldPackageFruits)}/{MAX_GOLD_PACKAGE_FRUITS} נבחרו
