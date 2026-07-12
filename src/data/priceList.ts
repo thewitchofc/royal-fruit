@@ -906,7 +906,8 @@ function resolveCatalogImageEntry(
   if (n.startsWith("קפיר ליים") || n.startsWith("עלי קפיר ליים")) return BY_EXACT_PRODUCT_IMAGES["קפיר ליים"];
   if (n.startsWith("פינגר ליים")) return BY_EXACT_PRODUCT_IMAGES["פינגר ליים"];
   if (n === "ליים" || n.startsWith("לימון ליים") || n.startsWith("ליים ")) return BY_EXACT_PRODUCT_IMAGES["ליים"];
-  if (n.startsWith("ליצ׳י")) return BY_EXACT_PRODUCT_IMAGES["ליצ׳י"];
+  if (/ליצ[׳']י\s+מובחר/.test(n)) return BY_EXACT_PRODUCT_IMAGES["ליצ׳י מובחר"];
+  if (/ליצ[׳']י/.test(n)) return BY_EXACT_PRODUCT_IMAGES["ליצ׳י"];
   if (n.startsWith("אבוקדו מוכן לאכילה מארז")) return BY_EXACT_PRODUCT_IMAGES["אבוקדו מוכן לאכילה מארז"];
   if (n.startsWith("אבוקדו מוכן לאכילה")) return BY_EXACT_PRODUCT_IMAGES["אבוקדו מוכן לאכילה"];
   if (n.startsWith("גוואקמולי") || n.startsWith("גווקאמולי") || n.startsWith("ממרח אבוקדו"))
@@ -960,6 +961,7 @@ function resolveCatalogImageEntry(
   if (n.startsWith("דומדמניות")) return BY_EXACT_PRODUCT_IMAGES["דומדמניות"];
   if (/תפוז\s+פ(יר|רי)מיום/.test(n)) return BY_EXACT_PRODUCT_IMAGES["תפוז פרימיום"];
   if (/שזיף\s+מ[יט]לי/.test(n)) return BY_EXACT_PRODUCT_IMAGES["שזיף מטלי"];
+  if (/ג[׳']ויה/.test(n)) return BY_EXACT_PRODUCT_IMAGES["ג׳ויה"];
   if (n.startsWith("שקד ירוק")) return BY_EXACT_PRODUCT_IMAGES["שקד ירוק"];
   if (n.startsWith("תות יער")) return BY_EXACT_PRODUCT_IMAGES["תות יער"];
   if (n.startsWith("פיטאיה") || n.startsWith("פטאיה") || n.startsWith("דרגון פרוט")) return BY_EXACT_PRODUCT_IMAGES["פיטאיה"];
@@ -1011,7 +1013,7 @@ function resolveGalleryFallbackImageEntry(name: string, description?: string): P
   if (/(קרמבולה|starfruit|כוכב)/.test(text)) return "/images/gallery/starfruit-trays.webp";
   if (/(תמר|אגוז|פקאן|nuts|walnut)/.test(text)) return "/images/gallery/dates-walnut-pack.webp";
   if (/(כרובית|ברוקולי|cauliflower|broccoli)/.test(text)) return "/images/gallery/colorful-cauliflower.webp";
-  if (/ג׳ויה/.test(text)) return "/images/catalog/apple-joya.png";
+  if (/ג[׳']ויה/.test(text)) return "/images/catalog/apple-joya.png";
   if (/(תפוח|apple)/.test(text) && !/אדמה/.test(text)) return "/images/gallery/red-kissabel-apples.webp";
   if (/(קיווי|kiwi)/.test(text)) return "/images/gallery/kikoka-gold-kiwi.webp";
   if (/(מלפפון|עגבני|גזר|אבוקדו|דלעת|תרד|אפונה|שום|בצל|אספרגוס|ירק|vegetable|veg)/.test(text)) {
