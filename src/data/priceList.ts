@@ -555,6 +555,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "נקטרינה פיתה": "/images/catalog/peach-flat.png",
     "נקטרינה פיתה מארז": "/images/catalog/peach-flat.png",
     "פיתה": "/images/catalog/peach-flat.png",
+    פסיפלורה: "/images/catalog/passionfruit.png",
+    "פסיפלורה מארז": "/images/catalog/passionfruit.png",
     "שקד ירוק": "/images/catalog/green-almond.png",
     תאנים: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
     תאנה: ["/images/catalog/figs-pack.png", "/images/catalog/figs-open.png"],
@@ -961,6 +963,7 @@ function resolveCatalogImageEntry(
   if (n.startsWith("שקד ירוק")) return BY_EXACT_PRODUCT_IMAGES["שקד ירוק"];
   if (n.startsWith("תות יער")) return BY_EXACT_PRODUCT_IMAGES["תות יער"];
   if (n.startsWith("פיטאיה") || n.startsWith("פטאיה") || n.startsWith("דרגון פרוט")) return BY_EXACT_PRODUCT_IMAGES["פיטאיה"];
+  if (n.startsWith("פסיפלורה")) return BY_EXACT_PRODUCT_IMAGES["פסיפלורה"];
   if (n.startsWith("תות פקיסטני") || n.startsWith("תות עץ")) return BY_EXACT_PRODUCT_IMAGES["תות פקיסטני"];
   if (n.startsWith("פטל שחור בכר")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור בכר"];
   if (n.startsWith("פטל שחור רובי")) return BY_EXACT_PRODUCT_IMAGES["פטל שחור רובי"];
