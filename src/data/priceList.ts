@@ -703,6 +703,8 @@ const BY_EXACT_PRODUCT_IMAGES: Record<string, ProductImageEntry> = {
     "מלפפון חמוץ בעבודת יד": "/images/catalog/pickled-cucumber.png",
     סברס: "/images/catalog/sabres.png",
     "סברס (לק״ג)": "/images/catalog/sabres.png",
+    "סברס קלוף": "/images/catalog/sabres-peeled.png",
+    "סברס קלוף מארז": "/images/catalog/sabres-peeled.png",
     "גולדן ברי": [
       "/images/catalog/golden-berry-pack.png",
       "/images/catalog/golden-berry-open.png",
